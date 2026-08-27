@@ -1,15 +1,13 @@
-name: BIST Web Sitesini Guncelle ve Yayinla
+name: BIST Web Sitesini Yayinla
 
 on:
   push:
     branches:
       - main
-  schedule:
-    - cron: '0 7-16 * * 1-5'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -18,22 +16,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Kodu Klonla
         uses: actions/checkout@v4
-
-      - name: Node.js Kur
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Bagimliliklari Yukle
-        run: npm install
-
-      - name: Web Sayfasini Uret
-        run: node build-web.js
 
       - name: GitHub Pages Icin Hazirla
         uses: actions/upload-pages-artifact@v3
