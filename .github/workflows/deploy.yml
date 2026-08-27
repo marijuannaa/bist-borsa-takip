@@ -1,0 +1,46 @@
+name: BIST Web Sitesini Guncelle ve Yayinla
+
+on:
+push:
+branches:
+- main
+schedule:
+# Hafta içi borsa saatlerinde saat başı çalışır (07:00 - 16:00 UTC)
+- cron: '0 7-16 * * 1-5'
+workflow_dispatch:
+
+permissions:
+contents: write
+pages: write
+id-token: write
+
+concurrency:
+group: "pages"
+cancel-in-progress: false
+
+jobs:
+build-and-deploy:
+runs-on: ubuntu-latest
+steps:
+- name: Kodu Klonla
+uses: actions/checkout@v4
+
+  - name: Node.js Kur
+    uses: actions/setup-node@v4
+    with:
+      node-version: 20
+
+  - name: Bağımlılıkları Yükle
+    run: npm install
+
+  - name: Web Sayfasını Üret
+    run: node build-web.js
+
+  - name: GitHub Pages İçin Hazırla
+    uses: actions/upload-pages-artifact@v3
+    with:
+      path: '.'
+
+  - name: GitHub Pages'e Yayınla
+    id: deployment
+    uses: actions/deploy-pages@v4
