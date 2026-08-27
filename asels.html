@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASELS - Hisse Detayı ve Geçmiş Fiyat Grafiği</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
+  <div class="max-w-5xl mx-auto space-y-6">
+    
+    <!-- Ust Navigasyon -->
+    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+      <a href="index.html" class="inline-flex items-center gap-2 text-sm font-medium text-slate-400 hover:text-white transition-colors bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-lg">
+        ← Ana Sayfaya Dön
+      </a>
+      <span class="text-xs text-slate-500">Otomatik BIST Analiz Portalı</span>
+    </div>
+
+    <!-- Hisse Baslik Karti -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-extrabold tracking-tight">ASELS</h1>
+          <span class="text-xs font-semibold px-2.5 py-1 rounded-full border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+            +1.38%
+          </span>
+        </div>
+        <p class="text-slate-400 text-sm mt-1">ASELSAN Elektronik Sanayi ve Ticaret Anonim Sirketi</p>
+      </div>
+
+      <div class="text-left md:text-right">
+        <div class="text-3xl font-bold tracking-tight">₺403.75</div>
+        <div class="text-sm font-medium text-emerald-400 mt-0.5">
+          ▲ ₺5.50
+        </div>
+      </div>
+    </div>
+
+    <!-- Grafik Karti -->
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-lg font-bold text-slate-200">Son 1 Aylık Fiyat Hareketi</h2>
+        <span class="text-xs text-slate-500 bg-slate-800 px-2 py-1 rounded-md">Günlük Kapanış</span>
+      </div>
+      <div class="h-72 md:h-96 w-full">
+        <canvas id="stockChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Finansal Detaylar Izgarasi -->
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">52H En Yüksek</span>
+        <span class="text-base font-bold text-slate-200 mt-1 block">₺-</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">52H En Düşük</span>
+        <span class="text-base font-bold text-slate-200 mt-1 block">₺-</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">F/K Oranı (P/E)</span>
+        <span class="text-base font-bold text-slate-200 mt-1 block">-</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">Günlük Hacim</span>
+        <span class="text-base font-bold text-slate-200 mt-1 block">31.779.482</span>
+      </div>
+    </div>
+
+    <!-- Alt Bilgi -->
+    <footer class="text-center text-xs text-slate-600 pt-4">
+      Veriler Yahoo Finance & Borsa API ile sağlanmaktadır. Yatırım tavsiyesi değildir.
+    </footer>
+  </div>
+
+  <script>
+    const ctx = document.getElementById('stockChart').getContext('2d');
+    const labels = ["28/07","29/07","30/07","31/07","03/08","04/08","05/08","06/08","07/08","10/08","11/08","12/08","13/08","14/08","17/08","18/08","19/08","20/08","21/08","24/08","25/08","26/08","27/08"];
+    const data = [358,354.5,337.5,342.25,336.25,349.25,346.75,363,353.75,356.25,356.25,381,395.75,387.5,389,381.25,403,402.25,403.25,399.75,403.75,398.25,403.75];
+
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(59, 130, 246, 0.35)');
+    gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'ASELS Fiyat (₺)',
+          data: data,
+          borderColor: '#38bdf8',
+          backgroundColor: gradient,
+          fill: true,
+          tension: 0.3,
+          borderWidth: 2.5,
+          pointRadius: 2,
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#38bdf8',
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0f172a',
+            titleColor: '#94a3b8',
+            bodyColor: '#f8fafc',
+            borderColor: '#334155',
+            borderWidth: 1,
+            padding: 10,
+            displayColors: false
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+            ticks: { color: '#64748b', maxTicksLimit: 8 }
+          },
+          y: {
+            grid: { color: 'rgba(51, 65, 85, 0.3)' },
+            ticks: { color: '#64748b' }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

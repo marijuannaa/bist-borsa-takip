@@ -1,218 +1,241 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIST Borsa Takip Paneli</title>
+  <title>BIST Borsa Takip & Analiz Portalı</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
-    .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    body { font-family: 'Inter', sans-serif; }
   </style>
 </head>
-<body class="min-h-screen p-4 md:p-8">
+<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8">
   <div class="max-w-6xl mx-auto space-y-8">
     
-    <!-- Üst Başlık -->
-    <header class="flex flex-col md:flex-row justify-between items-start md:items-center pb-6 border-b border-slate-750 gap-4">
+    <!-- Header -->
+    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
       <div>
-        <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-blue-400 to-emerald-400 bg-clip-text text-transparent">
-          📈 BIST Piyasa Takip Paneli
+        <h1 class="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-sky-400 to-indigo-400 bg-clip-text text-transparent">
+          Borsa İstanbul Portalı
         </h1>
-        <p class="text-slate-400 text-sm mt-1">Gecikmeli BIST borsa verileri ve popüler hisseler</p>
+        <p class="text-slate-400 text-sm mt-1">Canlı Endeks, Hisse Kartları ve Geçmiş Fiyat Grafikleri</p>
       </div>
-      <div class="text-xs text-slate-400 glass px-4 py-2 rounded-xl flex items-center gap-2">
-        <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        Son Güncelleme: <span class="font-mono text-slate-200">27.08.2026 22:12:26</span>
+      <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl text-xs text-slate-400 self-start md:self-auto">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Son Güncelleme: <strong class="text-slate-200">27.08.2026 22:27:14</strong></span>
       </div>
     </header>
 
-    <!-- Endeks Kartları -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-5">
-      <div class="glass p-5 rounded-2xl">
-        <div class="text-slate-400 text-sm font-medium">BIST 100 (XU100)</div>
-        <div class="text-2xl font-bold mt-2 font-mono">14575.51</div>
-        <div class="mt-2 text-sm font-semibold text-rose-400">
-          ▼ %-0.00
+    <!-- XU100 Ana Kart -->
+    <div class="bg-gradient-to-br from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20 px-3 py-1 rounded-md">Ana Endeks</span>
+          <h2 class="text-2xl md:text-3xl font-bold mt-2">BIST 100 (XU100)</h2>
+          <p class="text-slate-400 text-xs mt-1">Borsa İstanbul Ulusal 100 Endeksi</p>
+        </div>
+        <div class="flex items-baseline md:flex-col md:items-end gap-3 md:gap-1">
+          <span class="text-4xl md:text-5xl font-extrabold tracking-tight">₺14.575,51</span>
+          <span class="text-sm font-semibold px-3 py-1 rounded-full bg-rose-500/10 text-rose-400">
+            ▼ -0.24%
+          </span>
         </div>
       </div>
+    </div>
 
-      <div class="glass p-5 rounded-2xl">
-        <div class="text-slate-400 text-sm font-medium">BIST 30 (XU030)</div>
-        <div class="text-2xl font-bold mt-2 font-mono">16760.87</div>
-        <div class="mt-2 text-sm font-semibold text-rose-400">
-          ▼ %-0.01
-        </div>
+    <!-- Hisse Listesi Izgarasi -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-slate-200">Popüler Hisseler (Grafik için tıklayın)</h2>
+        <span class="text-xs text-slate-500">Detaylı analiz sayfaları mevcuttur</span>
       </div>
-
-      <div class="glass p-5 rounded-2xl">
-        <div class="text-slate-400 text-sm font-medium">BIST Banka (XBANK)</div>
-        <div class="text-2xl font-bold mt-2 font-mono">16513.03</div>
-        <div class="mt-2 text-sm font-semibold text-rose-400">
-          ▼ %-0.00
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+      <a href="thyao.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">THYAO</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">Türk Hava Yollari Anonim Ortakligi</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-rose-500/10 text-rose-400">
+            -0.41%
+          </span>
         </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺307.25</span>
+          <span class="text-xs font-medium text-rose-400 flex items-center">
+            ▼ ₺-1.25
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="garan.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">GARAN</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">Turkiye Garanti Bankasi A.S.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-rose-500/10 text-rose-400">
+            -0.23%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺133.00</span>
+          <span class="text-xs font-medium text-rose-400 flex items-center">
+            ▼ ₺-0.30
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="asels.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">ASELS</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">ASELSAN Elektronik Sanayi ve Ticaret Anonim Sirketi</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
+            +1.38%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺403.75</span>
+          <span class="text-xs font-medium text-emerald-400 flex items-center">
+            ▲ ₺5.50
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="eregl.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">EREGL</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">Eregli Demir ve Çelik Fabrikalari T.A.S.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-rose-500/10 text-rose-400">
+            -0.26%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺38.60</span>
+          <span class="text-xs font-medium text-rose-400 flex items-center">
+            ▼ ₺-0.10
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="tuprs.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">TUPRS</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">Türkiye Petrol Rafinerileri A.S.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
+            +0.20%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺380.75</span>
+          <span class="text-xs font-medium text-emerald-400 flex items-center">
+            ▲ ₺0.75
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="kchol.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">KCHOL</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">Koç Holding A.S.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400">
+            +0.00%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺214.20</span>
+          <span class="text-xs font-medium text-emerald-400 flex items-center">
+            ▲ ₺0.00
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="bimas.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">BIMAS</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">BIM Birlesik Magazalar A.S.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-rose-500/10 text-rose-400">
+            -1.08%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺413.75</span>
+          <span class="text-xs font-medium text-rose-400 flex items-center">
+            ▼ ₺-4.50
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
+      <a href="sise.html" class="block bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">SISE</h3>
+            <p class="text-xs text-slate-400 line-clamp-1">Türkiye Sise Ve Cam Fabrikalari A.S.</p>
+          </div>
+          <span class="text-xs font-semibold px-2 py-1 rounded-full bg-rose-500/10 text-rose-400">
+            -0.50%
+          </span>
+        </div>
+        <div class="flex items-baseline justify-between mt-4">
+          <span class="text-2xl font-black text-slate-100">₺40.04</span>
+          <span class="text-xs font-medium text-rose-400 flex items-center">
+            ▼ ₺-0.20
+          </span>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
+          <span>Detaylı Grafik</span>
+          <span class="text-sky-400 group-hover:translate-x-1 transition-transform">İncele →</span>
+        </div>
+      </a>
+    
       </div>
     </section>
 
-    <!-- Tablolar Alanı -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- Ana Takip Listesi Tablosu -->
-      <div class="lg:col-span-2 glass p-6 rounded-2xl">
-        <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-          <i class="fa-solid fa-layer-group text-blue-400"></i> Popüler Hisseler
-        </h2>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead class="text-slate-400 uppercase text-xs border-b border-slate-700/60 pb-2">
-              <tr>
-                <th class="py-3 px-2">Sembol</th>
-                <th class="py-3 px-2">Şirket</th>
-                <th class="py-3 px-2 text-right">Fiyat</th>
-                <th class="py-3 px-2 text-right">Değişim</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-slate-800">
-              
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">THYAO</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Türk Hava Yollari Anonim Ortakligi</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺307.25</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">GARAN</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Turkiye Garanti Bankasi A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺133.00</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">ASELS</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">ASELSAN Elektronik Sanayi ve Ticaret Anonim Sirketi</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺403.75</td>
-                  <td class="py-3 px-2 text-right font-semibold text-emerald-400">
-                    +%0.01
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">EREGL</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Eregli Demir ve Çelik Fabrikalari T.A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺38.60</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">TUPRS</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Türkiye Petrol Rafinerileri A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺380.75</td>
-                  <td class="py-3 px-2 text-right font-semibold text-emerald-400">
-                    +%0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">KCHOL</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Koç Holding A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺214.20</td>
-                  <td class="py-3 px-2 text-right font-semibold text-emerald-400">
-                    +%0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">SISE</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Türkiye Sise Ve Cam Fabrikalari A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺40.04</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">BIMAS</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">BIM Birlesik Magazalar A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺413.75</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.01
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">AKBNK</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Akbank T.A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺72.85</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.00
-                  </td>
-                </tr>
-                
-                <tr class="hover:bg-slate-800/40 transition">
-                  <td class="py-3 px-2 font-bold font-mono text-blue-300">YKBNK</td>
-                  <td class="py-3 px-2 text-slate-300 truncate max-w-[150px] md:max-w-[200px]">Yapi ve Kredi Bankasi A.S.</td>
-                  <td class="py-3 px-2 text-right font-mono font-medium">₺36.86</td>
-                  <td class="py-3 px-2 text-right font-semibold text-rose-400">
-                    %-0.01
-                  </td>
-                </tr>
-                
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Günün Yıldızları -->
-      <div class="glass p-6 rounded-2xl flex flex-col justify-between">
-        <div>
-          <h2 class="text-xl font-semibold mb-4 flex items-center gap-2">
-            <i class="fa-solid fa-fire text-amber-400"></i> Günün Yükselenleri
-          </h2>
-          <div class="space-y-3">
-            
-              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 border border-slate-700/30">
-                <div class="flex items-center gap-3">
-                  <span class="text-xs w-5 h-5 flex items-center justify-center rounded-full bg-slate-700 font-bold text-slate-300">1</span>
-                  <div>
-                    <div class="font-bold text-sm">ASELS</div>
-                    <div class="text-xs text-slate-400">₺403.75</div>
-                  </div>
-                </div>
-                <div class="text-emerald-400 font-bold text-sm">
-                  +%0.01
-                </div>
-              </div>
-            
-              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-800/50 border border-slate-700/30">
-                <div class="flex items-center gap-3">
-                  <span class="text-xs w-5 h-5 flex items-center justify-center rounded-full bg-slate-700 font-bold text-slate-300">2</span>
-                  <div>
-                    <div class="font-bold text-sm">TUPRS</div>
-                    <div class="text-xs text-slate-400">₺380.75</div>
-                  </div>
-                </div>
-                <div class="text-emerald-400 font-bold text-sm">
-                  +%0.00
-                </div>
-              </div>
-            
-          </div>
-        </div>
-
-        <div class="mt-8 pt-4 border-t border-slate-800 text-xs text-slate-500">
-          * Veriler Yahoo Finance kaynaklı olup gecikmeli sağlanmaktadır. Yatırım tavsiyesi içermez.
-        </div>
-      </div>
-
-    </div>
+    <!-- Footer -->
+    <footer class="text-center text-xs text-slate-600 pt-8 border-t border-slate-900">
+      GitHub Actions & Pages ile otomatik derlenmiştir. Yatırım tavsiyesi değildir.
+    </footer>
 
   </div>
 </body>
