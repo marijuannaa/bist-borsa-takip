@@ -32,6 +32,7 @@
           </span>
         </div>
         <p class="text-slate-400 text-sm mt-1">Eregli Demir ve Çelik Fabrikalari T.A.S.</p>
+        <span class="inline-block mt-2 text-[11px] font-medium text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">Basic Materials</span>
       </div>
 
       <div class="text-left md:text-right">
@@ -54,22 +55,30 @@
     </div>
 
     <!-- Finansal Detaylar Izgarasi -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">52H En Yüksek</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">₺-</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">₺45,10</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">52H En Düşük</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">₺-</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">₺23,46</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">Günün Aralığı</span>
+        <span class="text-xs md:text-sm font-bold text-slate-200 mt-1 block truncate">₺38,46 - ₺39,10</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">F/K Oranı (P/E)</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">-</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">N/A</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">Piyasa Değeri</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">-</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">Günlük Hacim</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">145.433.991</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">145.433.991</span>
       </div>
     </div>
 
@@ -85,8 +94,8 @@
     const data = [43.86,43.16,42.4,42.54,40.7,41.74,41.98,41.56,38.68,36.88,36.86,37.18,38.24,37.38,37.94,37.7,37.76,38.1,38.14,38.18,38.24,38.7,38.6];
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(59, 130, 246, 0.35)');
-    gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+    gradient.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+    gradient.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
 
     new Chart(ctx, {
       type: 'line',

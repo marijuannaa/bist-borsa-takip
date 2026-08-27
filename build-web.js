@@ -11,8 +11,35 @@ function formatDate(dateString) {
   return date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
 }
 
+function formatNumber(num) {
+  if (num === null || num === undefined || isNaN(num)) return '-';
+  return Number(num).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function formatMarketCap(cap) {
+  if (!cap || isNaN(cap)) return '-';
+  if (cap >= 1e12) return `₺${(cap / 1e12).toFixed(2)} Trl`;
+  if (cap >= 1e9) return `₺${(cap / 1e9).toFixed(2)} Mlr`;
+  if (cap >= 1e6) return `₺${(cap / 1e6).toFixed(2)} Mn`;
+  return `₺${Number(cap).toLocaleString('tr-TR')}`;
+}
+
 function generateDetailHtml(symbol, stockInfo, details, historical) {
   const quotes = historical?.quotes || [];
+  const meta = historical?.meta || {};
+
+  // 52 Haftalik ve Finansal gostergeleri olasi tum kaynaklardan cikar
+  const high52 = details?.fiftyTwoWeekHigh || meta.fiftyTwoWeekHigh || details?.summaryDetail?.fiftyTwoWeekHigh?.raw || details?.high || stockInfo.high;
+  const low52 = details?.fiftyTwoWeekLow || meta.fiftyTwoWeekLow || details?.summaryDetail?.fiftyTwoWeekLow?.raw || details?.low || stockInfo.low;
+  
+  const rawPE = details?.peRatio || details?.trailingPE || details?.forwardPE || details?.summaryDetail?.trailingPE?.raw;
+  const peText = rawPE && !isNaN(rawPE) ? Number(rawPE).toFixed(2) : 'N/A';
+
+  const marketCap = details?.marketCap || details?.summaryDetail?.marketCap?.raw;
+  const dayRange = (stockInfo.low && stockInfo.high) 
+    ? `₺${formatNumber(stockInfo.low)} - ₺${formatNumber(stockInfo.high)}`
+    : '-';
+
   const chartLabels = JSON.stringify(quotes.map(q => formatDate(q.date)));
   const chartPrices = JSON.stringify(quotes.map(q => Number(q.close.toFixed(2))));
 
@@ -53,7 +80,8 @@ function generateDetailHtml(symbol, stockInfo, details, historical) {
             ${isPositive ? '+' : ''}${((stockInfo.changePercent || 0) * 100).toFixed(2)}%
           </span>
         </div>
-        <p class="text-slate-400 text-sm mt-1">${stockInfo.name || details?.longName || symbol}</p>
+        <p class="text-slate-400 text-sm mt-1">${stockInfo.name || details?.longName || meta.longName || symbol}</p>
+        ${details?.sector ? `<span class="inline-block mt-2 text-[11px] font-medium text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded border border-sky-500/20">${details.sector}</span>` : ''}
       </div>
 
       <div class="text-left md:text-right">
@@ -76,22 +104,30 @@ function generateDetailHtml(symbol, stockInfo, details, historical) {
     </div>
 
     <!-- Finansal Detaylar Izgarasi -->
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">52H En Yüksek</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">₺${details?.fiftyTwoWeekHigh || '-'}</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">${high52 ? `₺${formatNumber(high52)}` : '-'}</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">52H En Düşük</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">₺${details?.fiftyTwoWeekLow || '-'}</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">${low52 ? `₺${formatNumber(low52)}` : '-'}</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">Günün Aralığı</span>
+        <span class="text-xs md:text-sm font-bold text-slate-200 mt-1 block truncate">${dayRange}</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">F/K Oranı (P/E)</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">${details?.peRatio ? Number(details.peRatio).toFixed(2) : '-'}</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">${peText}</span>
+      </div>
+      <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
+        <span class="text-xs text-slate-500 font-medium block">Piyasa Değeri</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">${formatMarketCap(marketCap)}</span>
       </div>
       <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl">
         <span class="text-xs text-slate-500 font-medium block">Günlük Hacim</span>
-        <span class="text-base font-bold text-slate-200 mt-1 block">${stockInfo.volume ? Number(stockInfo.volume).toLocaleString('tr-TR') : '-'}</span>
+        <span class="text-sm md:text-base font-bold text-slate-200 mt-1 block">${stockInfo.volume ? Number(stockInfo.volume).toLocaleString('tr-TR') : '-'}</span>
       </div>
     </div>
 
@@ -107,8 +143,8 @@ function generateDetailHtml(symbol, stockInfo, details, historical) {
     const data = ${chartPrices};
 
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-    gradient.addColorStop(0, 'rgba(59, 130, 246, 0.35)');
-    gradient.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+    gradient.addColorStop(0, 'rgba(56, 189, 248, 0.35)');
+    gradient.addColorStop(1, 'rgba(56, 189, 248, 0.0)');
 
     new Chart(ctx, {
       type: 'line',
