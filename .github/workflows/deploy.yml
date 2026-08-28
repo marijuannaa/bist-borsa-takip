@@ -31,10 +31,7 @@ jobs:
       - name: Node.js Kur
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-
-      - name: Paketleri Yukle
-        run: npm install yahoo-finance2
+          node-version: 22
 
       - name: Canli Verileri Cek ve data.json Uret
         run: node fetch-data.js
