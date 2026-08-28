@@ -1,10 +1,10 @@
 {
-  "updatedAt": "2026-08-28T06:12:01.530Z",
-  "updatedAtFormatted": "28.08.2026 09:12",
+  "updatedAt": "2026-08-28T06:28:42.238Z",
+  "updatedAtFormatted": "28.08.2026 09:28",
   "isMarketOpen": false,
   "indices": {
     "XU100": {
-      "name": "XU100",
+      "name": "BIST 100",
       "price": 14575.51,
       "change": -35.39,
       "changePercent": -0.24,
@@ -1268,7 +1268,7 @@
       ]
     },
     "XU030": {
-      "name": "XU030",
+      "name": "BIST 30",
       "price": 16760.87,
       "change": -93.63,
       "changePercent": -0.56,
@@ -2532,7 +2532,7 @@
       ]
     },
     "XBANK": {
-      "name": "XBANK",
+      "name": "BIST Banka",
       "price": 16513.03,
       "change": -12.37,
       "changePercent": -0.07,
@@ -5081,7 +5081,7 @@
           "close": 308.5
         },
         {
-          "timestamp": 1787811123,
+          "timestamp": 1787812123,
           "date": "27/08",
           "close": 307.25
         }
@@ -6371,7 +6371,7 @@
           "close": 133.3
         },
         {
-          "timestamp": 1787811123,
+          "timestamp": 1787812123,
           "date": "27/08",
           "close": 133
         }
@@ -7661,7 +7661,7 @@
           "close": 398.25
         },
         {
-          "timestamp": 1787811123,
+          "timestamp": 1787812124,
           "date": "27/08",
           "close": 403.75
         }
@@ -8951,7 +8951,7 @@
           "close": 38.7
         },
         {
-          "timestamp": 1787811124,
+          "timestamp": 1787812124,
           "date": "27/08",
           "close": 38.6
         }
@@ -10241,7 +10241,7 @@
           "close": 380
         },
         {
-          "timestamp": 1787811124,
+          "timestamp": 1787812124,
           "date": "27/08",
           "close": 380.75
         }
@@ -11531,7 +11531,7 @@
           "close": 214.2
         },
         {
-          "timestamp": 1787811124,
+          "timestamp": 1787812125,
           "date": "27/08",
           "close": 214.2
         }
@@ -12831,7 +12831,7 @@
           "close": 418.25
         },
         {
-          "timestamp": 1787811124,
+          "timestamp": 1787812125,
           "date": "27/08",
           "close": 413.75
         }
@@ -14121,7 +14121,7 @@
           "close": 40.24
         },
         {
-          "timestamp": 1787811125,
+          "timestamp": 1787812125,
           "date": "27/08",
           "close": 40.04
         }
@@ -15411,7 +15411,7 @@
           "close": 2.34
         },
         {
-          "timestamp": 1787811125,
+          "timestamp": 1787812125,
           "date": "27/08",
           "close": 2.38
         }
@@ -16701,7 +16701,7 @@
           "close": 79.55
         },
         {
-          "timestamp": 1787811125,
+          "timestamp": 1787812126,
           "date": "27/08",
           "close": 78.45
         }
@@ -17991,7 +17991,7 @@
           "close": 73.15
         },
         {
-          "timestamp": 1787811125,
+          "timestamp": 1787812126,
           "date": "27/08",
           "close": 72.85
         }
@@ -19281,7 +19281,7 @@
           "close": 20.22
         },
         {
-          "timestamp": 1787811126,
+          "timestamp": 1787812126,
           "date": "27/08",
           "close": 19.88
         }
