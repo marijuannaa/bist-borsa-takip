@@ -1,10 +1,4 @@
 import fs from 'fs';
-import yahooFinance from 'yahoo-finance2';
-
-// Yahoo Finance istemci ayarları
-yahooFinance.setGlobalConfig({
-  queue: { concurrency: 4 }
-});
 
 const STOCKS = [
   'THYAO.IS', 'GARAN.IS', 'ASELS.IS', 'EREGL.IS', 
@@ -18,16 +12,24 @@ const INDICES = [
   { key: 'XBANK', symbol: 'XBANK.IS' }
 ];
 
-async function fetchSummary(ticker) {
+async function fetchTickerData(ticker) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d`;
   try {
-    const res = await yahooFinance.chart(ticker, {
-      period1: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
-      interval: '1d'
+    const response = await fetch(url, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+      }
     });
-    
-    if (!res || !res.meta) return null;
-    const meta = res.meta;
-    
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const result = data?.chart?.result?.[0];
+    if (!result || !result.meta) return null;
+
+    const meta = result.meta;
     const price = meta.regularMarketPrice ?? meta.chartPreviousClose ?? 0;
     const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
     const change = price - prevClose;
@@ -53,8 +55,8 @@ async function fetchSummary(ticker) {
 }
 
 async function main() {
-  console.log('Veriler Yahoo Finance chart API üzerinden çekiliyor...');
-  
+  console.log('Veriler doğrudan Yahoo API üzerinden çekiliyor...');
+
   const now = new Date();
   const formattedTime = now.toLocaleDateString('tr-TR', {
     day: '2-digit',
@@ -71,9 +73,8 @@ async function main() {
     stocks: {}
   };
 
-  // 1. Endeksleri Çek
   for (const idx of INDICES) {
-    const data = await fetchSummary(idx.symbol);
+    const data = await fetchTickerData(idx.symbol);
     if (data) {
       output.indices[idx.key] = {
         name: idx.key,
@@ -86,9 +87,8 @@ async function main() {
     }
   }
 
-  // 2. Hisseleri Çek
   for (const sym of STOCKS) {
-    const data = await fetchSummary(sym);
+    const data = await fetchTickerData(sym);
     if (data) {
       const cleanKey = sym.replace('.IS', '');
       output.stocks[cleanKey] = {
@@ -108,7 +108,7 @@ async function main() {
   }
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
-  console.log('data.json tüm verilerle başarıyla oluşturuldu.');
+  console.log('data.json tüm güncel verilerle başarıyla oluşturuldu.');
 }
 
 main();

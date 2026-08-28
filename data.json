@@ -1,5 +1,173 @@
 {
-  "updatedAt": "2026-08-28T05:14:05.325Z",
-  "indices": {},
-  "stocks": {}
+  "updatedAt": "2026-08-28T05:18:09.012Z",
+  "updatedAtFormatted": "28.08.2026 08:18",
+  "indices": {
+    "XU100": {
+      "name": "XU100",
+      "price": 14575.51,
+      "change": 60.71,
+      "changePercent": 0.42,
+      "prevClose": 14514.8
+    },
+    "XU030": {
+      "name": "XU030",
+      "price": 16760.87,
+      "change": 35.77,
+      "changePercent": 0.21,
+      "prevClose": 16725.1
+    },
+    "XBANK": {
+      "name": "XBANK",
+      "price": 16513.03,
+      "change": 736.63,
+      "changePercent": 4.67,
+      "prevClose": 15776.4
+    }
+  },
+  "stocks": {
+    "THYAO": {
+      "symbol": "THYAO",
+      "shortName": "TURK HAVA YOLLARI",
+      "price": 307.25,
+      "change": 6.25,
+      "changePercent": 2.08,
+      "dayHigh": 311,
+      "dayLow": 303.25,
+      "fiftyTwoWeekHigh": 355.5,
+      "fiftyTwoWeekLow": 262.75,
+      "volume": 55158533
+    },
+    "GARAN": {
+      "symbol": "GARAN",
+      "shortName": "GARANTI BANKASI",
+      "price": 133,
+      "change": 3.1,
+      "changePercent": 2.39,
+      "dayHigh": 135.6,
+      "dayLow": 132.2,
+      "fiftyTwoWeekHigh": 169.7,
+      "fiftyTwoWeekLow": 115.4,
+      "volume": 37778026
+    },
+    "ASELS": {
+      "symbol": "ASELS",
+      "shortName": "ASELSAN",
+      "price": 403.75,
+      "change": 0.5,
+      "changePercent": 0.12,
+      "dayHigh": 408,
+      "dayLow": 393.5,
+      "fiftyTwoWeekHigh": 450,
+      "fiftyTwoWeekLow": 168.7,
+      "volume": 31779482
+    },
+    "EREGL": {
+      "symbol": "EREGL",
+      "shortName": "EREGLI DEMIR CELIK",
+      "price": 38.6,
+      "change": 0.46,
+      "changePercent": 1.21,
+      "dayHigh": 39.1,
+      "dayLow": 38.46,
+      "fiftyTwoWeekHigh": 45.1,
+      "fiftyTwoWeekLow": 23.46,
+      "volume": 145433991
+    },
+    "TUPRS": {
+      "symbol": "TUPRS",
+      "shortName": "TUPRAS",
+      "price": 380.75,
+      "change": -26,
+      "changePercent": -6.39,
+      "dayHigh": 386.75,
+      "dayLow": 378.75,
+      "fiftyTwoWeekHigh": 407.5,
+      "fiftyTwoWeekLow": 163.3,
+      "volume": 21093852
+    },
+    "KCHOL": {
+      "symbol": "KCHOL",
+      "shortName": "KOC HOLDING",
+      "price": 214.2,
+      "change": -8.2,
+      "changePercent": -3.69,
+      "dayHigh": 216.6,
+      "dayLow": 213.4,
+      "fiftyTwoWeekHigh": 229.1,
+      "fiftyTwoWeekLow": 146,
+      "volume": 24228603
+    },
+    "BIMAS": {
+      "symbol": "BIMAS",
+      "shortName": "BIM MAGAZALAR",
+      "price": 413.75,
+      "change": -2.75,
+      "changePercent": -0.66,
+      "dayHigh": 420.5,
+      "dayLow": 412.75,
+      "fiftyTwoWeekHigh": 425,
+      "fiftyTwoWeekLow": 241.625,
+      "volume": 8392363
+    },
+    "SISE": {
+      "symbol": "SISE",
+      "shortName": "SISE CAM",
+      "price": 40.04,
+      "change": 0.14,
+      "changePercent": 0.35,
+      "dayHigh": 40.48,
+      "dayLow": 39.88,
+      "fiftyTwoWeekHigh": 54.1,
+      "fiftyTwoWeekLow": 32.44,
+      "volume": 31292856
+    },
+    "SASA": {
+      "symbol": "SASA",
+      "shortName": "SASA POLYESTER",
+      "price": 2.38,
+      "change": 0.06,
+      "changePercent": 2.59,
+      "dayHigh": 2.42,
+      "dayLow": 2.33,
+      "fiftyTwoWeekHigh": 4.91,
+      "fiftyTwoWeekLow": 2.13,
+      "volume": 2630419292
+    },
+    "FROTO": {
+      "symbol": "FROTO",
+      "shortName": "FORD OTOSAN",
+      "price": 78.45,
+      "change": -1.75,
+      "changePercent": -2.18,
+      "dayHigh": 80.5,
+      "dayLow": 78.35,
+      "fiftyTwoWeekHigh": 135.4,
+      "fiftyTwoWeekLow": 75.05,
+      "volume": 18441047
+    },
+    "AKBNK": {
+      "symbol": "AKBNK",
+      "shortName": "AKBANK",
+      "price": 72.85,
+      "change": 3.15,
+      "changePercent": 4.52,
+      "dayHigh": 74.3,
+      "dayLow": 72.45,
+      "fiftyTwoWeekHigh": 93.5,
+      "fiftyTwoWeekLow": 53.05,
+      "volume": 134916666
+    },
+    "PETKM": {
+      "symbol": "PETKM",
+      "shortName": "PETKIM",
+      "price": 19.88,
+      "change": -0.7,
+      "changePercent": -3.4,
+      "dayHigh": 20.32,
+      "dayLow": 19.76,
+      "fiftyTwoWeekHigh": 28.06,
+      "fiftyTwoWeekLow": 16.12,
+      "volume": 45998595
+    }
+  }
 }
