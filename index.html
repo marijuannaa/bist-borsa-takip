@@ -39,7 +39,7 @@
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
               Borsa İstanbul Canlı Takip
             </h1>
-            <p class="text-xs sm:text-sm text-slate-400">Önbellek destekli hızlı veri • Her saat başı otomatik senkronizasyon</p>
+            <p class="text-xs sm:text-sm text-slate-400">Tek çağrılı toplu veri motoru • Her saat başı otomatik senkronizasyon</p>
           </div>
         </div>
       </div>
@@ -61,6 +61,7 @@
       </div>
     </header>
 
+    <!-- Endeks Kartları -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <!-- BIST 100 -->
       <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden group">
@@ -102,6 +103,7 @@
       </div>
     </div>
 
+    <!-- Canlı Hisse Bölümü -->
     <div class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -126,12 +128,13 @@
 
       <!-- Hisse Izgarası -->
       <div id="stockGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- JS ile dinamik doldurulur -->
+        <!-- JS ile doldurulur -->
       </div>
     </div>
 
   </div>
 
+  <!-- Hızlı Önizleme Modalı -->
   <div id="stockModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto custom-scrollbar p-6 shadow-2xl relative">
       
@@ -175,7 +178,7 @@
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
             </svg>
-            <span>Veriler API'den çekiliyor...</span>
+            <span>Grafik API'den çekiliyor...</span>
           </div>
         </div>
         <canvas id="modalChart"></canvas>
@@ -207,14 +210,13 @@
   <script>
     let isFetching = false;
     let trackedStocks = ['THYAO', 'GARAN', 'ASELS', 'EREGL', 'TUPRS', 'KCHOL', 'BIMAS', 'SISE', 'SASA', 'FROTO', 'AKBNK', 'PETKM'];
-    let stockCache = {};
-    let indexCache = {};
+    let stockDataMap = {};
+    let indexDataMap = {};
     let currentSelectedSymbol = 'THYAO';
     let currentPeriod = '1mo';
     let currentInterval = '1d';
     let chartInstance = null;
 
-    // Saat başına kalan süreyi saniye cinsinden hesaplar
     function getSecondsUntilNextHour() {
       const now = new Date();
       const minutes = now.getMinutes();
@@ -222,45 +224,10 @@
       return (60 - minutes - 1) * 60 + (60 - seconds);
     }
 
-    // Saniyeyi 54:12 gibi dakika:saniye formatına çevirir
     function formatTime(totalSeconds) {
       const mins = Math.floor(totalSeconds / 60);
       const secs = totalSeconds % 60;
       return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    }
-
-    // CORS Proxy üzerinden hızlı API istemcisi
-    async function fetchFromApi(symbol, range = '1d', interval = '1d') {
-      const isIndex = symbol.startsWith('^') || symbol.startsWith('XU') || symbol === 'XBANK';
-      const ticker = isIndex 
-        ? (symbol.startsWith('^') ? symbol : `^${symbol}`)
-        : (symbol.endsWith('.IS') ? symbol : `${symbol}.IS`);
-
-      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=${interval}&range=${range}`;
-      
-      const proxies = [
-        (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-        (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
-      ];
-
-      for (const proxyFn of proxies) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 sn zaman aşımı
-
-          const res = await fetch(proxyFn(targetUrl), { signal: controller.signal });
-          clearTimeout(timeoutId);
-          if (!res.ok) continue;
-          const data = await res.json();
-          if (data?.chart?.result?.[0]) {
-            return data.chart.result[0];
-          }
-        } catch (e) {
-          // sonraki proxy'e geç
-        }
-      }
-      throw new Error(`${symbol} verisi alınamadı`);
     }
 
     function formatNumber(val) {
@@ -275,11 +242,50 @@
       return Number(vol).toLocaleString('tr-TR');
     }
 
-    function applyIndexToUI(priceElId, changeElId, badgeElId, meta) {
-      const price = meta.regularMarketPrice || meta.chartPreviousClose || 0;
-      const prevClose = meta.chartPreviousClose || price;
-      const change = price - prevClose;
-      const changePercent = prevClose ? (change / prevClose) * 100 : 0;
+    // TEK BİR İSTEKLE TÜM HİSSELERİ VE ENDEKSLERİ TOPLU ÇEKEN HIZLI API FONKSİYONU
+    async function fetchBatchQuotes(symbolsList) {
+      const symbolsParam = symbolsList.map(s => {
+        if (s.startsWith('^') || s.startsWith('XU') || s === 'XBANK') {
+          return s.startsWith('^') ? s : `^${s}`;
+        }
+        return s.endsWith('.IS') ? s : `${s}.IS`;
+      }).join(',');
+
+      const targetUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbolsParam)}`;
+      
+      const proxies = [
+        (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
+        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
+      ];
+
+      for (const proxyFn of proxies) {
+        try {
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 7000);
+
+          const res = await fetch(proxyFn(targetUrl), { signal: controller.signal });
+          clearTimeout(timeoutId);
+          if (!res.ok) continue;
+
+          const data = await res.json();
+          const results = data?.quoteResponse?.result;
+          if (Array.isArray(results) && results.length > 0) {
+            return results;
+          }
+        } catch (e) {
+          // Sonraki proxy'e geç
+        }
+      }
+      throw new Error('Toplu veri çekilemedi');
+    }
+
+    function applyIndexToUI(priceElId, changeElId, badgeElId, data) {
+      if (!data) return;
+      const price = data.regularMarketPrice || data.regularMarketPreviousClose || 0;
+      const prevClose = data.regularMarketPreviousClose || price;
+      const change = data.regularMarketChange !== undefined ? data.regularMarketChange : (price - prevClose);
+      const changePercent = data.regularMarketChangePercent !== undefined ? data.regularMarketChangePercent : (prevClose ? (change / prevClose) * 100 : 0);
       const isPos = change >= 0;
 
       const priceEl = document.getElementById(priceElId);
@@ -305,9 +311,9 @@
       if (!grid) return;
 
       grid.innerHTML = trackedStocks.map(sym => {
-        const data = stockCache[sym];
+        const item = stockDataMap[sym];
         
-        if (!data) {
+        if (!item) {
           return `
           <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg animate-pulse">
             <div class="flex items-center justify-between mb-3">
@@ -328,11 +334,10 @@
           </div>`;
         }
 
-        const meta = data.meta || {};
-        const price = meta.regularMarketPrice || meta.chartPreviousClose || 0;
-        const prevClose = meta.chartPreviousClose || price;
-        const change = price - prevClose;
-        const changePercent = prevClose ? (change / prevClose) * 100 : 0;
+        const price = item.regularMarketPrice || item.regularMarketPreviousClose || 0;
+        const prevClose = item.regularMarketPreviousClose || price;
+        const change = item.regularMarketChange !== undefined ? item.regularMarketChange : (price - prevClose);
+        const changePercent = item.regularMarketChangePercent !== undefined ? item.regularMarketChangePercent : (prevClose ? (change / prevClose) * 100 : 0);
         const isPos = change >= 0;
 
         return `
@@ -340,7 +345,7 @@
             <div class="flex items-center justify-between mb-3">
               <div>
                 <a href="hisse.html?sembol=${sym}" class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">${sym}</a>
-                <p class="text-xs text-slate-400 line-clamp-1">${meta.shortName || meta.longName || sym}</p>
+                <p class="text-xs text-slate-400 line-clamp-1">${item.shortName || item.longName || sym}</p>
               </div>
               <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">
                 ${isPos ? '+' : ''}${changePercent.toFixed(2)}%
@@ -373,43 +378,32 @@
       if (btnText) btnText.textContent = 'Güncelleniyor...';
 
       try {
-        // 1. Endeksleri eşzamanlı çek
-        const indexPromises = [
-          fetchFromApi('XU100.IS', '1d', '1m').then(res => {
-            indexCache['XU100'] = res.meta;
-            applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', res.meta);
-          }).catch(() => null),
-          fetchFromApi('XU030.IS', '1d', '1m').then(res => {
-            indexCache['XU030'] = res.meta;
-            applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', res.meta);
-          }).catch(() => null),
-          fetchFromApi('XBANK.IS', '1d', '1m').then(res => {
-            indexCache['XBANK'] = res.meta;
-            applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', res.meta);
-          }).catch(() => null)
-        ];
+        // 3 Endeks + 12 Hisse = 15 sembolü TEK BİR İSTEKTE çeker
+        const allSymbols = ['XU100.IS', 'XU030.IS', 'XBANK.IS', ...trackedStocks];
+        const batchResults = await fetchBatchQuotes(allSymbols);
 
-        // 2. Takip listesindeki tüm hisseleri PARALEL çek
-        const stockPromises = trackedStocks.map(async sym => {
-          try {
-            const res = await fetchFromApi(sym, '1d', '1d');
-            stockCache[sym] = res;
-          } catch (e) {
-            // sessizce geç
+        batchResults.forEach(item => {
+          let cleanSymbol = item.symbol.replace('.IS', '').replace('^', '');
+          if (cleanSymbol === 'XU100' || cleanSymbol === 'XU030' || cleanSymbol === 'XBANK') {
+            indexDataMap[cleanSymbol] = item;
+          } else {
+            stockDataMap[cleanSymbol] = item;
           }
         });
 
-        // Hepsinin bitmesini bekle (ortalama 1-2 saniye)
-        await Promise.allSettled([...indexPromises, ...stockPromises]);
-        
-        // Önbelleğe kaydet
+        if (indexDataMap['XU100']) applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', indexDataMap['XU100']);
+        if (indexDataMap['XU030']) applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', indexDataMap['XU030']);
+        if (indexDataMap['XBANK']) applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', indexDataMap['XBANK']);
+
         try {
-          localStorage.setItem('bist_stock_cache', JSON.stringify(stockCache));
-          localStorage.setItem('bist_index_cache', JSON.stringify(indexCache));
+          localStorage.setItem('bist_batch_stocks', JSON.stringify(stockDataMap));
+          localStorage.setItem('bist_batch_indices', JSON.stringify(indexDataMap));
           localStorage.setItem('bist_cache_time', Date.now().toString());
         } catch (e) {}
 
         renderStockCards();
+      } catch (err) {
+        console.error('Veri çekme hatası:', err);
       } finally {
         if (icon) icon.classList.remove('animate-spin');
         if (btnText) btnText.textContent = 'Şimdi Güncelle';
@@ -421,6 +415,33 @@
       currentSelectedSymbol = symbol;
       document.getElementById('stockModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
+
+      const fastData = stockDataMap[symbol];
+      if (fastData) {
+        const price = fastData.regularMarketPrice || fastData.regularMarketPreviousClose || 0;
+        const prevClose = fastData.regularMarketPreviousClose || price;
+        const change = fastData.regularMarketChange !== undefined ? fastData.regularMarketChange : (price - prevClose);
+        const changePercent = fastData.regularMarketChangePercent !== undefined ? fastData.regularMarketChangePercent : (prevClose ? (change / prevClose) * 100 : 0);
+        const isPos = change >= 0;
+
+        document.getElementById('modalSymbol').textContent = symbol;
+        document.getElementById('modalName').textContent = fastData.shortName || fastData.longName || symbol;
+        document.getElementById('modalPrice').textContent = `₺${formatNumber(price)}`;
+        document.getElementById('modalChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(change)} (%${changePercent.toFixed(2)})`;
+        document.getElementById('modalChange').className = `text-sm font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+
+        const badge = document.getElementById('modalBadge');
+        badge.className = `text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+        badge.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
+
+        document.getElementById('modalHigh52').textContent = fastData.fiftyTwoWeekHigh ? `₺${formatNumber(fastData.fiftyTwoWeekHigh)}` : '-';
+        document.getElementById('modalLow52').textContent = fastData.fiftyTwoWeekLow ? `₺${formatNumber(fastData.fiftyTwoWeekLow)}` : '-';
+        document.getElementById('modalDayRange').textContent = (fastData.regularMarketDayLow && fastData.regularMarketDayHigh)
+          ? `₺${formatNumber(fastData.regularMarketDayLow)} - ₺${formatNumber(fastData.regularMarketDayHigh)}`
+          : '-';
+        document.getElementById('modalVolume').textContent = formatVolume(fastData.regularMarketVolume);
+      }
+
       await updateModalChart();
     }
 
@@ -448,51 +469,35 @@
       if (loader) loader.classList.remove('hidden');
 
       try {
-        const result = await fetchFromApi(currentSelectedSymbol, currentPeriod, currentInterval);
-        const meta = result.meta;
-        const quotes = result.indicators?.quote?.[0] || {};
-        const timestamps = result.timestamp || [];
-        
-        const price = meta.regularMarketPrice || meta.chartPreviousClose || 0;
-        const prevClose = meta.chartPreviousClose || price;
-        const change = price - prevClose;
-        const changePercent = prevClose ? (change / prevClose) * 100 : 0;
-        const isPos = change >= 0;
+        const ticker = currentSelectedSymbol.endsWith('.IS') ? currentSelectedSymbol : `${currentSelectedSymbol}.IS`;
+        const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=${currentInterval}&range=${currentPeriod}`;
+        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
 
-        document.getElementById('modalSymbol').textContent = currentSelectedSymbol;
-        document.getElementById('modalName').textContent = meta.shortName || meta.longName || currentSelectedSymbol;
-        document.getElementById('modalPrice').textContent = `₺${formatNumber(price)}`;
-        document.getElementById('modalChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(change)} (%${changePercent.toFixed(2)})`;
-        document.getElementById('modalChange').className = `text-sm font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+        const res = await fetch(proxyUrl);
+        const data = await res.json();
+        const result = data?.chart?.result?.[0];
 
-        const badge = document.getElementById('modalBadge');
-        badge.className = `text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
-        badge.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
+        if (result) {
+          const quotes = result.indicators?.quote?.[0] || {};
+          const timestamps = result.timestamp || [];
+          const labels = [];
+          const prices = [];
 
-        document.getElementById('modalHigh52').textContent = meta.fiftyTwoWeekHigh ? `₺${formatNumber(meta.fiftyTwoWeekHigh)}` : '-';
-        document.getElementById('modalLow52').textContent = meta.fiftyTwoWeekLow ? `₺${formatNumber(meta.fiftyTwoWeekLow)}` : '-';
-        document.getElementById('modalDayRange').textContent = (meta.regularMarketDayLow && meta.regularMarketDayHigh) 
-          ? `₺${formatNumber(meta.regularMarketDayLow)} - ₺${formatNumber(meta.regularMarketDayHigh)}` 
-          : '-';
-        document.getElementById('modalVolume').textContent = formatVolume(meta.regularMarketVolume);
+          timestamps.forEach((ts, idx) => {
+            const closeVal = quotes.close?.[idx];
+            if (closeVal !== null && closeVal !== undefined && !isNaN(closeVal)) {
+              const date = new Date(ts * 1000);
+              const dateStr = (currentPeriod === '1d' || currentPeriod === '5d')
+                ? date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
+                : date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
+              labels.push(dateStr);
+              prices.push(Number(closeVal.toFixed(2)));
+            }
+          });
 
-        const labels = [];
-        const prices = [];
-
-        timestamps.forEach((ts, idx) => {
-          const closeVal = quotes.close?.[idx];
-          if (closeVal !== null && closeVal !== undefined && !isNaN(closeVal)) {
-            const date = new Date(ts * 1000);
-            const dateStr = (currentPeriod === '1d' || currentPeriod === '5d')
-              ? date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
-              : date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
-            labels.push(dateStr);
-            prices.push(Number(closeVal.toFixed(2)));
-          }
-        });
-
-        renderChart(labels, prices, isPos);
-
+          const isPos = prices.length >= 2 ? (prices[prices.length - 1] >= prices[0]) : true;
+          renderChart(labels, prices, isPos);
+        }
       } catch (err) {
         console.error('Grafik verisi alınamadı:', err);
       } finally {
@@ -573,32 +578,29 @@
       renderStockCards();
       
       try {
-        const result = await fetchFromApi(symbol, '1mo', '1d');
-        stockCache[symbol] = result;
-        renderStockCards();
+        await fetchAllData(true);
         openStockModal(symbol);
       } catch (e) {
-        alert(`${symbol} sembolü bulunamadı veya veri alınamadı.`);
+        alert(`${symbol} sembolü bulunamadı.`);
         trackedStocks = trackedStocks.filter(s => s !== symbol);
         renderStockCards();
       }
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      // 1. Önce hafızadaki (LocalStorage) verileri ANINDA ekrana bas
+      // 1. Hafızadaki verileri ANINDA bas
       try {
-        const cachedStocks = localStorage.getItem('bist_stock_cache');
-        const cachedIndices = localStorage.getItem('bist_index_cache');
-        const cacheTime = localStorage.getItem('bist_cache_time');
+        const cachedStocks = localStorage.getItem('bist_batch_stocks');
+        const cachedIndices = localStorage.getItem('bist_batch_indices');
 
         if (cachedStocks && cachedIndices) {
-          stockCache = JSON.parse(cachedStocks);
-          indexCache = JSON.parse(cachedIndices);
+          stockDataMap = JSON.parse(cachedStocks);
+          indexDataMap = JSON.parse(cachedIndices);
           renderStockCards();
 
-          if (indexCache['XU100']) applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', indexCache['XU100']);
-          if (indexCache['XU030']) applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', indexCache['XU030']);
-          if (indexCache['XBANK']) applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', indexCache['XBANK']);
+          if (indexDataMap['XU100']) applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', indexDataMap['XU100']);
+          if (indexDataMap['XU030']) applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', indexDataMap['XU030']);
+          if (indexDataMap['XBANK']) applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', indexDataMap['XBANK']);
         }
       } catch (e) {}
 
@@ -608,17 +610,16 @@
       const lastTime = parseInt(localStorage.getItem('bist_cache_time') || '0', 10);
       const isCacheOld = (Date.now() - lastTime) > (60 * 60 * 1000);
       
-      if (Object.keys(stockCache).length === 0 || isCacheOld) {
+      if (Object.keys(stockDataMap).length === 0 || isCacheOld) {
         fetchAllData();
       }
 
-      // Saat başı sayacı (Örn: 14:00'e kalan süreyi sayar)
+      // Saat başı sayacı
       setInterval(() => {
         const remaining = getSecondsUntilNextHour();
         const cdEl = document.getElementById('countdownText');
         if (cdEl) cdEl.textContent = formatTime(remaining);
 
-        // Tam saat başına ulaşıldığında (kalan süre 0 olduğunda) otomatik yenile
         if (remaining <= 1) {
           fetchAllData(true);
         }
