@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIST Canlı Piyasa & Hisse Analiz Portalı</title>
+  <title>BIST Canlı Piyasa & Hisse Portalı</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,10 +16,10 @@
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     @keyframes pulse-subtle {
       0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
+      50% { opacity: 0.35; }
     }
     .skeleton-loader {
-      animation: pulse-subtle 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      animation: pulse-subtle 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
       background-color: #1e293b;
     }
   </style>
@@ -39,20 +39,20 @@
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
               Borsa İstanbul Canlı Takip
             </h1>
-            <p class="text-xs sm:text-sm text-slate-400">Doğrudan API üzerinden anlık veri çekilir • 15 dakikada bir otomatik yenilenir</p>
+            <p class="text-xs sm:text-sm text-slate-400">Önbellek destekli hızlı veri • Her saat başı otomatik senkronizasyon</p>
           </div>
         </div>
       </div>
 
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Canlı Bağlantı Durumu & 15 Dakikalık Sayaç -->
+        <!-- Canlı Bağlantı Durumu & Saat Başı Sayacı -->
         <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl text-xs text-slate-300 shadow-sm">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-slate-400">Sonraki Güncelleme: <strong id="countdownText" class="text-white font-mono">15:00</strong></span>
+          <span class="text-slate-400">Sonraki Saat Başı: <strong id="countdownText" class="text-white font-mono">--:--</strong></span>
         </div>
 
         <!-- Manuel Yenileme Butonu -->
-        <button id="refreshBtn" onclick="fetchAllData()" class="flex items-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer">
+        <button id="refreshBtn" onclick="fetchAllData(true)" class="flex items-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer">
           <svg id="refreshIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
           </svg>
@@ -159,12 +159,12 @@
 
       <!-- Zaman Aralığı Butonları -->
       <div class="flex flex-wrap items-center gap-2 mt-5">
-        <button onclick="changePeriod('1d', '1m')" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">1 Gün</button>
-        <button onclick="changePeriod('5d', '15m')" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">5 Gün</button>
-        <button onclick="changePeriod('1mo', '1d')" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all cursor-pointer">1 Ay</button>
-        <button onclick="changePeriod('3mo', '1d')" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">3 Ay</button>
-        <button onclick="changePeriod('1y', '1wk')" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">1 Yıl</button>
-        <button onclick="changePeriod('5y', '1mo')" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">5 Yıl</button>
+        <button onclick="changePeriod('1d', '1m', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">1 Gün</button>
+        <button onclick="changePeriod('5d', '15m', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">5 Gün</button>
+        <button onclick="changePeriod('1mo', '1d', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all cursor-pointer">1 Ay</button>
+        <button onclick="changePeriod('3mo', '1d', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">3 Ay</button>
+        <button onclick="changePeriod('1y', '1wk', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">1 Yıl</button>
+        <button onclick="changePeriod('5y', '1mo', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">5 Yıl</button>
       </div>
 
       <!-- Dinamik Grafik Alanı -->
@@ -205,28 +205,32 @@
   </div>
 
   <script>
-    // 15 dakika = 900 saniye
-    const REFRESH_INTERVAL_SECONDS = 900;
-    let countdown = REFRESH_INTERVAL_SECONDS;
     let isFetching = false;
-
-    // Başlangıçta takip edilecek hisseler
     let trackedStocks = ['THYAO', 'GARAN', 'ASELS', 'EREGL', 'TUPRS', 'KCHOL', 'BIMAS', 'SISE', 'SASA', 'FROTO', 'AKBNK', 'PETKM'];
     let stockCache = {};
+    let indexCache = {};
     let currentSelectedSymbol = 'THYAO';
     let currentPeriod = '1mo';
     let currentInterval = '1d';
     let chartInstance = null;
 
-    // Saniyeyi 15:00 / 08:45 gibi dakika:saniye formatına çevirir
-    function formatTime(seconds) {
-      const mins = Math.floor(seconds / 60);
-      const secs = seconds % 60;
+    // Saat başına kalan süreyi saniye cinsinden hesaplar
+    function getSecondsUntilNextHour() {
+      const now = new Date();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+      return (60 - minutes - 1) * 60 + (60 - seconds);
+    }
+
+    // Saniyeyi 54:12 gibi dakika:saniye formatına çevirir
+    function formatTime(totalSeconds) {
+      const mins = Math.floor(totalSeconds / 60);
+      const secs = totalSeconds % 60;
       return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
     }
 
-    // CORS engeli olmadan Yahoo Finance verisini çeken istemci
-    async function fetchFromApi(symbol, range = '1mo', interval = '1d') {
+    // CORS Proxy üzerinden hızlı API istemcisi
+    async function fetchFromApi(symbol, range = '1d', interval = '1d') {
       const isIndex = symbol.startsWith('^') || symbol.startsWith('XU') || symbol === 'XBANK';
       const ticker = isIndex 
         ? (symbol.startsWith('^') ? symbol : `^${symbol}`)
@@ -242,17 +246,21 @@
 
       for (const proxyFn of proxies) {
         try {
-          const res = await fetch(proxyFn(targetUrl));
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 sn zaman aşımı
+
+          const res = await fetch(proxyFn(targetUrl), { signal: controller.signal });
+          clearTimeout(timeoutId);
           if (!res.ok) continue;
           const data = await res.json();
           if (data?.chart?.result?.[0]) {
             return data.chart.result[0];
           }
         } catch (e) {
-          // Bir proxy yanıt vermezse diğerine geç
+          // sonraki proxy'e geç
         }
       }
-      throw new Error(`${symbol} için anlık veri alınamadı`);
+      throw new Error(`${symbol} verisi alınamadı`);
     }
 
     function formatNumber(val) {
@@ -267,41 +275,31 @@
       return Number(vol).toLocaleString('tr-TR');
     }
 
-    // Ana endeks kartlarını güncelle
-    async function fetchIndex(symbol, priceElId, changeElId, badgeElId) {
-      try {
-        const result = await fetchFromApi(symbol, '1d', '1m');
-        const meta = result.meta;
-        const price = meta.regularMarketPrice || meta.chartPreviousClose || 0;
-        const prevClose = meta.chartPreviousClose || price;
-        const change = price - prevClose;
-        const changePercent = prevClose ? (change / prevClose) * 100 : 0;
-        const isPos = change >= 0;
+    function applyIndexToUI(priceElId, changeElId, badgeElId, meta) {
+      const price = meta.regularMarketPrice || meta.chartPreviousClose || 0;
+      const prevClose = meta.chartPreviousClose || price;
+      const change = price - prevClose;
+      const changePercent = prevClose ? (change / prevClose) * 100 : 0;
+      const isPos = change >= 0;
 
-        const priceEl = document.getElementById(priceElId);
-        const changeEl = document.getElementById(changeElId);
-        const badgeEl = document.getElementById(badgeElId);
+      const priceEl = document.getElementById(priceElId);
+      const changeEl = document.getElementById(changeElId);
+      const badgeEl = document.getElementById(badgeElId);
 
-        if (priceEl) {
-          priceEl.classList.remove('skeleton-loader');
-          priceEl.textContent = `₺${formatNumber(price)}`;
-        }
-        
-        if (changeEl) {
-          changeEl.className = `text-xs font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
-          changeEl.textContent = `${isPos ? '▲ +' : '▼ '}${formatNumber(change)} (%${changePercent.toFixed(2)})`;
-        }
-
-        if (badgeEl) {
-          badgeEl.className = `text-xs font-semibold px-2 py-0.5 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
-          badgeEl.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
-        }
-      } catch (err) {
-        console.warn(`Endeks verisi alınamadı (${symbol}):`, err);
+      if (priceEl) {
+        priceEl.classList.remove('skeleton-loader');
+        priceEl.textContent = `₺${formatNumber(price)}`;
+      }
+      if (changeEl) {
+        changeEl.className = `text-xs font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+        changeEl.textContent = `${isPos ? '▲ +' : '▼ '}${formatNumber(change)} (%${changePercent.toFixed(2)})`;
+      }
+      if (badgeEl) {
+        badgeEl.className = `text-xs font-semibold px-2 py-0.5 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+        badgeEl.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
       }
     }
 
-    // Hisse kartlarını HTML'e bas
     function renderStockCards() {
       const grid = document.getElementById('stockGrid');
       if (!grid) return;
@@ -309,7 +307,6 @@
       grid.innerHTML = trackedStocks.map(sym => {
         const data = stockCache[sym];
         
-        // Veri henüz API'den gelmediyse yükleme animasyonu göster
         if (!data) {
           return `
           <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg animate-pulse">
@@ -331,7 +328,6 @@
           </div>`;
         }
 
-        // Veri geldiğinde kartı doldur
         const meta = data.meta || {};
         const price = meta.regularMarketPrice || meta.chartPreviousClose || 0;
         const prevClose = meta.chartPreviousClose || price;
@@ -367,8 +363,7 @@
       }).join('');
     }
 
-    // Tüm verileri API'den anlık çek
-    async function fetchAllData() {
+    async function fetchAllData(forceRefresh = false) {
       if (isFetching) return;
       isFetching = true;
 
@@ -379,25 +374,43 @@
 
       try {
         // 1. Endeksleri eşzamanlı çek
-        await Promise.allSettled([
-          fetchIndex('XU100.IS', 'xu100Price', 'xu100Change', 'xu100Badge'),
-          fetchIndex('XU030.IS', 'xu030Price', 'xu030Change', 'xu030Badge'),
-          fetchIndex('XBANK.IS', 'xbankPrice', 'xbankChange', 'xbankBadge')
-        ]);
+        const indexPromises = [
+          fetchFromApi('XU100.IS', '1d', '1m').then(res => {
+            indexCache['XU100'] = res.meta;
+            applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', res.meta);
+          }).catch(() => null),
+          fetchFromApi('XU030.IS', '1d', '1m').then(res => {
+            indexCache['XU030'] = res.meta;
+            applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', res.meta);
+          }).catch(() => null),
+          fetchFromApi('XBANK.IS', '1d', '1m').then(res => {
+            indexCache['XBANK'] = res.meta;
+            applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', res.meta);
+          }).catch(() => null)
+        ];
 
-        // 2. Takip listesindeki hisseleri sırayla çek
-        for (const sym of trackedStocks) {
+        // 2. Takip listesindeki tüm hisseleri PARALEL çek
+        const stockPromises = trackedStocks.map(async sym => {
           try {
-            const result = await fetchFromApi(sym, '1mo', '1d');
-            stockCache[sym] = result;
-            renderStockCards();
+            const res = await fetchFromApi(sym, '1d', '1d');
+            stockCache[sym] = res;
           } catch (e) {
-            console.warn(`${sym} yüklenemedi:`, e);
+            // sessizce geç
           }
-        }
+        });
+
+        // Hepsinin bitmesini bekle (ortalama 1-2 saniye)
+        await Promise.allSettled([...indexPromises, ...stockPromises]);
+        
+        // Önbelleğe kaydet
+        try {
+          localStorage.setItem('bist_stock_cache', JSON.stringify(stockCache));
+          localStorage.setItem('bist_index_cache', JSON.stringify(indexCache));
+          localStorage.setItem('bist_cache_time', Date.now().toString());
+        } catch (e) {}
+
+        renderStockCards();
       } finally {
-        // Çekim bittiğinde sayacı 900 saniyeye (15:00) sıfırla
-        countdown = REFRESH_INTERVAL_SECONDS;
         if (icon) icon.classList.remove('animate-spin');
         if (btnText) btnText.textContent = 'Şimdi Güncelle';
         isFetching = false;
@@ -408,7 +421,6 @@
       currentSelectedSymbol = symbol;
       document.getElementById('stockModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
-
       await updateModalChart();
     }
 
@@ -417,16 +429,15 @@
       document.body.style.overflow = 'auto';
     }
 
-    async function changePeriod(period, interval) {
+    async function changePeriod(period, interval, btnEl) {
       currentPeriod = period;
       currentInterval = interval;
 
-      // Buton stillerini güncelle
       document.querySelectorAll('.period-btn').forEach(btn => {
         btn.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer';
       });
-      if (event && event.target) {
-        event.target.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all cursor-pointer';
+      if (btnEl) {
+        btnEl.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all cursor-pointer';
       }
 
       await updateModalChart();
@@ -448,7 +459,6 @@
         const changePercent = prevClose ? (change / prevClose) * 100 : 0;
         const isPos = change >= 0;
 
-        // Modal başlıkları
         document.getElementById('modalSymbol').textContent = currentSelectedSymbol;
         document.getElementById('modalName').textContent = meta.shortName || meta.longName || currentSelectedSymbol;
         document.getElementById('modalPrice').textContent = `₺${formatNumber(price)}`;
@@ -459,7 +469,6 @@
         badge.className = `text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
         badge.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
 
-        // İstatistikler
         document.getElementById('modalHigh52').textContent = meta.fiftyTwoWeekHigh ? `₺${formatNumber(meta.fiftyTwoWeekHigh)}` : '-';
         document.getElementById('modalLow52').textContent = meta.fiftyTwoWeekLow ? `₺${formatNumber(meta.fiftyTwoWeekLow)}` : '-';
         document.getElementById('modalDayRange').textContent = (meta.regularMarketDayLow && meta.regularMarketDayHigh) 
@@ -467,7 +476,6 @@
           : '-';
         document.getElementById('modalVolume').textContent = formatVolume(meta.regularMarketVolume);
 
-        // Grafik verilerini hazırla
         const labels = [];
         const prices = [];
 
@@ -553,7 +561,6 @@
       });
     }
 
-    // Yeni hisse arama & ekleme fonksiyonu
     async function searchAndAddStock() {
       const input = document.getElementById('searchInput');
       const symbol = input.value.trim().toUpperCase();
@@ -577,18 +584,43 @@
       }
     }
 
-    // Sayfa açıldığında başlat & 900 saniyelik (15 dakika) sayaç
     window.addEventListener('DOMContentLoaded', () => {
+      // 1. Önce hafızadaki (LocalStorage) verileri ANINDA ekrana bas
+      try {
+        const cachedStocks = localStorage.getItem('bist_stock_cache');
+        const cachedIndices = localStorage.getItem('bist_index_cache');
+        const cacheTime = localStorage.getItem('bist_cache_time');
+
+        if (cachedStocks && cachedIndices) {
+          stockCache = JSON.parse(cachedStocks);
+          indexCache = JSON.parse(cachedIndices);
+          renderStockCards();
+
+          if (indexCache['XU100']) applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', indexCache['XU100']);
+          if (indexCache['XU030']) applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', indexCache['XU030']);
+          if (indexCache['XBANK']) applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', indexCache['XBANK']);
+        }
+      } catch (e) {}
+
       renderStockCards();
-      fetchAllData();
 
+      // Hafıza boşsa veya 1 saatten eskiyse arka planda hızlıca çek
+      const lastTime = parseInt(localStorage.getItem('bist_cache_time') || '0', 10);
+      const isCacheOld = (Date.now() - lastTime) > (60 * 60 * 1000);
+      
+      if (Object.keys(stockCache).length === 0 || isCacheOld) {
+        fetchAllData();
+      }
+
+      // Saat başı sayacı (Örn: 14:00'e kalan süreyi sayar)
       setInterval(() => {
-        countdown--;
+        const remaining = getSecondsUntilNextHour();
         const cdEl = document.getElementById('countdownText');
-        if (cdEl) cdEl.textContent = formatTime(countdown);
+        if (cdEl) cdEl.textContent = formatTime(remaining);
 
-        if (countdown <= 0) {
-          fetchAllData();
+        // Tam saat başına ulaşıldığında (kalan süre 0 olduğunda) otomatik yenile
+        if (remaining <= 1) {
+          fetchAllData(true);
         }
       }, 1000);
     });
