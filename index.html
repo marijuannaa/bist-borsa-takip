@@ -203,7 +203,7 @@
       const changeEl = document.getElementById(`${prefix}Change`);
       const badgeEl = document.getElementById(`${prefix}Badge`);
 
-      if (priceEl) priceEl.textContent = `₺${formatNumber(data.price)}`;
+      if (priceEl) priceEl.textContent = formatNumber(data.price);
       if (changeEl) {
         changeEl.className = `text-xs font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
         changeEl.textContent = `${isPos ? '▲ +' : '▼ '}${formatNumber(data.change)} (%${data.changePercent.toFixed(2)})`;
@@ -264,7 +264,6 @@
       if (icon) icon.classList.add('animate-spin');
 
       try {
-        // Önbellek engellemek için son zaman damgasıyla çağırır
         const res = await fetch(`data.json?_t=${Date.now()}`);
         if (!res.ok) throw new Error('data.json henüz oluşturulmamış');
         globalData = await res.json();

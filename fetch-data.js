@@ -1,84 +1,97 @@
 import fs from 'fs';
-import YahooFinance from 'yahoo-finance2';
+import yahooFinance from 'yahoo-finance2';
 
-const yf = new YahooFinance({ suppressNotices: ['yahooSurvey'] });
-
-const TRACKED_STOCKS = [
-  'THYAO', 'GARAN', 'ASELS', 'EREGL', 'TUPRS', 
-  'KCHOL', 'BIMAS', 'SISE', 'SASA', 'FROTO', 
-  'AKBNK', 'PETKM', 'YKBNK', 'ISCTR', 'TCELL', 'KRDMD'
+const STOCKS = [
+  'THYAO.IS', 'GARAN.IS', 'ASELS.IS', 'EREGL.IS', 
+  'TUPRS.IS', 'KCHOL.IS', 'BIMAS.IS', 'SISE.IS', 
+  'SASA.IS', 'FROTO.IS', 'AKBNK.IS', 'PETKM.IS'
 ];
 
-const INDICES = ['XU100', 'XU030', 'XBANK'];
+const INDICES = [
+  { key: 'XU100', symbol: 'XU100.IS' },
+  { key: 'XU030', symbol: 'XU030.IS' },
+  { key: 'XBANK', symbol: 'XBANK.IS' }
+];
+
+async function getSafeQuote(symbol) {
+  try {
+    return await yahooFinance.quote(symbol);
+  } catch (err) {
+    // Alternatif sembol formatını dene (^XU100 gibi)
+    if (!symbol.startsWith('^')) {
+      try {
+        return await yahooFinance.quote(`^${symbol.replace('.IS', '')}`);
+      } catch (e) {
+        console.warn(`Veri çekilemedi: ${symbol}`);
+        return null;
+      }
+    }
+    return null;
+  }
+}
 
 async function main() {
-  console.log('🚀 BIST Veri toplayıcı çalışıyor...');
-
+  console.log('Veriler Yahoo Finance üzerinden çekiliyor...');
   const output = {
     updatedAt: new Date().toISOString(),
-    updatedAtFormatted: new Date().toLocaleString('tr-TR', { timeZone: 'Europe/Istanbul' }),
     indices: {},
     stocks: {}
   };
 
-  try {
-    // 1. Endeksleri ve Hisseleri tek seferde çek
-    const allSymbols = [
-      ...INDICES.map(i => `^${i}`),
-      ...TRACKED_STOCKS.map(s => `${s}.IS`)
-    ];
+  // 1. Endeksleri Çek
+  for (const idx of INDICES) {
+    const q = await getSafeQuote(idx.symbol);
+    if (q) {
+      let price = q.regularMarketPrice ?? q.chartPreviousClose ?? q.previousClose ?? 0;
+      let prevClose = q.regularMarketPreviousClose ?? q.chartPreviousClose ?? q.previousClose ?? price;
+      
+      // Endeks puanı 100.000 üzerinde anormal gelirse 10'a bölme düzeltmesi
+      if (price > 50000 && (idx.key === 'XU100' || idx.key === 'XU030')) {
+        price = price / 10;
+        prevClose = prevClose / 10;
+      }
 
-    console.log('📊 Toplu fiyatlar Yahoo Finance üzerinden alınıyor...');
-    const quoteResults = await yf.quote(allSymbols);
+      const change = price - prevClose;
+      const changePercent = prevClose ? (change / prevClose) * 100 : (q.regularMarketChangePercent ?? 0);
 
-    quoteResults.forEach(item => {
-      let cleanSymbol = item.symbol.replace('.IS', '').replace('^', '');
-      const dataObj = {
-        symbol: cleanSymbol,
-        shortName: item.shortName || item.longName || cleanSymbol,
-        price: item.regularMarketPrice || item.regularMarketPreviousClose || 0,
-        change: item.regularMarketChange || 0,
-        changePercent: item.regularMarketChangePercent || 0,
-        dayHigh: item.regularMarketDayHigh || null,
-        dayLow: item.regularMarketDayLow || null,
-        fiftyTwoWeekHigh: item.fiftyTwoWeekHigh || null,
-        fiftyTwoWeekLow: item.fiftyTwoWeekLow || null,
-        volume: item.regularMarketVolume || 0,
-        marketCap: item.marketCap || null
+      output.indices[idx.key] = {
+        name: q.shortName || idx.key,
+        price: Number(price.toFixed(2)),
+        change: Number(change.toFixed(2)),
+        changePercent: Number(changePercent.toFixed(2)),
+        prevClose: Number(prevClose.toFixed(2))
       };
-
-      if (INDICES.includes(cleanSymbol)) {
-        output.indices[cleanSymbol] = dataObj;
-      } else {
-        output.stocks[cleanSymbol] = dataObj;
-      }
-    });
-
-    // 2. Takip edilen hisselerin geçmiş 30 günlük grafik verilerini topla
-    console.log('📈 Hisse grafik geçmişleri indiriliyor...');
-    for (const sym of TRACKED_STOCKS) {
-      try {
-        const queryOptions = { period1: '30d', interval: '1d' };
-        const hist = await yf.historical(`${sym}.IS`, queryOptions);
-        if (hist && Array.isArray(hist) && output.stocks[sym]) {
-          output.stocks[sym].history = hist.map(h => ({
-            date: new Date(h.date).toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' }),
-            close: Number(h.close.toFixed(2))
-          }));
-        }
-      } catch (err) {
-        console.warn(`⚠️ ${sym} grafiği alınamadı:`, err.message);
-      }
     }
-
-    // 3. data.json olarak kaydet
-    fs.writeFileSync('data.json', JSON.stringify(output, null, 2), 'utf8');
-    console.log('✅ data.json dosyası başarıyla üretildi!');
-
-  } catch (error) {
-    console.error('❌ Veri toplama hatası:', error);
-    process.exit(1);
   }
+
+  // 2. Hisseleri Çek
+  for (const sym of STOCKS) {
+    const q = await getSafeQuote(sym);
+    if (q) {
+      const cleanKey = sym.replace('.IS', '');
+      const price = q.regularMarketPrice ?? q.previousClose ?? 0;
+      const prevClose = q.regularMarketPreviousClose ?? price;
+      const change = q.regularMarketChange ?? (price - prevClose);
+      const changePercent = q.regularMarketChangePercent ?? (prevClose ? (change / prevClose) * 100 : 0);
+
+      output.stocks[cleanKey] = {
+        symbol: cleanKey,
+        shortName: q.shortName || cleanKey,
+        longName: q.longName || q.shortName || cleanKey,
+        price: Number(price.toFixed(2)),
+        change: Number(change.toFixed(2)),
+        changePercent: Number(changePercent.toFixed(2)),
+        dayHigh: q.regularMarketDayHigh || null,
+        dayLow: q.regularMarketDayLow || null,
+        fiftyTwoWeekHigh: q.fiftyTwoWeekHigh || null,
+        fiftyTwoWeekLow: q.fiftyTwoWeekLow || null,
+        volume: q.regularMarketVolume || 0
+      };
+    }
+  }
+
+  fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
+  console.log('data.json başarıyla oluşturuldu.');
 }
 
 main();
