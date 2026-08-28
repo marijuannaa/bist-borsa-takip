@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "borsa-api": "^1.2.0",
+    "resend": "^6.24.0",
     "yahoo-finance2": "^4.0.2"
   }
 }
