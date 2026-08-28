@@ -63,7 +63,7 @@
         <p id="stockLongName" class="text-slate-400 text-sm mt-1.5 skeleton-loader h-4 w-60 rounded"></p>
         <div class="flex items-center gap-2 mt-2">
           <span id="stockCurrency" class="text-[11px] font-semibold text-slate-400 bg-slate-800 px-2.5 py-0.5 rounded border border-slate-700">TRY</span>
-          <span id="stockMarketTime" class="text-[11px] text-slate-500">Canlı API İstemcisi</span>
+          <span id="stockMarketTime" class="text-[11px] text-slate-500">Canlı Senkronize Grafik</span>
         </div>
       </div>
 
@@ -134,7 +134,6 @@
   </div>
 
   <script>
-    // URL'den sembol parametresini al (Örn: hisse.html?sembol=THYAO)
     const urlParams = new URLSearchParams(window.location.search);
     let currentSymbol = (urlParams.get('sembol') || urlParams.get('symbol') || 'THYAO').toUpperCase();
     let currentRange = '1mo';
@@ -153,10 +152,9 @@
       return Number(vol).toLocaleString('tr-TR');
     }
 
-    // CORS Proxy üzerinden anlık Yahoo Finance verisi çekici
     async function fetchYahooData(symbol, range, interval) {
       const ticker = symbol.endsWith('.IS') ? symbol : `${symbol}.IS`;
-      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=${interval}&range=${range}`;
+      const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=${interval}&range=${range}&includePrePost=true`;
       
       const proxies = [
         (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
@@ -172,9 +170,7 @@
           if (data?.chart?.result?.[0]) {
             return data.chart.result[0];
           }
-        } catch (e) {
-          // sonraki proxy'e geç
-        }
+        } catch (e) {}
       }
       throw new Error(`${symbol} verisi API'den alınamadı.`);
     }
@@ -195,10 +191,8 @@
         const changePercent = prevClose ? (change / prevClose) * 100 : 0;
         const isPos = change >= 0;
 
-        // Sayfa Başlığını Güncelle
         document.title = `${currentSymbol} - ₺${formatNumber(price)} | BIST Canlı Detay`;
 
-        // Başlık Alanları
         const symEl = document.getElementById('stockSymbol');
         symEl.classList.remove('skeleton-loader');
         symEl.textContent = currentSymbol;
@@ -219,7 +213,6 @@
         badgeEl.className = `text-xs font-bold px-3 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
         badgeEl.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
 
-        // Alt İstatistikler
         const h52 = document.getElementById('statHigh52');
         h52.classList.remove('skeleton-loader');
         h52.textContent = meta.fiftyTwoWeekHigh ? `₺${formatNumber(meta.fiftyTwoWeekHigh)}` : '-';
@@ -238,7 +231,6 @@
         vol.classList.remove('skeleton-loader');
         vol.textContent = formatVolume(meta.regularMarketVolume);
 
-        // Grafik Verilerini Hazırla
         const labels = [];
         const prices = [];
 
@@ -247,17 +239,32 @@
           if (closeVal !== null && closeVal !== undefined && !isNaN(closeVal)) {
             const date = new Date(ts * 1000);
             const labelStr = (currentRange === '1d' || currentRange === '5d')
-              ? date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
-              : date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
+              ? date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Istanbul' })
+              : date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' });
             labels.push(labelStr);
             prices.push(Number(closeVal.toFixed(2)));
           }
         });
 
+        // Canlı uç nokta senkronizasyonu: Günlük periyotta son anlık fiyatı grafiğin ucuna bağla
+        if (currentRange !== '1d' && currentRange !== '5d' && price > 0) {
+          const now = new Date();
+          const todayStr = now.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' });
+          const lastLabel = labels[labels.length - 1];
+
+          if (lastLabel !== todayStr) {
+            labels.push(todayStr);
+            prices.push(Number(price.toFixed(2)));
+          } else {
+            // Bugünün barı varsa güncel anlık fiyatla güncelle
+            prices[prices.length - 1] = Number(price.toFixed(2));
+          }
+        }
+
         renderChart(labels, prices, isPos);
 
         const subTitle = document.getElementById('chartSubTitle');
-        subTitle.textContent = `${labels.length} veri noktası ile güncellendi • Aralık: ${currentRange.toUpperCase()}`;
+        subTitle.textContent = `${labels.length} veri noktası ile güncellendi • Son Veri: ${labels[labels.length - 1]}`;
 
       } catch (err) {
         console.error('Veri yükleme hatası:', err);
@@ -288,7 +295,7 @@
             fill: true,
             tension: 0.25,
             borderWidth: 2.5,
-            pointRadius: labels.length > 60 ? 0 : 2,
+            pointRadius: labels.length > 60 ? 0 : 2.5,
             pointHoverRadius: 6,
             pointBackgroundColor: color,
           }]
@@ -314,7 +321,7 @@
           scales: {
             x: {
               grid: { color: 'rgba(51, 65, 85, 0.2)' },
-              ticks: { color: '#64748b', maxTicksLimit: 8 }
+              ticks: { color: '#64748b', maxTicksLimit: 10 }
             },
             y: {
               grid: { color: 'rgba(51, 65, 85, 0.2)' },
