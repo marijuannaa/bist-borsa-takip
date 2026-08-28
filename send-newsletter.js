@@ -1,153 +1,135 @@
 import fs from 'fs';
 import { Resend } from 'resend';
 
-const resendApiKey = process.env.RESEND_API_KEY;
-const audienceId = process.env.RESEND_AUDIENCE_ID;
+const RESEND_API_KEY = process.env.RESEND_API_KEY;
+const RECIPIENT_EMAIL = 'mertcan.baybekmn@gmail.com';
 
-if (!resendApiKey) {
-  console.error('❌ HATA: RESEND_API_KEY ortam değişkeni bulunamadı.');
-  process.exit(1);
-}
+const resend = new Resend(RESEND_API_KEY);
 
-const resend = new Resend(resendApiKey);
-
-function formatNumber(val) {
+function formatNum(val) {
   if (val === null || val === undefined || isNaN(val)) return '-';
   return Number(val).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function getMarketData() {
-  if (!fs.existsSync('./data.json')) {
-    throw new Error('data.json dosyası bulunamadı. Önce node fetch-data.js çalıştırılmalı.');
+async function main() {
+  if (!RESEND_API_KEY) {
+    console.error('RESEND_API_KEY ortam degiskeni tanimli degil!');
+    process.exit(1);
   }
-  const raw = fs.readFileSync('./data.json', 'utf-8');
-  return JSON.parse(raw);
-}
 
-function generateEmailTemplate(data) {
-  const indices = data.indices || {};
-  const xu100 = indices.XU100 || { price: 0, change: 0, changePercent: 0 };
-  const xu030 = indices.XU030 || { price: 0, change: 0, changePercent: 0 };
-  const altin = indices.ALTIN || { price: 0, change: 0, changePercent: 0 };
-  const xbank = indices.XBANK || { price: 0, change: 0, changePercent: 0 };
+  if (!fs.existsSync('./data.json')) {
+    console.error('data.json dosyasi bulunamadi. Once fetch-data calistirilmali.');
+    process.exit(1);
+  }
 
-  const todayStr = new Date().toLocaleDateString('tr-TR', {
+  const rawData = fs.readFileSync('./data.json', 'utf-8');
+  const data = JSON.parse(rawData);
+
+  const xu100 = data.indices?.XU100 || {};
+  const xu030 = data.indices?.XU030 || {};
+  const xbank = data.indices?.XBANK || {};
+  const altin = data.indices?.ALTIN || {};
+
+  const isMarketOpen = data.isMarketOpen;
+  const statusLabel = isMarketOpen ? '🟢 Canlı Seans Verileri' : '🔴 Son Kapanış Verileri (Borsa Kapalı)';
+
+  const dateStr = new Date().toLocaleDateString('tr-TR', {
     day: '2-digit',
     month: 'long',
     year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
     timeZone: 'Europe/Istanbul'
   });
 
-  const makeRow = (title, item, isCurrency = false) => {
-    const isPos = item.change >= 0;
-    const color = isPos ? '#10b981' : '#f43f5e';
-    const sign = isPos ? '+' : '';
-    const arrow = isPos ? '▲' : '▼';
-    const priceText = isCurrency ? `₺${formatNumber(item.price)}` : formatNumber(item.price);
-    
-    return `
-      <tr style="border-bottom: 1px solid #1e293b;">
-        <td style="padding: 12px 8px; font-weight: 600; color: #f8fafc;">${title}</td>
-        <td style="padding: 12px 8px; text-align: right; font-weight: 700; color: #ffffff;">${priceText}</td>
-        <td style="padding: 12px 8px; text-align: right; font-weight: 600; color: ${color};">
-          ${arrow} ${sign}${formatNumber(item.change)} (%${item.changePercent}%)
-        </td>
-      </tr>
-    `;
-  };
-
-  return `
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <meta charset="utf-8">
-    <title>BIST Sabah Bülteni</title>
-  </head>
-  <body style="margin: 0; padding: 24px; background-color: #090d16; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #cbd5e1;">
-    <div style="max-width: 580px; margin: 0 auto; background-color: #0f172a; border-radius: 16px; border: 1px solid #1e293b; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.5);">
-      
-      <!-- Başlık -->
-      <div style="text-align: center; border-bottom: 1px solid #1e293b; padding-bottom: 20px; margin-bottom: 24px;">
-        <h1 style="color: #38bdf8; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">☀️ Borsa İstanbul Sabah Bülteni</h1>
-        <p style="color: #94a3b8; font-size: 13px; margin-top: 6px;">${todayStr} • Seans Öncesi Kapanış Verileri</p>
+  const htmlContent = `
+    <div style="font-family: Arial, sans-serif; background-color: #0f172a; color: #f8fafc; padding: 24px; max-width: 600px; margin: 0 auto; border-radius: 16px;">
+      <div style="text-align: center; border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 20px;">
+        <h1 style="color: #38bdf8; margin: 0; font-size: 22px;">🎉 BIST Portalı Sabah Bülteni</h1>
+        <p style="color: #94a3b8; font-size: 13px; margin-top: 6px;">Sabah Bülteni • ${dateStr}</p>
+        <span style="display: inline-block; margin-top: 8px; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 20px; background-color: ${isMarketOpen ? 'rgba(16,185,129,0.2)' : 'rgba(244,63,94,0.2)'}; color: ${isMarketOpen ? '#34d399' : '#f87171'}; border: 1px solid ${isMarketOpen ? '#10b981' : '#f43f5e'};">
+          ${statusLabel}
+        </span>
       </div>
 
-      <p style="font-size: 14px; line-height: 1.6; color: #e2e8f0;">
-        Günaydın! Borsa İstanbul'da seans açılmadan önce dünün piyasa kapanış puanları ve gram altın fiyat özeti aşağıdadır:
+      <p style="font-size: 14px; color: #cbd5e1; line-height: 1.5;">
+        Merhaba, Borsa İstanbul seans açılışı öncesi güncel piyasa özetiniz ve kapanış verileri aşağıda yer almaktadır.
       </p>
 
-      <!-- Fiyat Tablosu -->
-      <table style="width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 14px;">
-        <thead>
-          <tr style="border-bottom: 2px solid #334155; color: #94a3b8; text-align: left; font-size: 12px; text-transform: uppercase;">
-            <th style="padding: 8px;">Enstrüman</th>
-            <th style="padding: 8px; text-align: right;">Kapanış Fiyatı</th>
-            <th style="padding: 8px; text-align: right;">Günlük Değişim</th>
+      <div style="margin: 20px 0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
+          <tr style="background-color: #1e293b; border-bottom: 2px solid #0f172a;">
+            <th style="padding: 12px; color: #94a3b8;">Varlık</th>
+            <th style="padding: 12px; color: #94a3b8;">Fiyat / Puan</th>
+            <th style="padding: 12px; color: #94a3b8;">Günlük Değişim</th>
           </tr>
-        </thead>
-        <tbody>
-          ${makeRow('BIST 100 (XU100)', xu100)}
-          ${makeRow('BIST 30 (XU030)', xu030)}
-          ${makeRow('BIST Banka (XBANK)', xbank)}
-          ${makeRow('Gram Altın (TL)', altin, true)}
-        </tbody>
-      </table>
+          <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 12px; font-weight: bold; color: #38bdf8;">BIST 100 (XU100)</td>
+            <td style="padding: 12px;">${formatNum(xu100.price)}</td>
+            <td style="padding: 12px; color: ${(xu100.change || 0) >= 0 ? '#34d399' : '#f87171'}; font-weight: bold;">
+              ${(xu100.change || 0) >= 0 ? '▲ +' : '▼ '}%${Math.abs(xu100.changePercent || 0).toFixed(2)}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 12px; font-weight: bold; color: #818cf8;">BIST 30 (XU030)</td>
+            <td style="padding: 12px;">${formatNum(xu030.price)}</td>
+            <td style="padding: 12px; color: ${(xu030.change || 0) >= 0 ? '#34d399' : '#f87171'}; font-weight: bold;">
+              ${(xu030.change || 0) >= 0 ? '▲ +' : '▼ '}%${Math.abs(xu030.changePercent || 0).toFixed(2)}
+            </td>
+          </tr>
+          <tr style="border-bottom: 1px solid #334155;">
+            <td style="padding: 12px; font-weight: bold; color: #34d399;">BIST Banka (XBANK)</td>
+            <td style="padding: 12px;">${formatNum(xbank.price)}</td>
+            <td style="padding: 12px; color: ${(xbank.change || 0) >= 0 ? '#34d399' : '#f87171'}; font-weight: bold;">
+              ${(xbank.change || 0) >= 0 ? '▲ +' : '▼ '}%${Math.abs(xbank.changePercent || 0).toFixed(2)}
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 12px; font-weight: bold; color: #fbbf24;">Gram Altın (TL)</td>
+            <td style="padding: 12px;">₺${formatNum(altin.price)}</td>
+            <td style="padding: 12px; color: ${(altin.change || 0) >= 0 ? '#34d399' : '#f87171'}; font-weight: bold;">
+              ${(altin.change || 0) >= 0 ? '▲ +' : '▼ '}%${Math.abs(altin.changePercent || 0).toFixed(2)}
+            </td>
+          </tr>
+        </table>
+      </div>
 
-      <!-- Buton -->
-      <div style="text-align: center; margin: 30px 0;">
-        <a href="https://marijuannaa.github.io/bist-borsa-takip/" style="background-color: #0284c7; color: #ffffff; padding: 12px 24px; text-decoration: none; font-weight: 600; font-size: 14px; border-radius: 10px; display: inline-block;">
-          Canlı Grafikleri İncele →
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="https://marijuannaa.github.io/bist-borsa-takip/" style="background-color: #0284c7; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: bold; display: inline-block;">
+          Canlı Portala Git →
         </a>
       </div>
 
-      <!-- Alt Bilgi & Yasal Uyarı & Unsubscribe -->
-      <div style="border-top: 1px solid #1e293b; padding-top: 20px; font-size: 11px; color: #64748b; line-height: 1.5; text-align: center;">
-        <p style="margin-bottom: 8px;">
-          <strong>YASAL UYARI:</strong> Bu e-postadaki veriler yatırım tavsiyesi niteliği taşımaz. Bilgilendirme amaçlıdır.
-        </p>
+      <div style="border-top: 1px solid #334155; margin-top: 28px; padding-top: 16px; text-align: center; font-size: 11px; color: #64748b; line-height: 1.6;">
+        <p style="margin: 0 0 6px 0;">Bu bülten bilgilendirme amaçlıdır, yatırım tavsiyesi içermez.</p>
         <p style="margin: 0;">
-          Bu e-postayı BIST Borsa Takip bültenine abone olduğunuz için aldınız.<br>
-          Artık e-posta almak istemiyorsanız <a href="https://marijuannaa.github.io/bist-borsa-takip/abone.html#cikis" style="color: #38bdf8; text-decoration: underline;">Abonelikten Ayrıl</a>.
+          Artık sabah bülteni almak istemiyorsanız 
+          <a href="https://marijuannaa.github.io/bist-borsa-takip/abone.html" style="color: #94a3b8; text-decoration: underline;">
+            buraya tıklayarak bildirebilirsiniz
+          </a>.
         </p>
       </div>
-
     </div>
-  </body>
-  </html>
   `;
-}
 
-async function main() {
+  console.log(`Sabah bulteni ${RECIPIENT_EMAIL} adresine gonderiliyor...`);
+
   try {
-    console.log('📬 Sabah bülteni hazırlanıyor...');
-    const marketData = getMarketData();
-    const htmlContent = generateEmailTemplate(marketData);
+    const res = await resend.emails.send({
+      from: 'BIST Takip <onboarding@resend.dev>',
+      to: RECIPIENT_EMAIL,
+      subject: `🎉 BIST & Piyasa Sabah Bülteni (${isMarketOpen ? 'Canlı Seans' : 'Son Kapanış'})`,
+      html: htmlContent
+    });
 
-    const todayFormatted = new Date().toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
-    const subject = `☀️ BIST & Altın Sabah Özeti (${todayFormatted})`;
-
-    // Audience ID tanımlıysa oradaki kayıtlı abonelere, değilse test adresine gönderilir
-    if (audienceId) {
-      console.log(`Audience (${audienceId}) listesine bülten iletiliyor...`);
-      await resend.broadcasts.create({
-        audienceId: audienceId,
-        from: 'BIST Portali <onboarding@resend.dev>',
-        subject: subject,
-        html: htmlContent
-      });
+    if (res.error) {
+      console.error('Resend Hatasi:', res.error.message);
+      process.exit(1);
     } else {
-      console.log('Audience ID belirtilmedi. Doğrudan tekil gönderim yapılıyor...');
-      await resend.emails.send({
-        from: 'BIST Portali <onboarding@resend.dev>',
-        to: ['delivered@resend.dev'], // Test alıcısı
-        subject: subject,
-        html: htmlContent
-      });
+      console.log('Sabah bulteni basariyla iletildi. ID:', res.data?.id);
     }
-
-    console.log('✅ Sabah bülteni başarıyla gönderildi!');
   } catch (err) {
-    console.error('❌ E-posta gönderim hatası:', err.message);
+    console.error('Gonderim Hatasi:', err.message);
     process.exit(1);
   }
 }

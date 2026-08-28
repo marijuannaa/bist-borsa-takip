@@ -4,7 +4,7 @@ on:
   schedule:
     # Hafta ici her sabah 06:00 UTC = 09:00 TSI
     - cron: '0 6 * * 1-5'
-  workflow_dispatch: # Actions sekmesinden elle test etme butonu
+  workflow_dispatch:
 
 jobs:
   send-morning-newsletter:
@@ -16,7 +16,7 @@ jobs:
       - name: Node.js Kur
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 22
 
       - name: Paketleri Kur
         run: npm install resend
@@ -27,5 +27,4 @@ jobs:
       - name: Sabah Bultenini Gonder
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          RESEND_AUDIENCE_ID: ${{ secrets.RESEND_AUDIENCE_ID }}
         run: node send-newsletter.js
