@@ -12,8 +12,15 @@ const INDICES = [
   { key: 'XBANK', symbol: 'XBANK.IS' }
 ];
 
+function getFormattedDate(d) {
+  return d.toLocaleDateString('tr-TR', {
+    day: '2-digit',
+    month: '2-digit',
+    timeZone: 'Europe/Istanbul'
+  });
+}
+
 async function fetchTickerData(ticker) {
-  // 1 yıllık günlük veriyi tek seferde çeker
   const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1y&includePrePost=true`;
   try {
     const response = await fetch(url, {
@@ -34,7 +41,6 @@ async function fetchTickerData(ticker) {
     const change = price - prevClose;
     const changePercent = prevClose ? (change / prevClose) * 100 : 0;
 
-    // Grafik geçmişini temiz bir diziye dönüştür
     const history = [];
     const timestamps = result.timestamp || [];
     const closes = result.indicators?.quote?.[0]?.close || [];
@@ -43,24 +49,43 @@ async function fetchTickerData(ticker) {
       const c = closes[i];
       if (c !== null && c !== undefined && !isNaN(c)) {
         const date = new Date(ts * 1000);
-        const dateStr = date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' });
         history.push({
           timestamp: ts,
-          date: dateStr,
+          date: getFormattedDate(date),
           close: Number(c.toFixed(2))
         });
       }
     });
 
-    // Güncel fiyatı grafiğin son barı olarak bağla
+    // Tarih zincirini tamamla: Dünün ve Bugünün tarihlerini hesapla
     const now = new Date();
-    const todayStr = now.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' });
-    if (history.length > 0 && history[history.length - 1].date !== todayStr && price > 0) {
+    const todayStr = getFormattedDate(now);
+
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayStr = getFormattedDate(yesterday);
+
+    const lastBarDate = history.length > 0 ? history[history.length - 1].date : null;
+
+    // 1. Dünün verisi eksikse araya ekle
+    if (lastBarDate !== yesterdayStr && lastBarDate !== todayStr && prevClose > 0) {
+      history.push({
+        timestamp: Math.floor(yesterday.getTime() / 1000),
+        date: yesterdayStr,
+        close: Number(prevClose.toFixed(2))
+      });
+    }
+
+    // 2. Bugünün verisini en uca canlı fiyatla ekle
+    const currentLastDate = history.length > 0 ? history[history.length - 1].date : null;
+    if (currentLastDate !== todayStr && price > 0) {
       history.push({
         timestamp: Math.floor(now.getTime() / 1000),
         date: todayStr,
         close: Number(price.toFixed(2))
       });
+    } else if (currentLastDate === todayStr && price > 0) {
+      history[history.length - 1].close = Number(price.toFixed(2));
     }
 
     return {
@@ -84,7 +109,7 @@ async function fetchTickerData(ticker) {
 }
 
 async function main() {
-  console.log('Veriler ve grafikler doğrudan Yahoo API üzerinden çekiliyor...');
+  console.log('Veriler ve kesintisiz grafik zinciri oluşturuluyor...');
 
   const now = new Date();
   const formattedTime = now.toLocaleDateString('tr-TR', {
@@ -114,7 +139,7 @@ async function main() {
         prevClose: data.prevClose,
         history: data.history
       };
-      console.log(`✓ Endeks çekildi: ${idx.key} -> ₺${data.price}`);
+      console.log(`✓ Endeks: ${idx.key} -> ₺${data.price}`);
     }
   }
 
@@ -123,12 +148,12 @@ async function main() {
     if (data) {
       const cleanKey = sym.replace('.IS', '');
       output.stocks[cleanKey] = data;
-      console.log(`✓ Hisse çekildi: ${cleanKey} -> ₺${data.price} (${data.history.length} bar grafik)`);
+      console.log(`✓ Hisse: ${cleanKey} -> ₺${data.price} (${data.history.length} bar)`);
     }
   }
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
-  console.log('data.json tüm veriler ve grafiklerle başarıyla oluşturuldu.');
+  console.log('data.json dun ve bugun dahil eksiksiz guncellendi.');
 }
 
 main();
