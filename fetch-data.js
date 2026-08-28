@@ -9,8 +9,7 @@ const STOCKS = [
 const INDICES = [
   { key: 'XU100', symbol: 'XU100.IS', name: 'BIST 100' },
   { key: 'XU030', symbol: 'XU030.IS', name: 'BIST 30' },
-  { key: 'XBANK', symbol: 'XBANK.IS', name: 'BIST Banka' },
-  { key: 'ALTIN', symbol: 'ALTIN.S1.IS', altSymbol: 'ALTIN.IS', name: 'Darphane Altın' }
+  { key: 'XBANK', symbol: 'XBANK.IS', name: 'BIST Banka' }
 ];
 
 function isBistOpen() {
@@ -31,103 +30,130 @@ function formatDateTR(date) {
   });
 }
 
-async function fetchTickerData(ticker, altTicker = null) {
-  let url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1y`;
-  let data = null;
-
+async function fetchTickerData(ticker) {
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1y`;
   try {
-    let response = await fetch(url, {
+    const response = await fetch(url, {
       headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
     });
 
-    if (!response.ok && altTicker) {
-      url = `https://query1.finance.yahoo.com/v8/finance/chart/${altTicker}?interval=1d&range=1y`;
-      response = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' }
-      });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+    const result = data?.chart?.result?.[0];
+    if (!result || !result.meta) return null;
+
+    const meta = result.meta;
+    const timestamps = result.timestamp || [];
+    const closes = result.indicators?.quote?.[0]?.close || [];
+
+    const history = [];
+    timestamps.forEach((ts, i) => {
+      const c = closes[i];
+      if (c !== null && c !== undefined && !isNaN(c)) {
+        history.push({
+          timestamp: ts,
+          date: formatDateTR(new Date(ts * 1000)),
+          close: Number(c.toFixed(2))
+        });
+      }
+    });
+
+    if (history.length === 0) return null;
+
+    const marketOpen = isBistOpen();
+    const now = new Date();
+    const todayStr = formatDateTR(now);
+
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayStr = formatDateTR(yesterday);
+
+    const latestOfficialPrice = Number((meta.regularMarketPrice ?? history[history.length - 1].close).toFixed(2));
+    const lastBar = history[history.length - 1];
+
+    if (!marketOpen && ticker.endsWith('.IS')) {
+      if (lastBar.date !== yesterdayStr && lastBar.date !== todayStr) {
+        history.push({
+          timestamp: Math.floor(yesterday.getTime() / 1000),
+          date: yesterdayStr,
+          close: latestOfficialPrice
+        });
+      } else {
+        lastBar.close = latestOfficialPrice;
+      }
+    } else {
+      if (lastBar.date !== todayStr) {
+        history.push({
+          timestamp: Math.floor(now.getTime() / 1000),
+          date: todayStr,
+          close: latestOfficialPrice
+        });
+      } else {
+        lastBar.close = latestOfficialPrice;
+      }
     }
 
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    data = await response.json();
+    const currentPrice = history[history.length - 1].close;
+    const previousClosePrice = history.length > 1 ? history[history.length - 2].close : currentPrice;
+    
+    const change = Number((currentPrice - previousClosePrice).toFixed(2));
+    const changePercent = previousClosePrice > 0 ? Number(((change / previousClosePrice) * 100).toFixed(2)) : 0;
+
+    return {
+      symbol: meta.symbol,
+      shortName: meta.shortName || meta.symbol,
+      price: currentPrice,
+      prevClose: previousClosePrice,
+      change: change,
+      changePercent: changePercent,
+      dayHigh: meta.regularMarketDayHigh || currentPrice,
+      dayLow: meta.regularMarketDayLow || currentPrice,
+      fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh || null,
+      fiftyTwoWeekLow: meta.fiftyTwoWeekLow || null,
+      volume: meta.regularMarketVolume || 0,
+      history: history
+    };
   } catch (err) {
     console.warn(`Veri çekilemedi: ${ticker} -> ${err.message}`);
     return null;
   }
+}
 
-  const result = data?.chart?.result?.[0];
-  if (!result || !result.meta) return null;
+// Gram Altın (TL) Hesaplayıcı
+async function fetchGramGold() {
+  try {
+    const [goldData, usdData] = await Promise.all([
+      fetchTickerData('GC=F'),     // Ons Altın (USD)
+      fetchTickerData('USDTRY=X')  // Dolar / TL Kuru
+    ]);
 
-  const meta = result.meta;
-  const timestamps = result.timestamp || [];
-  const closes = result.indicators?.quote?.[0]?.close || [];
+    if (!goldData || !usdData) return null;
 
-  const history = [];
-  timestamps.forEach((ts, i) => {
-    const c = closes[i];
-    if (c !== null && c !== undefined && !isNaN(c)) {
-      history.push({
-        timestamp: ts,
-        date: formatDateTR(new Date(ts * 1000)),
-        close: Number(c.toFixed(2))
-      });
-    }
-  });
+    const goldPrice = goldData.price;
+    const usdPrice = usdData.price;
+    const OUNCE_TO_GRAM = 31.1034768;
 
-  if (history.length === 0) return null;
+    // Gram Altın Fiyatı = (Ons * USDTRY) / 31.1035
+    const currentPrice = Number(((goldPrice * usdPrice) / OUNCE_TO_GRAM).toFixed(2));
+    
+    const prevGoldPrice = goldData.prevClose || goldPrice;
+    const prevUsdPrice = usdData.prevClose || usdPrice;
+    const previousClosePrice = Number(((prevGoldPrice * prevUsdPrice) / OUNCE_TO_GRAM).toFixed(2));
 
-  const marketOpen = isBistOpen();
-  const now = new Date();
-  const todayStr = formatDateTR(now);
+    const change = Number((currentPrice - previousClosePrice).toFixed(2));
+    const changePercent = previousClosePrice > 0 ? Number(((change / previousClosePrice) * 100).toFixed(2)) : 0;
 
-  const yesterday = new Date();
-  yesterday.setDate(now.getDate() - 1);
-  const yesterdayStr = formatDateTR(yesterday);
-
-  const latestOfficialPrice = Number((meta.regularMarketPrice ?? history[history.length - 1].close).toFixed(2));
-  const lastBar = history[history.length - 1];
-
-  if (!marketOpen) {
-    if (lastBar.date !== yesterdayStr && lastBar.date !== todayStr) {
-      history.push({
-        timestamp: Math.floor(yesterday.getTime() / 1000),
-        date: yesterdayStr,
-        close: latestOfficialPrice
-      });
-    } else {
-      lastBar.close = latestOfficialPrice;
-    }
-  } else {
-    if (lastBar.date !== todayStr) {
-      history.push({
-        timestamp: Math.floor(now.getTime() / 1000),
-        date: todayStr,
-        close: latestOfficialPrice
-      });
-    } else {
-      lastBar.close = latestOfficialPrice;
-    }
+    return {
+      name: 'Gram Altın',
+      price: currentPrice,
+      prevClose: previousClosePrice,
+      change: change,
+      changePercent: changePercent
+    };
+  } catch (err) {
+    console.warn('Gram altın hesaplanamadı:', err);
+    return null;
   }
-
-  const currentPrice = history[history.length - 1].close;
-  const previousClosePrice = history.length > 1 ? history[history.length - 2].close : currentPrice;
-  
-  const change = Number((currentPrice - previousClosePrice).toFixed(2));
-  const changePercent = previousClosePrice > 0 ? Number(((change / previousClosePrice) * 100).toFixed(2)) : 0;
-
-  return {
-    symbol: meta.symbol,
-    shortName: meta.shortName || meta.symbol,
-    price: currentPrice,
-    prevClose: previousClosePrice,
-    change: change,
-    changePercent: changePercent,
-    dayHigh: meta.regularMarketDayHigh || currentPrice,
-    dayLow: meta.regularMarketDayLow || currentPrice,
-    fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh || null,
-    fiftyTwoWeekLow: meta.fiftyTwoWeekLow || null,
-    volume: meta.regularMarketVolume || 0,
-    history: history
-  };
 }
 
 async function main() {
@@ -153,7 +179,7 @@ async function main() {
   };
 
   for (const idx of INDICES) {
-    const data = await fetchTickerData(idx.symbol, idx.altSymbol);
+    const data = await fetchTickerData(idx.symbol);
     if (data) {
       output.indices[idx.key] = {
         name: idx.name,
@@ -163,8 +189,15 @@ async function main() {
         prevClose: data.prevClose,
         history: data.history
       };
-      console.log(`✓ Kart Verisi: ${idx.key} -> ₺${data.price} (${data.change >= 0 ? '+' : ''}${data.changePercent}%)`);
+      console.log(`✓ Endeks: ${idx.key} -> ${data.price} (${data.change >= 0 ? '+' : ''}${data.changePercent}%)`);
     }
+  }
+
+  // Gram Altın Verisini Çek ve Ekle
+  const gramGold = await fetchGramGold();
+  if (gramGold) {
+    output.indices['ALTIN'] = gramGold;
+    console.log(`✓ Gram Altın: ₺${gramGold.price} (${gramGold.change >= 0 ? '+' : ''}${gramGold.changePercent}%)`);
   }
 
   for (const sym of STOCKS) {
@@ -177,7 +210,7 @@ async function main() {
   }
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
-  console.log('data.json Altın verisi ile birlikte başarıyla güncellendi.');
+  console.log('data.json Gram Altın ile başarıyla güncellendi.');
 }
 
 main();
