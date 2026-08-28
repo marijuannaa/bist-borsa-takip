@@ -43,6 +43,14 @@
           <span class="text-slate-400">Son Senkronizasyon: <strong id="lastSyncText" class="text-white font-mono">Yükleniyor...</strong></span>
         </div>
 
+        <!-- Bültene Abone Ol Butonu -->
+        <a href="abone.html" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/40 text-amber-400 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+          <span>Sabah Bülteni</span>
+        </a>
+
         <!-- Yenile Butonu -->
         <button id="refreshBtn" onclick="loadDataFromCDN()" class="flex items-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer">
           <svg id="refreshIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -94,7 +102,7 @@
         </div>
       </div>
 
-      <!-- Gram Altın Kartı (4. Kart) -->
+      <!-- Gram Altın Kartı -->
       <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden group">
         <div class="flex items-center justify-between">
           <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-md">Emtia / Piyasa</span>
@@ -134,6 +142,27 @@
       <!-- Hisse Izgarası -->
       <div id="stockGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- JS ile doldurulur -->
+      </div>
+    </div>
+
+    <!-- Ana Sayfa Bülten Abonelik Kartı -->
+    <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-sky-950/40 border border-slate-800/80 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+      <div class="space-y-2 text-center md:text-left">
+        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
+          ✉️ Ücretsiz Sabah Bülteni
+        </div>
+        <h3 class="text-xl sm:text-2xl font-black text-white">Her Sabah 09:00'da Piyasa Özeti E-postanızda</h3>
+        <p class="text-xs sm:text-sm text-slate-400 max-w-xl">
+          Borsa İstanbul seansı açılmadan önce dünün BIST 100, BIST 30, BIST Banka kapanışları ve Gram Altın fiyatı her iş günü sabahı kutunuza gelsin.
+        </p>
+      </div>
+      <div class="w-full md:w-auto flex-shrink-0">
+        <a href="abone.html" class="inline-flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 text-white text-sm font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-600/20 transition-all w-full md:w-auto">
+          <span>Hemen Ücretsiz Abone Ol</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </a>
       </div>
     </div>
 
