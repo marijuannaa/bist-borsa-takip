@@ -13,7 +13,8 @@ const INDICES = [
 ];
 
 async function fetchTickerData(ticker) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=5d`;
+  // 1 yıllık günlük veriyi tek seferde çeker
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1y&includePrePost=true`;
   try {
     const response = await fetch(url, {
       headers: {
@@ -21,9 +22,7 @@ async function fetchTickerData(ticker) {
       }
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const data = await response.json();
     const result = data?.chart?.result?.[0];
@@ -34,6 +33,35 @@ async function fetchTickerData(ticker) {
     const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
     const change = price - prevClose;
     const changePercent = prevClose ? (change / prevClose) * 100 : 0;
+
+    // Grafik geçmişini temiz bir diziye dönüştür
+    const history = [];
+    const timestamps = result.timestamp || [];
+    const closes = result.indicators?.quote?.[0]?.close || [];
+
+    timestamps.forEach((ts, i) => {
+      const c = closes[i];
+      if (c !== null && c !== undefined && !isNaN(c)) {
+        const date = new Date(ts * 1000);
+        const dateStr = date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' });
+        history.push({
+          timestamp: ts,
+          date: dateStr,
+          close: Number(c.toFixed(2))
+        });
+      }
+    });
+
+    // Güncel fiyatı grafiğin son barı olarak bağla
+    const now = new Date();
+    const todayStr = now.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit', timeZone: 'Europe/Istanbul' });
+    if (history.length > 0 && history[history.length - 1].date !== todayStr && price > 0) {
+      history.push({
+        timestamp: Math.floor(now.getTime() / 1000),
+        date: todayStr,
+        close: Number(price.toFixed(2))
+      });
+    }
 
     return {
       symbol: meta.symbol,
@@ -46,7 +74,8 @@ async function fetchTickerData(ticker) {
       dayLow: meta.regularMarketDayLow || null,
       fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh || null,
       fiftyTwoWeekLow: meta.fiftyTwoWeekLow || null,
-      volume: meta.regularMarketVolume || 0
+      volume: meta.regularMarketVolume || 0,
+      history: history
     };
   } catch (err) {
     console.warn(`Veri çekilemedi: ${ticker} -> ${err.message}`);
@@ -55,9 +84,9 @@ async function fetchTickerData(ticker) {
 }
 
 async function main() {
-  console.log('Veriler doğrudan Yahoo API üzerinden çekiliyor...');
+  console.log('Veriler ve grafikler doğrudan Yahoo API üzerinden çekiliyor...');
 
-const now = new Date();
+  const now = new Date();
   const formattedTime = now.toLocaleDateString('tr-TR', {
     day: '2-digit',
     month: '2-digit',
@@ -82,7 +111,8 @@ const now = new Date();
         price: data.price,
         change: data.change,
         changePercent: data.changePercent,
-        prevClose: data.prevClose
+        prevClose: data.prevClose,
+        history: data.history
       };
       console.log(`✓ Endeks çekildi: ${idx.key} -> ₺${data.price}`);
     }
@@ -92,24 +122,13 @@ const now = new Date();
     const data = await fetchTickerData(sym);
     if (data) {
       const cleanKey = sym.replace('.IS', '');
-      output.stocks[cleanKey] = {
-        symbol: cleanKey,
-        shortName: data.shortName,
-        price: data.price,
-        change: data.change,
-        changePercent: data.changePercent,
-        dayHigh: data.dayHigh,
-        dayLow: data.dayLow,
-        fiftyTwoWeekHigh: data.fiftyTwoWeekHigh,
-        fiftyTwoWeekLow: data.fiftyTwoWeekLow,
-        volume: data.volume
-      };
-      console.log(`✓ Hisse çekildi: ${cleanKey} -> ₺${data.price}`);
+      output.stocks[cleanKey] = data;
+      console.log(`✓ Hisse çekildi: ${cleanKey} -> ₺${data.price} (${data.history.length} bar grafik)`);
     }
   }
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
-  console.log('data.json tüm güncel verilerle başarıyla oluşturuldu.');
+  console.log('data.json tüm veriler ve grafiklerle başarıyla oluşturuldu.');
 }
 
 main();
