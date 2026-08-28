@@ -1,0 +1,31 @@
+name: Sabah Bulteni Otomatik Gonder
+
+on:
+  schedule:
+    # Hafta ici her sabah 06:00 UTC = 09:00 TSI
+    - cron: '0 6 * * 1-5'
+  workflow_dispatch: # Actions sekmesinden elle test etme butonu
+
+jobs:
+  send-morning-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kodu Klonla
+        uses: actions/checkout@v4
+
+      - name: Node.js Kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Paketleri Kur
+        run: npm install resend
+
+      - name: Guncel Verileri Cek
+        run: node fetch-data.js
+
+      - name: Sabah Bultenini Gonder
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_AUDIENCE_ID: ${{ secrets.RESEND_AUDIENCE_ID }}
+        run: node send-newsletter.js
