@@ -1,6 +1,11 @@
 import fs from 'fs';
 import yahooFinance from 'yahoo-finance2';
 
+// Yahoo Finance istemci ayarları
+yahooFinance.setGlobalConfig({
+  queue: { concurrency: 4 }
+});
+
 const STOCKS = [
   'THYAO.IS', 'GARAN.IS', 'ASELS.IS', 'EREGL.IS', 
   'TUPRS.IS', 'KCHOL.IS', 'BIMAS.IS', 'SISE.IS', 
@@ -13,85 +18,97 @@ const INDICES = [
   { key: 'XBANK', symbol: 'XBANK.IS' }
 ];
 
-async function getSafeQuote(symbol) {
+async function fetchSummary(ticker) {
   try {
-    return await yahooFinance.quote(symbol);
+    const res = await yahooFinance.chart(ticker, {
+      period1: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+      interval: '1d'
+    });
+    
+    if (!res || !res.meta) return null;
+    const meta = res.meta;
+    
+    const price = meta.regularMarketPrice ?? meta.chartPreviousClose ?? 0;
+    const prevClose = meta.chartPreviousClose ?? meta.previousClose ?? price;
+    const change = price - prevClose;
+    const changePercent = prevClose ? (change / prevClose) * 100 : 0;
+
+    return {
+      symbol: meta.symbol,
+      shortName: meta.shortName || meta.symbol,
+      price: Number(price.toFixed(2)),
+      prevClose: Number(prevClose.toFixed(2)),
+      change: Number(change.toFixed(2)),
+      changePercent: Number(changePercent.toFixed(2)),
+      dayHigh: meta.regularMarketDayHigh || null,
+      dayLow: meta.regularMarketDayLow || null,
+      fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh || null,
+      fiftyTwoWeekLow: meta.fiftyTwoWeekLow || null,
+      volume: meta.regularMarketVolume || 0
+    };
   } catch (err) {
-    // Alternatif sembol formatını dene (^XU100 gibi)
-    if (!symbol.startsWith('^')) {
-      try {
-        return await yahooFinance.quote(`^${symbol.replace('.IS', '')}`);
-      } catch (e) {
-        console.warn(`Veri çekilemedi: ${symbol}`);
-        return null;
-      }
-    }
+    console.warn(`Veri çekilemedi: ${ticker} -> ${err.message}`);
     return null;
   }
 }
 
 async function main() {
-  console.log('Veriler Yahoo Finance üzerinden çekiliyor...');
+  console.log('Veriler Yahoo Finance chart API üzerinden çekiliyor...');
+  
+  const now = new Date();
+  const formattedTime = now.toLocaleDateString('tr-TR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+
   const output = {
-    updatedAt: new Date().toISOString(),
+    updatedAt: now.toISOString(),
+    updatedAtFormatted: formattedTime,
     indices: {},
     stocks: {}
   };
 
   // 1. Endeksleri Çek
   for (const idx of INDICES) {
-    const q = await getSafeQuote(idx.symbol);
-    if (q) {
-      let price = q.regularMarketPrice ?? q.chartPreviousClose ?? q.previousClose ?? 0;
-      let prevClose = q.regularMarketPreviousClose ?? q.chartPreviousClose ?? q.previousClose ?? price;
-      
-      // Endeks puanı 100.000 üzerinde anormal gelirse 10'a bölme düzeltmesi
-      if (price > 50000 && (idx.key === 'XU100' || idx.key === 'XU030')) {
-        price = price / 10;
-        prevClose = prevClose / 10;
-      }
-
-      const change = price - prevClose;
-      const changePercent = prevClose ? (change / prevClose) * 100 : (q.regularMarketChangePercent ?? 0);
-
+    const data = await fetchSummary(idx.symbol);
+    if (data) {
       output.indices[idx.key] = {
-        name: q.shortName || idx.key,
-        price: Number(price.toFixed(2)),
-        change: Number(change.toFixed(2)),
-        changePercent: Number(changePercent.toFixed(2)),
-        prevClose: Number(prevClose.toFixed(2))
+        name: idx.key,
+        price: data.price,
+        change: data.change,
+        changePercent: data.changePercent,
+        prevClose: data.prevClose
       };
+      console.log(`✓ Endeks çekildi: ${idx.key} -> ₺${data.price}`);
     }
   }
 
   // 2. Hisseleri Çek
   for (const sym of STOCKS) {
-    const q = await getSafeQuote(sym);
-    if (q) {
+    const data = await fetchSummary(sym);
+    if (data) {
       const cleanKey = sym.replace('.IS', '');
-      const price = q.regularMarketPrice ?? q.previousClose ?? 0;
-      const prevClose = q.regularMarketPreviousClose ?? price;
-      const change = q.regularMarketChange ?? (price - prevClose);
-      const changePercent = q.regularMarketChangePercent ?? (prevClose ? (change / prevClose) * 100 : 0);
-
       output.stocks[cleanKey] = {
         symbol: cleanKey,
-        shortName: q.shortName || cleanKey,
-        longName: q.longName || q.shortName || cleanKey,
-        price: Number(price.toFixed(2)),
-        change: Number(change.toFixed(2)),
-        changePercent: Number(changePercent.toFixed(2)),
-        dayHigh: q.regularMarketDayHigh || null,
-        dayLow: q.regularMarketDayLow || null,
-        fiftyTwoWeekHigh: q.fiftyTwoWeekHigh || null,
-        fiftyTwoWeekLow: q.fiftyTwoWeekLow || null,
-        volume: q.regularMarketVolume || 0
+        shortName: data.shortName,
+        price: data.price,
+        change: data.change,
+        changePercent: data.changePercent,
+        dayHigh: data.dayHigh,
+        dayLow: data.dayLow,
+        fiftyTwoWeekHigh: data.fiftyTwoWeekHigh,
+        fiftyTwoWeekLow: data.fiftyTwoWeekLow,
+        volume: data.volume
       };
+      console.log(`✓ Hisse çekildi: ${cleanKey} -> ₺${data.price}`);
     }
   }
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
-  console.log('data.json başarıyla oluşturuldu.');
+  console.log('data.json tüm verilerle başarıyla oluşturuldu.');
 }
 
 main();
