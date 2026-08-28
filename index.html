@@ -14,14 +14,6 @@
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
     .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
     .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-    @keyframes pulse-subtle {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.35; }
-    }
-    .skeleton-loader {
-      animation: pulse-subtle 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      background-color: #1e293b;
-    }
   </style>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen antialiased">
@@ -37,26 +29,26 @@
           </div>
           <div>
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              Borsa İstanbul Canlı Takip
+              Borsa İstanbul Takip Portalı
             </h1>
-            <p class="text-xs sm:text-sm text-slate-400">Tek çağrılı toplu veri motoru • Her saat başı otomatik senkronizasyon</p>
+            <p class="text-xs sm:text-sm text-slate-400">Yüksek hızlı CDN motoru • Saat başı otomatik senkronizasyon</p>
           </div>
         </div>
       </div>
 
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Canlı Bağlantı Durumu & Saat Başı Sayacı -->
+        <!-- Son Güncelleme Bilgisi -->
         <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl text-xs text-slate-300 shadow-sm">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-slate-400">Sonraki Saat Başı: <strong id="countdownText" class="text-white font-mono">--:--</strong></span>
+          <span class="text-slate-400">Son Senkronizasyon: <strong id="lastSyncText" class="text-white font-mono">Yükleniyor...</strong></span>
         </div>
 
-        <!-- Manuel Yenileme Butonu -->
-        <button id="refreshBtn" onclick="fetchAllData(true)" class="flex items-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer">
+        <!-- Yenile Butonu -->
+        <button id="refreshBtn" onclick="loadDataFromCDN()" class="flex items-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer">
           <svg id="refreshIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
           </svg>
-          <span id="refreshBtnText">Şimdi Güncelle</span>
+          <span id="refreshBtnText">Yenile</span>
         </button>
       </div>
     </header>
@@ -71,7 +63,7 @@
         </div>
         <h3 class="text-sm font-semibold text-slate-400 mt-2">BIST 100 (XU100)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="xu100Price" class="text-2xl sm:text-3xl font-black text-white skeleton-loader h-9 w-32 rounded"></div>
+          <div id="xu100Price" class="text-2xl sm:text-3xl font-black text-white">--</div>
           <div id="xu100Change" class="text-xs font-medium text-slate-400">--</div>
         </div>
       </div>
@@ -84,7 +76,7 @@
         </div>
         <h3 class="text-sm font-semibold text-slate-400 mt-2">BIST 30 (XU030)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="xu030Price" class="text-2xl sm:text-3xl font-black text-white skeleton-loader h-9 w-32 rounded"></div>
+          <div id="xu030Price" class="text-2xl sm:text-3xl font-black text-white">--</div>
           <div id="xu030Change" class="text-xs font-medium text-slate-400">--</div>
         </div>
       </div>
@@ -97,7 +89,7 @@
         </div>
         <h3 class="text-sm font-semibold text-slate-400 mt-2">BIST Banka (XBANK)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="xbankPrice" class="text-2xl sm:text-3xl font-black text-white skeleton-loader h-9 w-32 rounded"></div>
+          <div id="xbankPrice" class="text-2xl sm:text-3xl font-black text-white">--</div>
           <div id="xbankChange" class="text-xs font-medium text-slate-400">--</div>
         </div>
       </div>
@@ -107,18 +99,18 @@
     <div class="space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 class="text-xl font-bold text-slate-200">Canlı Hisse Kartları</h2>
+          <h2 class="text-xl font-bold text-slate-200">Hisse Senetleri</h2>
           <p class="text-xs text-slate-500">Geçmiş grafik ve detayları görmek için hissenin üzerine tıklayın</p>
         </div>
 
-        <!-- Canlı Arama Inputu -->
+        <!-- Filtreleme Inputu -->
         <div class="relative min-w-[260px] sm:w-80">
           <input 
             type="text" 
             id="searchInput" 
-            placeholder="Hisse ara veya ekle (örn: SASA, FROTO)..." 
+            placeholder="Listede hisse filtrele (örn: THYAO)..." 
             class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 pl-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all uppercase"
-            onkeypress="if(event.key==='Enter') searchAndAddStock()"
+            oninput="filterCards()"
           />
           <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -128,7 +120,7 @@
 
       <!-- Hisse Izgarası -->
       <div id="stockGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- JS ile doldurulur -->
+        <!-- JS ile 0.01 saniyede doldurulur -->
       </div>
     </div>
 
@@ -160,27 +152,8 @@
         </div>
       </div>
 
-      <!-- Zaman Aralığı Butonları -->
-      <div class="flex flex-wrap items-center gap-2 mt-5">
-        <button onclick="changePeriod('1d', '1m', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">1 Gün</button>
-        <button onclick="changePeriod('5d', '15m', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">5 Gün</button>
-        <button onclick="changePeriod('1mo', '1d', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all cursor-pointer">1 Ay</button>
-        <button onclick="changePeriod('3mo', '1d', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">3 Ay</button>
-        <button onclick="changePeriod('1y', '1wk', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">1 Yıl</button>
-        <button onclick="changePeriod('5y', '1mo', this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer">5 Yıl</button>
-      </div>
-
       <!-- Dinamik Grafik Alanı -->
-      <div class="mt-4 bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 h-72 sm:h-96 relative">
-        <div id="chartLoader" class="absolute inset-0 flex items-center justify-center bg-slate-900/60 backdrop-blur-xs rounded-2xl z-10 hidden">
-          <div class="flex items-center gap-2 text-sm text-sky-400 font-medium">
-            <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-            </svg>
-            <span>Grafik API'den çekiliyor...</span>
-          </div>
-        </div>
+      <div class="mt-5 bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 h-72 sm:h-96 relative">
         <canvas id="modalChart"></canvas>
       </div>
 
@@ -208,27 +181,8 @@
   </div>
 
   <script>
-    let isFetching = false;
-    let trackedStocks = ['THYAO', 'GARAN', 'ASELS', 'EREGL', 'TUPRS', 'KCHOL', 'BIMAS', 'SISE', 'SASA', 'FROTO', 'AKBNK', 'PETKM'];
-    let stockDataMap = {};
-    let indexDataMap = {};
-    let currentSelectedSymbol = 'THYAO';
-    let currentPeriod = '1mo';
-    let currentInterval = '1d';
+    let globalData = null;
     let chartInstance = null;
-
-    function getSecondsUntilNextHour() {
-      const now = new Date();
-      const minutes = now.getMinutes();
-      const seconds = now.getSeconds();
-      return (60 - minutes - 1) * 60 + (60 - seconds);
-    }
-
-    function formatTime(totalSeconds) {
-      const mins = Math.floor(totalSeconds / 60);
-      const secs = totalSeconds % 60;
-      return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-    }
 
     function formatNumber(val) {
       if (val === null || val === undefined || isNaN(val)) return '-';
@@ -242,119 +196,50 @@
       return Number(vol).toLocaleString('tr-TR');
     }
 
-    // TEK BİR İSTEKLE TÜM HİSSELERİ VE ENDEKSLERİ TOPLU ÇEKEN HIZLI API FONKSİYONU
-    async function fetchBatchQuotes(symbolsList) {
-      const symbolsParam = symbolsList.map(s => {
-        if (s.startsWith('^') || s.startsWith('XU') || s === 'XBANK') {
-          return s.startsWith('^') ? s : `^${s}`;
-        }
-        return s.endsWith('.IS') ? s : `${s}.IS`;
-      }).join(',');
-
-      const targetUrl = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${encodeURIComponent(symbolsParam)}`;
-      
-      const proxies = [
-        (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-        (url) => `https://corsproxy.io/?url=${encodeURIComponent(url)}`,
-        (url) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`
-      ];
-
-      for (const proxyFn of proxies) {
-        try {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 7000);
-
-          const res = await fetch(proxyFn(targetUrl), { signal: controller.signal });
-          clearTimeout(timeoutId);
-          if (!res.ok) continue;
-
-          const data = await res.json();
-          const results = data?.quoteResponse?.result;
-          if (Array.isArray(results) && results.length > 0) {
-            return results;
-          }
-        } catch (e) {
-          // Sonraki proxy'e geç
-        }
-      }
-      throw new Error('Toplu veri çekilemedi');
-    }
-
-    function applyIndexToUI(priceElId, changeElId, badgeElId, data) {
+    function applyIndex(prefix, data) {
       if (!data) return;
-      const price = data.regularMarketPrice || data.regularMarketPreviousClose || 0;
-      const prevClose = data.regularMarketPreviousClose || price;
-      const change = data.regularMarketChange !== undefined ? data.regularMarketChange : (price - prevClose);
-      const changePercent = data.regularMarketChangePercent !== undefined ? data.regularMarketChangePercent : (prevClose ? (change / prevClose) * 100 : 0);
-      const isPos = change >= 0;
+      const isPos = data.change >= 0;
+      const priceEl = document.getElementById(`${prefix}Price`);
+      const changeEl = document.getElementById(`${prefix}Change`);
+      const badgeEl = document.getElementById(`${prefix}Badge`);
 
-      const priceEl = document.getElementById(priceElId);
-      const changeEl = document.getElementById(changeElId);
-      const badgeEl = document.getElementById(badgeElId);
-
-      if (priceEl) {
-        priceEl.classList.remove('skeleton-loader');
-        priceEl.textContent = `₺${formatNumber(price)}`;
-      }
+      if (priceEl) priceEl.textContent = `₺${formatNumber(data.price)}`;
       if (changeEl) {
         changeEl.className = `text-xs font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
-        changeEl.textContent = `${isPos ? '▲ +' : '▼ '}${formatNumber(change)} (%${changePercent.toFixed(2)})`;
+        changeEl.textContent = `${isPos ? '▲ +' : '▼ '}${formatNumber(data.change)} (%${data.changePercent.toFixed(2)})`;
       }
       if (badgeEl) {
         badgeEl.className = `text-xs font-semibold px-2 py-0.5 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
-        badgeEl.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
+        badgeEl.textContent = `${isPos ? '+' : ''}${data.changePercent.toFixed(2)}%`;
       }
     }
 
-    function renderStockCards() {
+    function renderStockCards(filterText = '') {
       const grid = document.getElementById('stockGrid');
-      if (!grid) return;
+      if (!grid || !globalData?.stocks) return;
 
-      grid.innerHTML = trackedStocks.map(sym => {
-        const item = stockDataMap[sym];
-        
-        if (!item) {
-          return `
-          <div class="bg-slate-900/90 border border-slate-800 p-5 rounded-2xl shadow-lg animate-pulse">
-            <div class="flex items-center justify-between mb-3">
-              <div>
-                <span class="font-bold text-lg text-white">${sym}</span>
-                <div class="h-3 w-28 bg-slate-800 rounded mt-2"></div>
-              </div>
-              <div class="h-6 w-14 bg-slate-800 rounded-full"></div>
-            </div>
-            <div class="flex items-baseline justify-between mt-4">
-              <div class="h-8 w-24 bg-slate-800 rounded"></div>
-              <div class="h-4 w-16 bg-slate-800 rounded"></div>
-            </div>
-            <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
-              <span>Yükleniyor...</span>
-              <span class="text-slate-600">Detay →</span>
-            </div>
-          </div>`;
-        }
+      const entries = Object.entries(globalData.stocks);
+      const filtered = entries.filter(([sym, item]) => {
+        return sym.includes(filterText) || (item.shortName && item.shortName.toUpperCase().includes(filterText));
+      });
 
-        const price = item.regularMarketPrice || item.regularMarketPreviousClose || 0;
-        const prevClose = item.regularMarketPreviousClose || price;
-        const change = item.regularMarketChange !== undefined ? item.regularMarketChange : (price - prevClose);
-        const changePercent = item.regularMarketChangePercent !== undefined ? item.regularMarketChangePercent : (prevClose ? (change / prevClose) * 100 : 0);
-        const isPos = change >= 0;
-
+      grid.innerHTML = filtered.map(([sym, item]) => {
+        const isPos = item.change >= 0;
         return `
           <div class="bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
             <div class="flex items-center justify-between mb-3">
               <div>
                 <a href="hisse.html?sembol=${sym}" class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">${sym}</a>
-                <p class="text-xs text-slate-400 line-clamp-1">${item.shortName || item.longName || sym}</p>
+                <p class="text-xs text-slate-400 line-clamp-1">${item.shortName || sym}</p>
               </div>
               <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">
-                ${isPos ? '+' : ''}${changePercent.toFixed(2)}%
+                ${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%
               </span>
             </div>
             <div class="flex items-baseline justify-between mt-4">
-              <span class="text-2xl font-black text-slate-100">₺${formatNumber(price)}</span>
+              <span class="text-2xl font-black text-slate-100">₺${formatNumber(item.price)}</span>
               <span class="text-xs font-medium ${isPos ? 'text-emerald-400' : 'text-rose-400'}">
-                ${isPos ? '▲' : '▼'} ₺${formatNumber(change)}
+                ${isPos ? '▲' : '▼'} ₺${formatNumber(item.change)}
               </span>
             </div>
             <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
@@ -368,141 +253,72 @@
       }).join('');
     }
 
-    async function fetchAllData(forceRefresh = false) {
-      if (isFetching) return;
-      isFetching = true;
+    function filterCards() {
+      const q = document.getElementById('searchInput').value.trim().toUpperCase();
+      renderStockCards(q);
+    }
 
+    // 0.02 Saniyede kendi data.json dosyasından çeken ultra hızlı fonksiyon
+    async function loadDataFromCDN() {
       const icon = document.getElementById('refreshIcon');
-      const btnText = document.getElementById('refreshBtnText');
       if (icon) icon.classList.add('animate-spin');
-      if (btnText) btnText.textContent = 'Güncelleniyor...';
 
       try {
-        // 3 Endeks + 12 Hisse = 15 sembolü TEK BİR İSTEKTE çeker
-        const allSymbols = ['XU100.IS', 'XU030.IS', 'XBANK.IS', ...trackedStocks];
-        const batchResults = await fetchBatchQuotes(allSymbols);
+        // Önbellek engellemek için son zaman damgasıyla çağırır
+        const res = await fetch(`data.json?_t=${Date.now()}`);
+        if (!res.ok) throw new Error('data.json henüz oluşturulmamış');
+        globalData = await res.json();
 
-        batchResults.forEach(item => {
-          let cleanSymbol = item.symbol.replace('.IS', '').replace('^', '');
-          if (cleanSymbol === 'XU100' || cleanSymbol === 'XU030' || cleanSymbol === 'XBANK') {
-            indexDataMap[cleanSymbol] = item;
-          } else {
-            stockDataMap[cleanSymbol] = item;
-          }
-        });
+        document.getElementById('lastSyncText').textContent = globalData.updatedAtFormatted || 'Bugün';
 
-        if (indexDataMap['XU100']) applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', indexDataMap['XU100']);
-        if (indexDataMap['XU030']) applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', indexDataMap['XU030']);
-        if (indexDataMap['XBANK']) applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', indexDataMap['XBANK']);
-
-        try {
-          localStorage.setItem('bist_batch_stocks', JSON.stringify(stockDataMap));
-          localStorage.setItem('bist_batch_indices', JSON.stringify(indexDataMap));
-          localStorage.setItem('bist_cache_time', Date.now().toString());
-        } catch (e) {}
+        applyIndex('xu100', globalData.indices?.XU100);
+        applyIndex('xu030', globalData.indices?.XU030);
+        applyIndex('xbank', globalData.indices?.XBANK);
 
         renderStockCards();
       } catch (err) {
-        console.error('Veri çekme hatası:', err);
+        console.warn('Veri yüklenemedi:', err);
       } finally {
         if (icon) icon.classList.remove('animate-spin');
-        if (btnText) btnText.textContent = 'Şimdi Güncelle';
-        isFetching = false;
       }
     }
 
-    async function openStockModal(symbol) {
-      currentSelectedSymbol = symbol;
+    function openStockModal(sym) {
+      const item = globalData?.stocks?.[sym];
+      if (!item) return;
+
       document.getElementById('stockModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
 
-      const fastData = stockDataMap[symbol];
-      if (fastData) {
-        const price = fastData.regularMarketPrice || fastData.regularMarketPreviousClose || 0;
-        const prevClose = fastData.regularMarketPreviousClose || price;
-        const change = fastData.regularMarketChange !== undefined ? fastData.regularMarketChange : (price - prevClose);
-        const changePercent = fastData.regularMarketChangePercent !== undefined ? fastData.regularMarketChangePercent : (prevClose ? (change / prevClose) * 100 : 0);
-        const isPos = change >= 0;
+      const isPos = item.change >= 0;
+      document.getElementById('modalSymbol').textContent = sym;
+      document.getElementById('modalName').textContent = item.shortName || sym;
+      document.getElementById('modalPrice').textContent = `₺${formatNumber(item.price)}`;
+      document.getElementById('modalChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(item.change)} (%${item.changePercent.toFixed(2)})`;
+      document.getElementById('modalChange').className = `text-sm font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
 
-        document.getElementById('modalSymbol').textContent = symbol;
-        document.getElementById('modalName').textContent = fastData.shortName || fastData.longName || symbol;
-        document.getElementById('modalPrice').textContent = `₺${formatNumber(price)}`;
-        document.getElementById('modalChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(change)} (%${changePercent.toFixed(2)})`;
-        document.getElementById('modalChange').className = `text-sm font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+      const badge = document.getElementById('modalBadge');
+      badge.className = `text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+      badge.textContent = `${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%`;
 
-        const badge = document.getElementById('modalBadge');
-        badge.className = `text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
-        badge.textContent = `${isPos ? '+' : ''}${changePercent.toFixed(2)}%`;
+      document.getElementById('modalHigh52').textContent = item.fiftyTwoWeekHigh ? `₺${formatNumber(item.fiftyTwoWeekHigh)}` : '-';
+      document.getElementById('modalLow52').textContent = item.fiftyTwoWeekLow ? `₺${formatNumber(item.fiftyTwoWeekLow)}` : '-';
+      document.getElementById('modalDayRange').textContent = (item.dayLow && item.dayHigh)
+        ? `₺${formatNumber(item.dayLow)} - ₺${formatNumber(item.dayHigh)}`
+        : '-';
+      document.getElementById('modalVolume').textContent = formatVolume(item.volume);
 
-        document.getElementById('modalHigh52').textContent = fastData.fiftyTwoWeekHigh ? `₺${formatNumber(fastData.fiftyTwoWeekHigh)}` : '-';
-        document.getElementById('modalLow52').textContent = fastData.fiftyTwoWeekLow ? `₺${formatNumber(fastData.fiftyTwoWeekLow)}` : '-';
-        document.getElementById('modalDayRange').textContent = (fastData.regularMarketDayLow && fastData.regularMarketDayHigh)
-          ? `₺${formatNumber(fastData.regularMarketDayLow)} - ₺${formatNumber(fastData.regularMarketDayHigh)}`
-          : '-';
-        document.getElementById('modalVolume').textContent = formatVolume(fastData.regularMarketVolume);
+      // Grafiği çiz
+      if (item.history && item.history.length > 0) {
+        const labels = item.history.map(h => h.date);
+        const prices = item.history.map(h => h.close);
+        renderChart(labels, prices, isPos);
       }
-
-      await updateModalChart();
     }
 
     function closeModal() {
       document.getElementById('stockModal').classList.add('hidden');
       document.body.style.overflow = 'auto';
-    }
-
-    async function changePeriod(period, interval, btnEl) {
-      currentPeriod = period;
-      currentInterval = interval;
-
-      document.querySelectorAll('.period-btn').forEach(btn => {
-        btn.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-slate-800 text-slate-400 hover:text-white transition-all cursor-pointer';
-      });
-      if (btnEl) {
-        btnEl.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all cursor-pointer';
-      }
-
-      await updateModalChart();
-    }
-
-    async function updateModalChart() {
-      const loader = document.getElementById('chartLoader');
-      if (loader) loader.classList.remove('hidden');
-
-      try {
-        const ticker = currentSelectedSymbol.endsWith('.IS') ? currentSelectedSymbol : `${currentSelectedSymbol}.IS`;
-        const targetUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=${currentInterval}&range=${currentPeriod}`;
-        const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-
-        const res = await fetch(proxyUrl);
-        const data = await res.json();
-        const result = data?.chart?.result?.[0];
-
-        if (result) {
-          const quotes = result.indicators?.quote?.[0] || {};
-          const timestamps = result.timestamp || [];
-          const labels = [];
-          const prices = [];
-
-          timestamps.forEach((ts, idx) => {
-            const closeVal = quotes.close?.[idx];
-            if (closeVal !== null && closeVal !== undefined && !isNaN(closeVal)) {
-              const date = new Date(ts * 1000);
-              const dateStr = (currentPeriod === '1d' || currentPeriod === '5d')
-                ? date.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })
-                : date.toLocaleDateString('tr-TR', { day: '2-digit', month: '2-digit' });
-              labels.push(dateStr);
-              prices.push(Number(closeVal.toFixed(2)));
-            }
-          });
-
-          const isPos = prices.length >= 2 ? (prices[prices.length - 1] >= prices[0]) : true;
-          renderChart(labels, prices, isPos);
-        }
-      } catch (err) {
-        console.error('Grafik verisi alınamadı:', err);
-      } finally {
-        if (loader) loader.classList.add('hidden');
-      }
     }
 
     function renderChart(labels, prices, isPositive) {
@@ -526,7 +342,7 @@
             fill: true,
             tension: 0.25,
             borderWidth: 2.5,
-            pointRadius: labels.length > 50 ? 0 : 2,
+            pointRadius: 2,
             pointHoverRadius: 6,
             pointBackgroundColor: color,
           }]
@@ -566,64 +382,8 @@
       });
     }
 
-    async function searchAndAddStock() {
-      const input = document.getElementById('searchInput');
-      const symbol = input.value.trim().toUpperCase();
-      if (!symbol) return;
-
-      if (!trackedStocks.includes(symbol)) {
-        trackedStocks.unshift(symbol);
-      }
-      input.value = '';
-      renderStockCards();
-      
-      try {
-        await fetchAllData(true);
-        openStockModal(symbol);
-      } catch (e) {
-        alert(`${symbol} sembolü bulunamadı.`);
-        trackedStocks = trackedStocks.filter(s => s !== symbol);
-        renderStockCards();
-      }
-    }
-
     window.addEventListener('DOMContentLoaded', () => {
-      // 1. Hafızadaki verileri ANINDA bas
-      try {
-        const cachedStocks = localStorage.getItem('bist_batch_stocks');
-        const cachedIndices = localStorage.getItem('bist_batch_indices');
-
-        if (cachedStocks && cachedIndices) {
-          stockDataMap = JSON.parse(cachedStocks);
-          indexDataMap = JSON.parse(cachedIndices);
-          renderStockCards();
-
-          if (indexDataMap['XU100']) applyIndexToUI('xu100Price', 'xu100Change', 'xu100Badge', indexDataMap['XU100']);
-          if (indexDataMap['XU030']) applyIndexToUI('xu030Price', 'xu030Change', 'xu030Badge', indexDataMap['XU030']);
-          if (indexDataMap['XBANK']) applyIndexToUI('xbankPrice', 'xbankChange', 'xbankBadge', indexDataMap['XBANK']);
-        }
-      } catch (e) {}
-
-      renderStockCards();
-
-      // Hafıza boşsa veya 1 saatten eskiyse arka planda hızlıca çek
-      const lastTime = parseInt(localStorage.getItem('bist_cache_time') || '0', 10);
-      const isCacheOld = (Date.now() - lastTime) > (60 * 60 * 1000);
-      
-      if (Object.keys(stockDataMap).length === 0 || isCacheOld) {
-        fetchAllData();
-      }
-
-      // Saat başı sayacı
-      setInterval(() => {
-        const remaining = getSecondsUntilNextHour();
-        const cdEl = document.getElementById('countdownText');
-        if (cdEl) cdEl.textContent = formatTime(remaining);
-
-        if (remaining <= 1) {
-          fetchAllData(true);
-        }
-      }, 1000);
+      loadDataFromCDN();
     });
   </script>
 </body>

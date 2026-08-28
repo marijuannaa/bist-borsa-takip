@@ -1,13 +1,16 @@
-name: BIST Web Sitesini Yayinla
+name: BIST Web Sitesini ve Verileri Otomatik Guncelle
 
 on:
   push:
     branches:
       - main
+  schedule:
+    # Hafta ici her saat basi verileri gunceller (07:00 - 16:00 UTC = 10:00 - 19:00 TSI)
+    - cron: '0 7-16 * * 1-5'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -16,7 +19,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  deploy:
+  build-and-deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -24,6 +27,17 @@ jobs:
     steps:
       - name: Kodu Klonla
         uses: actions/checkout@v4
+
+      - name: Node.js Kur
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Paketleri Yukle
+        run: npm install yahoo-finance2
+
+      - name: Canli Verileri Cek ve data.json Uret
+        run: node fetch-data.js
 
       - name: GitHub Pages Icin Hazirla
         uses: actions/upload-pages-artifact@v3
