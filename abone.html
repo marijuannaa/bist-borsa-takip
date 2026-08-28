@@ -3,107 +3,91 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIST Sabah Bülteni Aboneliği</title>
+  <title>Sabah Bültenine Abone Ol | BIST Portalı</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', sans-serif; }
-  </style>
+  <style>body { font-family: 'Inter', sans-serif; }</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 sm:p-8 flex items-center justify-center antialiased">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 antialiased">
+  <div class="max-w-md w-full bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6 text-center">
+    
+    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 to-indigo-600 mx-auto flex items-center justify-center font-black text-2xl text-white shadow-lg shadow-sky-500/20">
+      ✉️
+    </div>
 
-  <div class="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden">
-    <!-- Arka plan parlaması -->
-    <div class="absolute -top-12 -right-12 w-40 h-40 bg-sky-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div>
+      <h1 class="text-2xl font-black text-white">Sabah Piyasa Bülteni</h1>
+      <p class="text-xs sm:text-sm text-slate-400 mt-2">
+        Her iş günü sabah 09:00'da dünün BIST 100, BIST 30, BIST Banka ve Gram Altın kapanış puanları e-posta kutunuza gelsin.
+      </p>
+    </div>
 
-    <div class="space-y-6 relative z-10">
-      
-      <!-- Geri Dön Butonu -->
-      <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-white transition-colors">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        <span>Ana Sayfaya Dön</span>
+    <!-- Formspree Entegre Form -->
+    <form id="subscribeForm" onsubmit="handleFormspree(event)" class="space-y-3">
+      <input 
+        type="email" 
+        name="email"
+        id="emailInput" 
+        placeholder="E-posta adresinizi girin..." 
+        required 
+        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all"
+      />
+      <button 
+        type="submit" 
+        id="submitBtn"
+        class="w-full bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-sm font-bold py-3 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer"
+      >
+        Ücretsiz Abone Ol
+      </button>
+    </form>
+
+    <div id="statusMsg" class="hidden text-xs font-semibold p-3 rounded-xl"></div>
+
+    <div class="pt-4 border-t border-slate-800/80">
+      <a href="index.html" class="text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+        ← Ana Sayfaya Dön
       </a>
-
-      <!-- Başlık & İkon -->
-      <div class="text-center space-y-2">
-        <div class="w-14 h-14 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-sky-500/20 text-2xl">
-          📬
-        </div>
-        <h1 class="text-2xl font-black tracking-tight text-white">Sabah Bültenine Katılın</h1>
-        <p class="text-xs text-slate-400 leading-relaxed">
-          Her iş günü sabah saat <strong>09:00'da</strong> BIST 100, BIST 30 ve Gram Altın kapanış puanları e-posta kutunuza gelsin.
-        </p>
-      </div>
-
-      <!-- Abonelik Formu -->
-      <form id="subscribeForm" onsubmit="handleSubscribe(event)" class="space-y-4">
-        <div>
-          <label class="block text-xs font-medium text-slate-400 mb-1.5" for="emailInput">E-posta Adresiniz</label>
-          <input 
-            type="email" 
-            id="emailInput" 
-            required 
-            placeholder="ornek@domain.com"
-            class="w-full bg-slate-950 border border-slate-800 focus:border-sky-500 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-sky-500 transition-all"
-          />
-        </div>
-
-        <button 
-          type="submit" 
-          id="submitBtn"
-          class="w-full bg-gradient-to-r from-sky-500 to-indigo-600 hover:opacity-90 active:scale-98 text-white font-semibold text-sm py-3 rounded-xl shadow-lg shadow-sky-500/20 transition-all cursor-pointer"
-        >
-          Ücretsiz Abone Ol
-        </button>
-      </form>
-
-      <!-- Bildirim Mesajı Kutusu -->
-      <div id="statusMessage" class="hidden p-3.5 rounded-xl text-xs text-center border font-medium"></div>
-
-      <!-- Bilgi Maddeleri -->
-      <div class="border-t border-slate-800/80 pt-4 space-y-2 text-[11px] text-slate-500">
-        <div class="flex items-center gap-2">
-          <span class="text-emerald-400">✓</span>
-          <span>Spam yok, günde yalnızca 1 adet seans öncesi mail</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-emerald-400">✓</span>
-          <span>Dilediğiniz an tek tıkla abonelikten ayrılma hakkı</span>
-        </div>
-      </div>
-
     </div>
   </div>
 
   <script>
-    async function handleSubscribe(e) {
+    const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xppzzwwy';
+
+    async function handleFormspree(e) {
       e.preventDefault();
-      const email = document.getElementById('emailInput').value.trim();
+      const form = document.getElementById('subscribeForm');
+      const emailInput = document.getElementById('emailInput');
       const btn = document.getElementById('submitBtn');
-      const msg = document.getElementById('statusMessage');
+      const msg = document.getElementById('statusMsg');
+
+      const userEmail = emailInput.value.trim();
 
       btn.disabled = true;
       btn.textContent = 'Kaydediliyor...';
+      msg.classList.add('hidden');
 
-      // Örnek: Formspree veya Resend Audience uç noktası
-      // Ücretsiz Formspree formu bağlandığında doğrudan oraya iletir
       try {
-        // Simüle edilmiş kayıt başarısı (Kendi Formspree/Resend URL'nizi buraya yazabilirsiniz)
-        await new Promise(r => setTimeout(r, 600));
+        const response = await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
 
-        msg.className = 'block p-3.5 rounded-xl text-xs text-center border bg-emerald-500/10 text-emerald-400 border-emerald-500/20';
-        msg.textContent = `Tebrikler! ${email} adresi sabah bültenine başarıyla kaydedildi.`;
-        document.getElementById('emailInput').value = '';
+        if (response.ok) {
+          msg.className = 'text-xs font-semibold p-3 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 block text-emerald-400';
+          msg.textContent = `Tebrikler! ${userEmail} adresi bülten listesine başarıyla eklendi.`;
+          form.reset();
+          btn.textContent = 'Abone Olundu ✓';
+        } else {
+          throw new Error('Form iletilemedi');
+        }
       } catch (err) {
-        msg.className = 'block p-3.5 rounded-xl text-xs text-center border bg-rose-500/10 text-rose-400 border-rose-500/20';
-        msg.textContent = 'Abonelik sırasında bir hata oluştu. Lütfen tekrar deneyin.';
-      } finally {
+        msg.className = 'text-xs font-semibold p-3 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/20 block text-rose-400';
+        msg.textContent = 'Kayıt sırasında bir hata oluştu. Lütfen tekrar deneyin.';
         btn.disabled = false;
-        btn.textContent = 'Ücretsiz Abone Ol';
+        btn.textContent = 'Tekrar Dene';
       }
     }
   </script>
