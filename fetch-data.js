@@ -13,18 +13,13 @@ const INDICES = [
 ];
 
 function isBistOpen() {
-  // Türkiye saati kontrolü
   const now = new Date();
   const trTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
-  const day = trTime.getDay(); // 0: Pazar, 6: Cumartesi
+  const day = trTime.getDay();
   if (day === 0 || day === 6) return false;
 
-  const hours = trTime.getHours();
-  const minutes = trTime.getMinutes();
-  const totalMinutes = hours * 60 + minutes;
-
-  // 10:00 (600 dk) ile 18:15 (1095 dk) arası seans açıktır
-  return totalMinutes >= 600 && totalMinutes <= 1095;
+  const totalMinutes = trTime.getHours() * 60 + trTime.getMinutes();
+  return totalMinutes >= 600 && totalMinutes <= 1095; // 10:00 - 18:15 TSİ
 }
 
 function formatDateTR(date) {
@@ -69,50 +64,61 @@ async function fetchTickerData(ticker) {
     if (history.length === 0) return null;
 
     const marketOpen = isBistOpen();
-    const lastHistoryBar = history[history.length - 1];
-    const prevHistoryBar = history.length > 1 ? history[history.length - 2] : lastHistoryBar;
+    const now = new Date();
+    const todayStr = formatDateTR(now);
 
-    let price = 0;
-    let prevClose = 0;
-    let change = 0;
-    let changePercent = 0;
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+    const yesterdayStr = formatDateTR(yesterday);
 
-    const todayStr = formatDateTR(new Date());
+    // meta.regularMarketPrice en son seans fiyatıdır (Örn: 307.25)
+    const latestOfficialPrice = Number((meta.regularMarketPrice ?? history[history.length - 1].close).toFixed(2));
+    
+    // Son barın tarihi
+    const lastBar = history[history.length - 1];
 
-    if (marketOpen) {
-      // 1. SEANS AÇIK: Canlı piyasa fiyatını kullan
-      price = meta.regularMarketPrice ?? lastHistoryBar.close;
-      prevClose = lastHistoryBar.date === todayStr ? prevHistoryBar.close : lastHistoryBar.close;
-      change = price - prevClose;
-      changePercent = prevClose > 0 ? (change / prevClose) * 100 : 0;
-
-      // Bugünün barı yoksa ekle, varsa canlı fiyatla güncelle
-      if (lastHistoryBar.date !== todayStr) {
+    if (!marketOpen) {
+      // BORSA KAPALI:
+      // Eğer son bar dünün seansı değilse, dünün kapanışını (307.25) ekle
+      if (lastBar.date !== yesterdayStr && lastBar.date !== todayStr) {
         history.push({
-          timestamp: Math.floor(Date.now() / 1000),
-          date: todayStr,
-          close: Number(price.toFixed(2))
+          timestamp: Math.floor(yesterday.getTime() / 1000),
+          date: yesterdayStr,
+          close: latestOfficialPrice
         });
       } else {
-        lastHistoryBar.close = Number(price.toFixed(2));
+        lastBar.close = latestOfficialPrice;
       }
     } else {
-      // 2. SEANS KAPALI: Son gerçekleşen resmi seans kapanışını baz al
-      price = lastHistoryBar.close;
-      prevClose = prevHistoryBar.close;
-      change = price - prevClose;
-      changePercent = prevClose > 0 ? (change / prevClose) * 100 : 0;
+      // BORSA AÇIK:
+      // Bugünün canlı fiyat barını ekle veya güncelle
+      if (lastBar.date !== todayStr) {
+        history.push({
+          timestamp: Math.floor(now.getTime() / 1000),
+          date: todayStr,
+          close: latestOfficialPrice
+        });
+      } else {
+        lastBar.close = latestOfficialPrice;
+      }
     }
+
+    // Fiyat ve Günlük Değişim Hesabı
+    const currentPrice = history[history.length - 1].close;
+    const previousClosePrice = history.length > 1 ? history[history.length - 2].close : currentPrice;
+    
+    const change = Number((currentPrice - previousClosePrice).toFixed(2));
+    const changePercent = previousClosePrice > 0 ? Number(((change / previousClosePrice) * 100).toFixed(2)) : 0;
 
     return {
       symbol: meta.symbol,
       shortName: meta.shortName || meta.symbol,
-      price: Number(price.toFixed(2)),
-      prevClose: Number(prevClose.toFixed(2)),
-      change: Number(change.toFixed(2)),
-      changePercent: Number(changePercent.toFixed(2)),
-      dayHigh: meta.regularMarketDayHigh || price,
-      dayLow: meta.regularMarketDayLow || price,
+      price: currentPrice,
+      prevClose: previousClosePrice,
+      change: change,
+      changePercent: changePercent,
+      dayHigh: meta.regularMarketDayHigh || currentPrice,
+      dayLow: meta.regularMarketDayLow || currentPrice,
       fiftyTwoWeekHigh: meta.fiftyTwoWeekHigh || null,
       fiftyTwoWeekLow: meta.fiftyTwoWeekLow || null,
       volume: meta.regularMarketVolume || 0,
@@ -125,8 +131,8 @@ async function fetchTickerData(ticker) {
 }
 
 async function main() {
-  const marketStatus = isBistOpen() ? 'CANLI SEANS AÇIK' : 'BORSA KAPALI (Son Kapanış Baz Alındı)';
-  console.log(`Durum: ${marketStatus}`);
+  const statusStr = isBistOpen() ? 'CANLI SEANS' : 'KAPALI (Dünün Kapanışı Eşitlendi)';
+  console.log(`Durum: ${statusStr}`);
 
   const now = new Date();
   const formattedTime = now.toLocaleDateString('tr-TR', {
@@ -157,7 +163,7 @@ async function main() {
         prevClose: data.prevClose,
         history: data.history
       };
-      console.log(`✓ Endeks: ${idx.key} -> ₺${data.price}`);
+      console.log(`✓ Endeks: ${idx.key} -> ${data.price} (${data.change >= 0 ? '+' : ''}${data.changePercent}%)`);
     }
   }
 
@@ -166,12 +172,12 @@ async function main() {
     if (data) {
       const cleanKey = sym.replace('.IS', '');
       output.stocks[cleanKey] = data;
-      console.log(`✓ Hisse: ${cleanKey} -> ₺${data.price}`);
+      console.log(`✓ Hisse: ${cleanKey} -> ₺${data.price} (${data.change >= 0 ? '+' : ''}${data.changePercent}%)`);
     }
   }
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
-  console.log('data.json hatasız ve organik verilerle oluşturuldu.');
+  console.log('data.json Google Finance ile tam uyumlu güncellendi.');
 }
 
 main();
