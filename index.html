@@ -3,246 +3,570 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIST Canlı Piyasa & Hisse Portalı</title>
+  <title>BIST Terminal | Borsa İstanbul Canlı Piyasa & Analiz Portalı</title>
+  <meta name="description" content="Borsa İstanbul (BIST 100, BIST 30, BIST Banka) hisselerini, döviz ve altın fiyatlarını canlı, anlık ve derinlemesine teknik göstergelerle takip edin.">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts: Outfit (Headings) + Inter (UI) + JetBrains Mono (Financial Numbers) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Outfit', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          },
+          colors: {
+            brand: {
+              50: '#f0f9ff',
+              500: '#0ea5e9',
+              600: '#0284c7',
+              700: '#0369a1',
+              900: '#0c4a6e',
+              950: '#082f49'
+            },
+            dark: {
+              bg: '#070b12',
+              card: '#0d131f',
+              border: '#1b2436',
+              hover: '#161f33'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    body { font-family: 'Inter', sans-serif; }
+    body { font-family: 'Inter', sans-serif; background-color: #070b12; color: #f1f5f9; }
+    .font-num { font-family: 'JetBrains Mono', monospace; }
+    .font-display { font-family: 'Outfit', sans-serif; }
+    
     .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-    .custom-scrollbar::-webkit-scrollbar-track { background: #0f172a; }
-    .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #070b12; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker 45s linear infinite;
+    }
+    .ticker-track:hover {
+      animation-play-state: paused;
+    }
+
+    .glass-card {
+      background: rgba(13, 19, 31, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(27, 36, 54, 0.85);
+    }
+    .glass-card-hover:hover {
+      background: rgba(22, 31, 51, 0.95);
+      border-color: rgba(56, 189, 248, 0.4);
+      transform: translateY(-2px);
+    }
+    .heat-box {
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .heat-box:hover {
+      transform: scale(1.02);
+      z-index: 10;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+    }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen antialiased">
+<body class="min-h-screen bg-[#070b12] text-slate-100 antialiased selection:bg-sky-500 selection:text-white flex flex-col justify-between">
 
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
-    
-    <!-- Üst Başlık & Kontroller -->
-    <header class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
-      <div>
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-sky-500/20 font-black text-xl text-white">
-            ₺
-          </div>
-          <div>
-            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-              Borsa İstanbul Takip Portalı
+  <!-- ================= TOP LIVE TICKER TAPE ================= -->
+  <div class="border-b border-slate-800/80 bg-[#090e18] overflow-hidden sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto flex items-center">
+      <div class="bg-sky-600 text-white text-[11px] font-black tracking-wider uppercase px-3 py-2 flex items-center gap-1.5 shrink-0 z-10 font-display shadow-md">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        CANLI PİYASA
+      </div>
+      <div class="overflow-hidden relative w-full py-1.5" id="tickerWrapper">
+        <div class="ticker-track text-xs" id="tickerTrack">
+          <!-- Populated by JS -->
+          <div class="px-4 py-1 text-slate-400">Piyasa verileri yükleniyor...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN CONTAINER ================= -->
+  <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 space-y-6 w-full flex-grow">
+
+    <!-- Top Navigation & Market Clock Bar -->
+    <header class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800/60 pb-5">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-500 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-sky-500/25 text-white font-display font-black text-2xl">
+          ₺
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl sm:text-3xl font-black font-display tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+              BIST Terminal
             </h1>
-            <p class="text-xs sm:text-sm text-slate-400">Yüksek hızlı CDN motoru • Saat başı otomatik senkronizasyon</p>
+            <span class="bg-sky-500/10 text-sky-400 border border-sky-500/20 text-[10px] font-bold px-2 py-0.5 rounded-md font-mono">
+              v2.0 PRO
+            </span>
           </div>
+          <p class="text-xs text-slate-400 mt-0.5">Borsa İstanbul Derinlik, Teknik Göstergeler & Portföy Portalı</p>
         </div>
       </div>
 
-      <div class="flex flex-wrap items-center gap-3">
-        <!-- Son Güncelleme Bilgisi -->
-        <div class="flex items-center gap-2 bg-slate-900 border border-slate-800 px-3.5 py-2 rounded-xl text-xs text-slate-300 shadow-sm">
+      <!-- Market Clock & Quick Action Links -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        
+        <!-- Live Market Status Pill -->
+        <div id="marketStatusBadge" class="flex items-center gap-2 bg-[#0d131f] border border-slate-800 px-3.5 py-2 rounded-xl text-xs shadow-sm">
           <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-slate-400">Son Senkronizasyon: <strong id="lastSyncText" class="text-white font-mono">Yükleniyor...</strong></span>
+          <span class="text-slate-400">Seans: <strong id="sessionStatusText" class="text-slate-200">Yükleniyor...</strong></span>
+          <span id="sessionCountdownText" class="text-slate-500 font-mono text-[11px] hidden sm:inline-block"></span>
         </div>
 
-        <!-- Bültene Abone Ol Butonu -->
-        <a href="abone.html" class="flex items-center gap-2 bg-slate-900 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/40 text-amber-400 text-xs font-semibold px-3.5 py-2 rounded-xl transition-all shadow-sm">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-          </svg>
+        <!-- Navigation Links -->
+        <a href="portfoy.html" class="flex items-center gap-1.5 bg-[#0d131f] hover:bg-slate-800/80 border border-slate-800 hover:border-emerald-500/40 text-emerald-400 text-xs font-semibold px-3 py-2 rounded-xl transition-all shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>Portföy Takip</span>
+        </a>
+
+        <a href="hesaplayici.html" class="flex items-center gap-1.5 bg-[#0d131f] hover:bg-slate-800/80 border border-slate-800 hover:border-purple-500/40 text-purple-400 text-xs font-semibold px-3 py-2 rounded-xl transition-all shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+          <span>Hesaplayıcı</span>
+        </a>
+
+        <a href="abone.html" class="flex items-center gap-1.5 bg-[#0d131f] hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/40 text-amber-400 text-xs font-semibold px-3 py-2 rounded-xl transition-all shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
           <span>Sabah Bülteni</span>
         </a>
 
-        <!-- Yenile Butonu -->
-        <button id="refreshBtn" onclick="loadDataFromCDN()" class="flex items-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 transition-all text-white text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg shadow-sky-600/20 cursor-pointer">
-          <svg id="refreshIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-          </svg>
-          <span id="refreshBtnText">Yenile</span>
+        <!-- Live Refresh -->
+        <button id="refreshBtn" onclick="loadDataFromCDN()" class="flex items-center gap-1.5 bg-sky-600 hover:bg-sky-500 active:scale-95 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-sky-600/20 transition-all cursor-pointer">
+          <svg id="refreshIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <span class="hidden sm:inline">Yenile</span>
         </button>
       </div>
     </header>
 
-    <!-- Endeks ve Emtia Kartları (4 Kolon) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <!-- ================= 4 HERO METRIC CARDS ================= -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5" id="heroMetrics">
+      
       <!-- BIST 100 -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden group">
+      <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-xl relative overflow-hidden transition-all group">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2.5 py-0.5 rounded-md">Ana Endeks</span>
-          <span id="xu100Badge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Yükleniyor...</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-sky-400 bg-sky-500/10 border border-sky-500/20 px-2.5 py-0.5 rounded-lg font-display">Ana Endeks</span>
+          <span id="xu100Badge" class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">--</span>
         </div>
-        <h3 class="text-sm font-semibold text-slate-400 mt-2">BIST 100 (XU100)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="xu100Price" class="text-2xl font-black text-white">--</div>
-          <div id="xu100Change" class="text-xs font-medium text-slate-400">--</div>
+          <div>
+            <h3 class="text-xs text-slate-400 font-medium">BIST 100 (XU100)</h3>
+            <div id="xu100Price" class="text-2xl font-black font-num tracking-tight text-white mt-0.5">--</div>
+          </div>
+          <div id="xu100Change" class="text-right text-xs font-num font-semibold text-slate-400">--</div>
+        </div>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800/80 pt-2 font-mono">
+          <span>RSI: <strong id="xu100Rsi" class="text-slate-300">--</strong></span>
+          <span id="xu100Range">G: -- - --</span>
         </div>
       </div>
 
       <!-- BIST 30 -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden group">
+      <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-xl relative overflow-hidden transition-all group">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-md">BIST 30</span>
-          <span id="xu030Badge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Yükleniyor...</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-2.5 py-0.5 rounded-lg font-display">BIST 30</span>
+          <span id="xu030Badge" class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">--</span>
         </div>
-        <h3 class="text-sm font-semibold text-slate-400 mt-2">BIST 30 (XU030)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="xu030Price" class="text-2xl font-black text-white">--</div>
-          <div id="xu030Change" class="text-xs font-medium text-slate-400">--</div>
+          <div>
+            <h3 class="text-xs text-slate-400 font-medium">BIST 30 (XU030)</h3>
+            <div id="xu030Price" class="text-2xl font-black font-num tracking-tight text-white mt-0.5">--</div>
+          </div>
+          <div id="xu030Change" class="text-right text-xs font-num font-semibold text-slate-400">--</div>
+        </div>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800/80 pt-2 font-mono">
+          <span>Önceki Kapanış:</span>
+          <span id="xu030Prev" class="text-slate-300">--</span>
         </div>
       </div>
 
       <!-- BIST Banka -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden group">
+      <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-xl relative overflow-hidden transition-all group">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-md">Bankacılık</span>
-          <span id="xbankBadge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Yükleniyor...</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-lg font-display">Bankacılık</span>
+          <span id="xbankBadge" class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">--</span>
         </div>
-        <h3 class="text-sm font-semibold text-slate-400 mt-2">BIST Banka (XBANK)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="xbankPrice" class="text-2xl font-black text-white">--</div>
-          <div id="xbankChange" class="text-xs font-medium text-slate-400">--</div>
+          <div>
+            <h3 class="text-xs text-slate-400 font-medium">BIST Banka (XBANK)</h3>
+            <div id="xbankPrice" class="text-2xl font-black font-num tracking-tight text-white mt-0.5">--</div>
+          </div>
+          <div id="xbankChange" class="text-right text-xs font-num font-semibold text-slate-400">--</div>
+        </div>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800/80 pt-2 font-mono">
+          <span>Sektör Lideri:</span>
+          <span class="text-emerald-400">GARAN / AKBNK</span>
         </div>
       </div>
 
-      <!-- Gram Altın Kartı -->
-      <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-5 shadow-xl relative overflow-hidden group">
+      <!-- Gram Altın -->
+      <div class="glass-card rounded-2xl p-4 sm:p-5 shadow-xl relative overflow-hidden transition-all group">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-md">Emtia / Piyasa</span>
-          <span id="altinBadge" class="text-xs font-semibold px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">Yükleniyor...</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-lg font-display">Kıymetli Maden</span>
+          <span id="altinBadge" class="text-[11px] font-bold font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">--</span>
         </div>
-        <h3 class="text-sm font-semibold text-slate-400 mt-2">Gram Altın (TL)</h3>
         <div class="mt-2 flex items-baseline justify-between">
-          <div id="altinPrice" class="text-2xl font-black text-amber-300">--</div>
-          <div id="altinChange" class="text-xs font-medium text-slate-400">--</div>
+          <div>
+            <h3 class="text-xs text-slate-400 font-medium">Gram Altın (24K)</h3>
+            <div id="altinPrice" class="text-2xl font-black font-num tracking-tight text-amber-300 mt-0.5">--</div>
+          </div>
+          <div id="altinChange" class="text-right text-xs font-num font-semibold text-slate-400">--</div>
         </div>
+        <div class="mt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-slate-800/80 pt-2 font-mono">
+          <span>Çeyrek: <strong id="ceyrekQuick" class="text-amber-400">--</strong></span>
+          <span>Gümüş: <strong id="gumusQuick" class="text-slate-300">--</strong></span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= SECONDARY CURRENCY / COMMODITY STRIP ================= -->
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 font-mono text-xs">
+      <div class="bg-[#0c121e] border border-slate-800/70 p-2.5 rounded-xl flex items-center justify-between">
+        <span class="text-slate-400 font-sans">USD/TRY</span>
+        <span id="stripUsd" class="font-bold text-white">--</span>
+      </div>
+      <div class="bg-[#0c121e] border border-slate-800/70 p-2.5 rounded-xl flex items-center justify-between">
+        <span class="text-slate-400 font-sans">EUR/TRY</span>
+        <span id="stripEur" class="font-bold text-white">--</span>
+      </div>
+      <div class="bg-[#0c121e] border border-slate-800/70 p-2.5 rounded-xl flex items-center justify-between">
+        <span class="text-slate-400 font-sans">GBP/TRY</span>
+        <span id="stripGbp" class="font-bold text-white">--</span>
+      </div>
+      <div class="bg-[#0c121e] border border-slate-800/70 p-2.5 rounded-xl flex items-center justify-between">
+        <span class="text-slate-400 font-sans">BIST Sınai</span>
+        <span id="stripXusin" class="font-bold text-white">--</span>
+      </div>
+      <div class="bg-[#0c121e] border border-slate-800/70 p-2.5 rounded-xl flex items-center justify-between">
+        <span class="text-slate-400 font-sans">Brent ($)</span>
+        <span id="stripBrent" class="font-bold text-white">--</span>
+      </div>
+      <div class="bg-[#0c121e] border border-slate-800/70 p-2.5 rounded-xl flex items-center justify-between">
+        <span class="text-slate-400 font-sans">Bitcoin ($)</span>
+        <span id="stripBtc" class="font-bold text-white">--</span>
       </div>
     </div>
 
-    <!-- Canlı Hisse Bölümü -->
-    <div class="space-y-4">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h2 class="text-xl font-bold text-slate-200">Hisse Senetleri</h2>
-          <p class="text-xs text-slate-500">Geçmiş grafik ve detayları görmek için hissenin üzerine tıklayın</p>
-        </div>
-
-        <!-- Filtreleme Inputu -->
-        <div class="relative min-w-[260px] sm:w-80">
+    <!-- ================= CONTROLS, SEARCH & VIEW SWITCHER ================= -->
+    <div class="space-y-3.5 pt-2">
+      
+      <!-- Top Filters & Actions Bar -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        
+        <!-- Live Instant Search -->
+        <div class="relative w-full md:w-80">
           <input 
             type="text" 
             id="searchInput" 
-            placeholder="Listede hisse filtrele (örn: THYAO)..." 
-            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 pl-10 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all uppercase"
-            oninput="filterCards()"
+            placeholder="Hisse sembolü veya şirket ara (örn: THYAO, Garanti)..." 
+            class="w-full bg-[#0c121e] border border-slate-800 rounded-xl px-4 py-2.5 pl-10 text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all font-sans uppercase"
+            oninput="applyAllFilters()"
           />
-          <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-slate-500 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
+          <span class="absolute right-3 top-2.5 text-[10px] text-slate-500 border border-slate-800 px-1.5 py-0.5 rounded font-mono hidden sm:inline-block">/ tuşu</span>
         </div>
-      </div>
 
-      <!-- Hisse Izgarası -->
-      <div id="stockGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <!-- JS ile doldurulur -->
-      </div>
-    </div>
-
-    <!-- Ana Sayfa Bülten Abonelik Kartı -->
-    <div class="bg-gradient-to-r from-slate-900 via-slate-900 to-sky-950/40 border border-slate-800/80 rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
-      <div class="space-y-2 text-center md:text-left">
-        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 border border-amber-500/20 px-3 py-1 rounded-full">
-          ✉️ Ücretsiz Sabah Bülteni
-        </div>
-        <h3 class="text-xl sm:text-2xl font-black text-white">Her Sabah 09:00'da Piyasa Özeti E-postanızda</h3>
-        <p class="text-xs sm:text-sm text-slate-400 max-w-xl">
-          Borsa İstanbul seansı açılmadan önce dünün BIST 100, BIST 30, BIST Banka kapanışları ve Gram Altın fiyatı her iş günü sabahı kutunuza gelsin.
-        </p>
-      </div>
-      <div class="w-full md:w-auto flex-shrink-0">
-        <a href="abone.html" class="inline-flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-500 active:scale-95 text-white text-sm font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-sky-600/20 transition-all w-full md:w-auto">
-          <span>Hemen Ücretsiz Abone Ol</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-          </svg>
-        </a>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Hızlı Önizleme Modalı -->
-  <div id="stockModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto custom-scrollbar p-6 shadow-2xl relative">
-      
-      <!-- Kapatma Butonu -->
-      <button onclick="closeModal()" class="absolute right-4 top-4 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-800 p-2 rounded-xl transition-all cursor-pointer">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-      </button>
-
-      <!-- Modal Başlık Bilgisi -->
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
-        <div>
-          <div class="flex items-center gap-3">
-            <h2 id="modalSymbol" class="text-3xl font-extrabold text-white">--</h2>
-            <span id="modalBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-800 text-slate-300">--</span>
+        <!-- Sorting & View Switches -->
+        <div class="flex flex-wrap items-center gap-2">
+          
+          <!-- Sort Dropdown -->
+          <div class="relative">
+            <select id="sortSelect" onchange="applyAllFilters()" class="bg-[#0c121e] border border-slate-800 text-slate-300 text-xs font-semibold rounded-xl px-3 py-2.5 focus:outline-none focus:border-sky-500 transition-all appearance-none pr-8 cursor-pointer">
+              <option value="default">Sıralama: Varsayılan</option>
+              <option value="gain_desc">En Çok Yükselenler (% ↑)</option>
+              <option value="gain_asc">En Çok Düşenler (% ↓)</option>
+              <option value="volume_desc">En Yüksek Hacim (TL)</option>
+              <option value="price_desc">Fiyat: Yüksekten Düşüğe</option>
+              <option value="price_asc">Fiyat: Düşükten Yükseğe</option>
+              <option value="rsi_asc">RSI: Aşırı Satım (Ucuz)</option>
+              <option value="rsi_desc">RSI: Aşırı Alım (Pahalı)</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+            </div>
           </div>
-          <p id="modalName" class="text-sm text-slate-400 mt-1">Yükleniyor...</p>
+
+          <!-- View Mode Switcher -->
+          <div class="flex items-center bg-[#0c121e] border border-slate-800 p-1 rounded-xl">
+            <button id="viewBtnGrid" onclick="switchViewMode('grid')" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-sky-600 text-white transition-all flex items-center gap-1.5" title="Kart Görünümü">
+              <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+              <span>Kartlar</span>
+            </button>
+            <button id="viewBtnTable" onclick="switchViewMode('table')" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1.5" title="Tablo Görünümü">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+              <span>Tablo</span>
+            </button>
+            <button id="viewBtnHeat" onclick="switchViewMode('heat')" class="px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1.5" title="Isı Haritası">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+              <span>Isı Haritası</span>
+            </button>
+          </div>
+
         </div>
-        <div class="text-left sm:text-right">
-          <div id="modalPrice" class="text-3xl font-black text-white">--</div>
-          <div id="modalChange" class="text-sm font-semibold text-slate-400">--</div>
-        </div>
+
       </div>
 
-      <!-- Dinamik Grafik Alanı -->
-      <div class="mt-5 bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 h-72 sm:h-96 relative">
-        <canvas id="modalChart"></canvas>
-      </div>
-
-      <!-- Dinamik Finansal İstatistikler -->
-      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
-        <div class="bg-slate-950/40 border border-slate-800/80 p-3.5 rounded-xl">
-          <span class="text-xs text-slate-500 font-medium block">52H En Yüksek</span>
-          <span id="modalHigh52" class="text-sm sm:text-base font-bold text-slate-200 mt-1 block">--</span>
-        </div>
-        <div class="bg-slate-950/40 border border-slate-800/80 p-3.5 rounded-xl">
-          <span class="text-xs text-slate-500 font-medium block">52H En Düşük</span>
-          <span id="modalLow52" class="text-sm sm:text-base font-bold text-slate-200 mt-1 block">--</span>
-        </div>
-        <div class="bg-slate-950/40 border border-slate-800/80 p-3.5 rounded-xl">
-          <span class="text-xs text-slate-500 font-medium block">Günün Aralığı</span>
-          <span id="modalDayRange" class="text-xs sm:text-sm font-bold text-slate-200 mt-1 block truncate">--</span>
-        </div>
-        <div class="bg-slate-950/40 border border-slate-800/80 p-3.5 rounded-xl">
-          <span class="text-xs text-slate-500 font-medium block">Hacim</span>
-          <span id="modalVolume" class="text-sm sm:text-base font-bold text-slate-200 mt-1 block">--</span>
-        </div>
+      <!-- Sector Filter Tabs -->
+      <div class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-1 text-xs" id="sectorFilterTabs">
+        <button onclick="setSectorFilter('ALL', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-bold bg-sky-600 text-white shrink-0 transition-all">
+          Tüm Hisseler (<span id="totalStocksCount">0</span>)
+        </button>
+        <button onclick="setSectorFilter('FAVORITES', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium text-amber-400 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 shrink-0 transition-all flex items-center gap-1">
+          ⭐ Takip Listem (<span id="favCount">0</span>)
+        </button>
+        <button onclick="setSectorFilter('BIST30', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          BIST 30
+        </button>
+        <button onclick="setSectorFilter('Bankacılık & Finans', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Bankacılık
+        </button>
+        <button onclick="setSectorFilter('Ulaştırma & Havacılık', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Havacılık & Ulaştırma
+        </button>
+        <button onclick="setSectorFilter('Holdingler', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Holdingler
+        </button>
+        <button onclick="setSectorFilter('Sanayi & Metal', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Sanayi & Metal
+        </button>
+        <button onclick="setSectorFilter('Enerji & Altyapı', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Enerji & Altyapı
+        </button>
+        <button onclick="setSectorFilter('Teknoloji & Savunma', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Teknoloji & Savunma
+        </button>
+        <button onclick="setSectorFilter('Perakende & Tüketim', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Perakende & Tüketim
+        </button>
+        <button onclick="setSectorFilter('DIVIDEND', this)" class="sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all">
+          Temettü Şirketleri
+        </button>
       </div>
 
     </div>
-  </div>
 
-  <!-- Yasal Uyarı / Sorumluluk Reddi (Footer) -->
-  <footer class="mt-12 border-t border-slate-800/80 pt-6 pb-8 text-center text-xs text-slate-500 space-y-3">
-    <div class="max-w-4xl mx-auto bg-slate-900/60 border border-slate-850 rounded-xl p-4 text-[11px] leading-relaxed text-slate-400 text-left sm:text-center">
-      <p class="font-bold text-slate-300 mb-1">YASAL UYARI</p>
-      <p>
-        Bu sayfada yer alan tüm borsa verileri, hisse fiyatları, grafikler, analizler ve istatistiki bilgiler yalnızca genel bilgilendirme amacıyla sunulmaktadır. 
-        Burada yer alan hiçbir bilgi, yorum ve tavsiye <strong>Sermaye Piyasası Kurulu (SPK)</strong> mevzuatı kapsamında yatırım danışmanlığı veya alım-satım tavsiyesi niteliği taşımaz.
-      </p>
-      <p class="mt-1">
-        Veriler Yahoo Finance ve halka açık kaynaklar üzerinden otomatik olarak temin edilmekte olup gecikmeli, eksik veya hatalı olabilir. Sitede sunulan bilgilere dayanılarak yapılan işlemlerden doğabilecek doğrudan veya dolaylı maddi ve manevi zararlardan bu site ve yapımcıları sorumlu tutulamaz.
-      </p>
+    <!-- ================= VIEW 1: CARDS (GRID) ================= -->
+    <div id="viewContainerGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+      <!-- Injected by JS -->
     </div>
 
-    <p class="text-slate-600 text-[11px]">
-      © 2026 Borsa İstanbul Takip Portalı. Tüm hakları saklıdır. Veriler bilgi amaçlıdır.
-    </p>
+    <!-- ================= VIEW 2: FINANCIAL TABLE ================= -->
+    <div id="viewContainerTable" class="hidden glass-card rounded-2xl border border-slate-800 overflow-hidden shadow-2xl">
+      <div class="overflow-x-auto custom-scrollbar">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-[#0c121e] text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">Sembol</th>
+              <th class="py-3 px-4">Şirket Ünvanı</th>
+              <th class="py-3 px-4">Sektör</th>
+              <th class="py-3 px-4 text-right">Fiyat (₺)</th>
+              <th class="py-3 px-4 text-right">Günlük %</th>
+              <th class="py-3 px-4 text-right">1 Hafta %</th>
+              <th class="py-3 px-4 text-right">1 Ay %</th>
+              <th class="py-3 px-4 text-right">Günün Aralığı</th>
+              <th class="py-3 px-4 text-right">RSI (14)</th>
+              <th class="py-3 px-4 text-right">Hacim (TL)</th>
+              <th class="py-3 px-4 text-center">İşlem</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody" class="divide-y divide-slate-800/60 font-mono">
+            <!-- Injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ================= VIEW 3: MARKET HEATMAP ================= -->
+    <div id="viewContainerHeat" class="hidden space-y-4">
+      <div class="glass-card rounded-2xl p-4 sm:p-6 border border-slate-800">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-800">
+          <div>
+            <h2 class="text-lg font-bold font-display text-white">BIST Piyasa Isı Haritası (Heatmap)</h2>
+            <p class="text-xs text-slate-400">Sektör ağırlıkları ve anlık fiyat değişim performansları</p>
+          </div>
+          <div class="flex items-center gap-3 text-xs font-mono">
+            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-rose-600 inline-block"></span> &lt; -3%</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-rose-800 inline-block"></span> -1%</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-slate-800 inline-block"></span> 0%</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-800 inline-block"></span> +1%</span>
+            <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-emerald-600 inline-block"></span> &gt; +3%</span>
+          </div>
+        </div>
+        <div id="heatmapGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+          <!-- Injected by JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SECTOR BENCHMARK CARDS ================= -->
+    <section class="mt-8 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+        <h2 class="text-base font-bold font-display text-slate-200">Sektörel Piyasa Analizi</h2>
+        <span class="text-xs text-slate-500 font-mono">Canlı Sektör Ortalamaları</span>
+      </div>
+      <div id="sectorBreakdownGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 font-mono text-xs">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-slate-800/80 bg-[#060a10] py-8 text-center text-xs text-slate-500 mt-12 w-full">
+    <div class="max-w-7xl mx-auto px-4 space-y-4">
+      <div class="max-w-4xl mx-auto bg-[#0b101b] border border-slate-850 p-4 rounded-2xl text-[11px] text-slate-400 text-left sm:text-center leading-relaxed">
+        <strong class="text-slate-300 block mb-1">YASAL UYARI VE ÇEKİNCE:</strong>
+        Bu portalda yer alan borsa verileri, hisse fiyatları, teknik analiz göstergeleri ve hesaplamalar genel bilgilendirme amacıyla sunulmakta olup Sermaye Piyasası Kurulu (SPK) mevzuatı kapsamında yatırım danışmanlığı veya al-sat tavsiyesi içermez.
+      </div>
+      <p class="text-slate-600 font-mono text-[11px]">
+        © 2026 Borsa İstanbul Terminal Portalı • Yüksek Hızlı Statik CDN Veri Mimarisi • Otomatik GitHub Actions Motoru
+      </p>
+    </div>
   </footer>
 
+  <!-- ================= QUICK PREVIEW MODAL ================= -->
+  <div id="stockModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-3 sm:p-4">
+    <div class="bg-[#0d1322] border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[92vh] overflow-y-auto custom-scrollbar p-5 sm:p-7 shadow-2xl relative space-y-5">
+      
+      <!-- Close Button -->
+      <button onclick="closeStockModal()" class="absolute right-5 top-5 text-slate-400 hover:text-white bg-slate-800/80 hover:bg-slate-700 p-2.5 rounded-2xl transition-all cursor-pointer">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <!-- Modal Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-5 pr-12 sm:pr-0">
+        <div>
+          <div class="flex items-center gap-3">
+            <h2 id="modalSymbol" class="text-3xl sm:text-4xl font-black font-display text-white">--</h2>
+            <span id="modalBadge" class="text-xs font-bold font-mono px-3 py-1 rounded-full bg-slate-800 text-slate-300">--</span>
+            <button id="modalFavBtn" onclick="toggleFavoriteCurrentModal()" class="text-slate-500 hover:text-amber-400 transition-colors p-1" title="Favorilere Ekle">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+            </button>
+          </div>
+          <p id="modalName" class="text-xs sm:text-sm text-slate-400 mt-1 font-sans">Yükleniyor...</p>
+          <span id="modalSector" class="inline-block mt-2 text-[11px] font-semibold text-sky-400 bg-sky-500/10 px-2.5 py-0.5 rounded-md border border-sky-500/20 font-sans"></span>
+        </div>
+
+        <div class="text-left sm:text-right">
+          <div id="modalPrice" class="text-3xl sm:text-4xl font-black font-num text-white">--</div>
+          <div id="modalChange" class="text-sm font-semibold font-num text-slate-400 mt-1">--</div>
+        </div>
+      </div>
+
+      <!-- Timeframe selector -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs">
+          <button onclick="setModalChartFilter(7, this)" class="modal-time-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">1H</button>
+          <button onclick="setModalChartFilter(30, this)" class="modal-time-btn px-3 py-1.5 rounded-lg bg-sky-600 text-white font-bold">1A</button>
+          <button onclick="setModalChartFilter(90, this)" class="modal-time-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">3A</button>
+          <button onclick="setModalChartFilter(180, this)" class="modal-time-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">6A</button>
+          <button onclick="setModalChartFilter(365, this)" class="modal-time-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">1Y</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <a id="modalDeepLink" href="#" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all inline-flex items-center gap-1.5 shadow-md">
+            <span>Tam Detay Sayfası</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Dynamic Chart Canvas -->
+      <div class="bg-slate-950/80 border border-slate-800/90 rounded-2xl p-4 h-72 sm:h-80 relative">
+        <canvas id="modalChartCanvas"></canvas>
+      </div>
+
+      <!-- Key Statistics Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+        <div class="bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl">
+          <span class="text-slate-500 font-sans block text-[11px]">52H En Yüksek</span>
+          <span id="modalHigh52" class="text-sm font-bold text-white mt-1 block">--</span>
+        </div>
+        <div class="bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl">
+          <span class="text-slate-500 font-sans block text-[11px]">52H En Düşük</span>
+          <span id="modalLow52" class="text-sm font-bold text-white mt-1 block">--</span>
+        </div>
+        <div class="bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl">
+          <span class="text-slate-500 font-sans block text-[11px]">RSI (14)</span>
+          <span id="modalRsi" class="text-sm font-bold text-white mt-1 block">--</span>
+        </div>
+        <div class="bg-slate-950/60 border border-slate-800/80 p-3 rounded-xl">
+          <span class="text-slate-500 font-sans block text-[11px]">Günlük Hacim</span>
+          <span id="modalVolume" class="text-sm font-bold text-white mt-1 block">--</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT APPLICATION LOGIC ================= -->
   <script>
     let globalData = null;
-    let chartInstance = null;
+    let currentSectorFilter = 'ALL';
+    let currentViewMode = 'grid';
+    let modalChartInstance = null;
+    let activeModalSymbol = null;
+    let modalCurrentDays = 30;
+
+    const FAVORITES_STORAGE_KEY = 'bist_terminal_favorites_v1';
+
+    function getFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || ['THYAO', 'GARAN', 'ASELS', 'EREGL', 'TUPRS'];
+      } catch {
+        return ['THYAO', 'GARAN', 'ASELS'];
+      }
+    }
+
+    function toggleFavorite(sym, e) {
+      if (e) e.stopPropagation();
+      let favs = getFavorites();
+      if (favs.includes(sym)) {
+        favs = favs.filter(s => s !== sym);
+      } else {
+        favs.push(sym);
+      }
+      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favs));
+      updateFavCount();
+      applyAllFilters();
+      updateModalFavIcon();
+    }
+
+    function updateFavCount() {
+      const favs = getFavorites();
+      const el = document.getElementById('favCount');
+      if (el) el.textContent = favs.length;
+    }
 
     function formatNumber(val) {
       if (val === null || val === undefined || isNaN(val)) return '-';
@@ -256,6 +580,28 @@
       return Number(vol).toLocaleString('tr-TR');
     }
 
+    function renderSparklineSvg(sparkline, isPos) {
+      if (!sparkline || sparkline.length < 2) return '';
+      const min = Math.min(...sparkline);
+      const max = Math.max(...sparkline);
+      const range = max - min || 1;
+      const width = 80;
+      const height = 24;
+
+      const points = sparkline.map((val, i) => {
+        const x = (i / (sparkline.length - 1)) * width;
+        const y = height - ((val - min) / range) * (height - 4) - 2;
+        return `${x.toFixed(1)},${y.toFixed(1)}`;
+      }).join(' ');
+
+      const strokeColor = isPos ? '#10b981' : '#f43f5e';
+      return `
+        <svg width="${width}" height="${height}" class="shrink-0">
+          <polyline fill="none" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" points="${points}" />
+        </svg>
+      `;
+    }
+
     function applyIndex(prefix, data, isCurrency = false) {
       if (!data) return;
       const isPos = data.change >= 0;
@@ -265,47 +611,113 @@
 
       if (priceEl) priceEl.textContent = isCurrency ? `₺${formatNumber(data.price)}` : formatNumber(data.price);
       if (changeEl) {
-        changeEl.className = `text-xs font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+        changeEl.className = `text-right text-xs font-num font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
         changeEl.textContent = `${isPos ? '▲ +' : '▼ '}${formatNumber(data.change)} (%${data.changePercent.toFixed(2)})`;
       }
       if (badgeEl) {
-        badgeEl.className = `text-xs font-semibold px-2 py-0.5 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+        badgeEl.className = `text-[11px] font-bold font-mono px-2 py-0.5 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
         badgeEl.textContent = `${isPos ? '+' : ''}${data.changePercent.toFixed(2)}%`;
       }
     }
 
-    function renderStockCards(filterText = '') {
-      const grid = document.getElementById('stockGrid');
-      if (!grid || !globalData?.stocks) return;
+    function buildTickerTape(data) {
+      const track = document.getElementById('tickerTrack');
+      if (!track) return;
 
-      const entries = Object.entries(globalData.stocks);
-      const filtered = entries.filter(([sym, item]) => {
-        return sym.includes(filterText) || (item.shortName && item.shortName.toUpperCase().includes(filterText));
+      const items = [];
+      if (data.indices?.XU100) items.push({ sym: 'BIST 100', price: data.indices.XU100.price, chg: data.indices.XU100.changePercent });
+      if (data.indices?.XU030) items.push({ sym: 'BIST 30', price: data.indices.XU030.price, chg: data.indices.XU030.changePercent });
+      if (data.indices?.XBANK) items.push({ sym: 'XBANK', price: data.indices.XBANK.price, chg: data.indices.XBANK.changePercent });
+      if (data.indices?.ALTIN) items.push({ sym: 'Gram Altın', price: `₺${formatNumber(data.indices.ALTIN.price)}`, chg: data.indices.ALTIN.changePercent });
+      if (data.currencies?.USDTRY) items.push({ sym: 'USD/TRY', price: `₺${formatNumber(data.currencies.USDTRY.price)}`, chg: data.currencies.USDTRY.changePercent });
+      if (data.currencies?.EURTRY) items.push({ sym: 'EUR/TRY', price: `₺${formatNumber(data.currencies.EURTRY.price)}`, chg: data.currencies.EURTRY.changePercent });
+
+      // Add top movers
+      (data.topGainers || []).slice(0, 4).forEach(g => {
+        items.push({ sym: g.symbol, price: `₺${formatNumber(g.price)}`, chg: g.changePercent });
       });
 
-      grid.innerHTML = filtered.map(([sym, item]) => {
-        const isPos = item.change >= 0;
+      const html = items.map(item => {
+        const isPos = item.chg >= 0;
+        const color = isPos ? 'text-emerald-400' : 'text-rose-400';
         return `
-          <div class="bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 p-5 rounded-2xl transition-all duration-200 transform hover:-translate-y-1 shadow-lg group">
-            <div class="flex items-center justify-between mb-3">
-              <div>
-                <a href="hisse.html?sembol=${sym}" class="font-bold text-lg text-white group-hover:text-sky-400 transition-colors">${sym}</a>
-                <p class="text-xs text-slate-400 line-clamp-1">${item.shortName || sym}</p>
+          <div class="inline-flex items-center gap-2 px-4 py-0.5 shrink-0 border-r border-slate-800/80 font-mono">
+            <span class="font-bold text-slate-300 font-sans">${item.sym}</span>
+            <span class="font-semibold text-white">${item.price}</span>
+            <span class="${color} font-bold text-[11px]">${isPos ? '▲ +' : '▼ '}${item.chg.toFixed(2)}%</span>
+          </div>
+        `;
+      }).join('');
+
+      // Duplicate for seamless loop
+      track.innerHTML = html + html;
+    }
+
+    function renderGridCards(stocks) {
+      const container = document.getElementById('viewContainerGrid');
+      const favs = getFavorites();
+
+      if (stocks.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full py-12 text-center text-slate-500 font-sans glass-card rounded-2xl p-8">
+            <p class="text-base font-bold text-slate-300">Arama kriterlerine uygun hisse bulunamadı.</p>
+            <p class="text-xs mt-1">Farklı bir arama kelimesi veya sektör seçmeyi deneyebilirsiniz.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = stocks.map(item => {
+        const isPos = item.change >= 0;
+        const isFav = favs.includes(item.symbol);
+        const rsiVal = item.rsi14;
+        let rsiBadge = '';
+        if (rsiVal !== null && rsiVal !== undefined) {
+          if (rsiVal < 30) rsiBadge = `<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" title="RSI Aşırı Satım">RSI ${rsiVal.toFixed(0)} (Alım)</span>`;
+          else if (rsiVal > 70) rsiBadge = `<span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20" title="RSI Aşırı Alım">RSI ${rsiVal.toFixed(0)} (Satış)</span>`;
+        }
+
+        const sparklineSvg = renderSparklineSvg(item.sparkline, isPos);
+
+        return `
+          <div onclick="openStockModal('${item.symbol}')" class="glass-card glass-card-hover p-4 sm:p-5 rounded-2xl transition-all duration-200 cursor-pointer group relative flex flex-col justify-between">
+            <div>
+              <!-- Top Row: Symbol, Star, % Change Badge -->
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <button onclick="toggleFavorite('${item.symbol}', event)" class="text-slate-600 hover:text-amber-400 transition-colors" title="Favorilere Ekle">
+                    <svg class="w-4 h-4 ${isFav ? 'text-amber-400 fill-amber-400' : ''}" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                  </button>
+                  <span class="font-extrabold text-base font-display text-white group-hover:text-sky-400 transition-colors">${item.symbol}</span>
+                  ${item.bist30 ? '<span class="text-[9px] font-mono font-bold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-1.5 py-0.2 rounded">B30</span>' : ''}
+                </div>
+                <span class="text-xs font-bold font-mono px-2 py-0.5 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">
+                  ${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%
+                </span>
               </div>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}">
-                ${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%
-              </span>
+
+              <!-- Company Name & Sector -->
+              <p class="text-xs text-slate-400 line-clamp-1 font-sans">${item.name || item.shortName || item.symbol}</p>
+              
+              <!-- Price & Sparkline -->
+              <div class="flex items-end justify-between mt-3.5 mb-2">
+                <div>
+                  <div class="text-2xl font-black font-num text-white">₺${formatNumber(item.price)}</div>
+                  <div class="text-xs font-mono ${isPos ? 'text-emerald-400' : 'text-rose-400'} mt-0.5">
+                    ${isPos ? '▲ +' : '▼ '}₺${formatNumber(item.change)}
+                  </div>
+                </div>
+                ${sparklineSvg}
+              </div>
             </div>
-            <div class="flex items-baseline justify-between mt-4">
-              <span class="text-2xl font-black text-slate-100">₺${formatNumber(item.price)}</span>
-              <span class="text-xs font-medium ${isPos ? 'text-emerald-400' : 'text-rose-400'}">
-                ${isPos ? '▲' : '▼'} ₺${formatNumber(item.change)}
-              </span>
-            </div>
-            <div class="mt-3 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] text-slate-500">
-              <button onclick="openStockModal('${sym}')" class="text-slate-400 hover:text-white transition-colors cursor-pointer">Hızlı Önizle</button>
-              <a href="hisse.html?sembol=${sym}" class="text-sky-400 font-semibold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                Detaylı Grafik →
+
+            <!-- Bottom Stats & Link -->
+            <div class="mt-3 pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
+              <div class="flex items-center gap-1.5">
+                ${rsiBadge || `<span class="font-mono">Hacim: ${formatVolume(item.volume)}</span>`}
+              </div>
+              <a href="hisse.html?sembol=${item.symbol}" onclick="event.stopPropagation()" class="text-sky-400 hover:text-sky-300 font-semibold inline-flex items-center gap-0.5 transition-transform group-hover:translate-x-0.5">
+                Grafik →
               </a>
             </div>
           </div>
@@ -313,9 +725,168 @@
       }).join('');
     }
 
-    function filterCards() {
-      const q = document.getElementById('searchInput').value.trim().toUpperCase();
-      renderStockCards(q);
+    function renderTable(stocks) {
+      const tbody = document.getElementById('tableBody');
+      const favs = getFavorites();
+
+      tbody.innerHTML = stocks.map(item => {
+        const isPos = item.change >= 0;
+        const isFav = favs.includes(item.symbol);
+        const w1 = item.returns?.w1 ?? 0;
+        const m1 = item.returns?.m1 ?? 0;
+
+        return `
+          <tr onclick="openStockModal('${item.symbol}')" class="hover:bg-slate-850/60 cursor-pointer transition-colors">
+            <td class="py-3 px-4 font-bold text-white font-display flex items-center gap-2">
+              <button onclick="toggleFavorite('${item.symbol}', event)" class="text-slate-600 hover:text-amber-400">
+                <svg class="w-3.5 h-3.5 ${isFav ? 'text-amber-400 fill-amber-400' : ''}" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+              </button>
+              <span>${item.symbol}</span>
+            </td>
+            <td class="py-3 px-4 font-sans text-slate-300 line-clamp-1 max-w-[200px]">${item.name || item.shortName || item.symbol}</td>
+            <td class="py-3 px-4 font-sans text-slate-400">${item.sector || 'BIST'}</td>
+            <td class="py-3 px-4 text-right font-bold text-white">₺${formatNumber(item.price)}</td>
+            <td class="py-3 px-4 text-right font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}">${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%</td>
+            <td class="py-3 px-4 text-right ${w1 >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${w1 >= 0 ? '+' : ''}${w1.toFixed(2)}%</td>
+            <td class="py-3 px-4 text-right ${m1 >= 0 ? 'text-emerald-400' : 'text-rose-400'}">${m1 >= 0 ? '+' : ''}${m1.toFixed(2)}%</td>
+            <td class="py-3 px-4 text-right text-slate-400">₺${formatNumber(item.dayLow)} - ₺${formatNumber(item.dayHigh)}</td>
+            <td class="py-3 px-4 text-right font-bold ${item.rsi14 < 30 ? 'text-emerald-400' : (item.rsi14 > 70 ? 'text-rose-400' : 'text-slate-300')}">${item.rsi14 ? item.rsi14.toFixed(1) : '-'}</td>
+            <td class="py-3 px-4 text-right text-slate-400">${formatVolume(item.volume * item.price)}</td>
+            <td class="py-3 px-4 text-center">
+              <a href="hisse.html?sembol=${item.symbol}" onclick="event.stopPropagation()" class="text-sky-400 hover:text-sky-300 font-semibold text-[11px]">Detay →</a>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderHeatmap(stocks) {
+      const container = document.getElementById('heatmapGrid');
+      
+      container.innerHTML = stocks.map(item => {
+        const pct = item.changePercent || 0;
+        let bgStyle = 'background-color: #1e293b;';
+        if (pct >= 4) bgStyle = 'background-color: #059669;';
+        else if (pct >= 2) bgStyle = 'background-color: #10b981;';
+        else if (pct > 0) bgStyle = 'background-color: #065f46;';
+        else if (pct <= -4) bgStyle = 'background-color: #dc2626;';
+        else if (pct <= -2) bgStyle = 'background-color: #e11d48;';
+        else if (pct < 0) bgStyle = 'background-color: #881337;';
+
+        return `
+          <div onclick="openStockModal('${item.symbol}')" style="${bgStyle}" class="heat-box rounded-xl p-3 text-white flex flex-col justify-between h-24 cursor-pointer shadow-md">
+            <div class="flex items-center justify-between">
+              <span class="font-black font-display text-sm">${item.symbol}</span>
+              <span class="text-xs font-mono font-bold">${pct >= 0 ? '+' : ''}${pct.toFixed(2)}%</span>
+            </div>
+            <div>
+              <div class="text-xs font-mono font-semibold">₺${formatNumber(item.price)}</div>
+              <div class="text-[10px] text-slate-200 truncate opacity-80">${item.sector || ''}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderSectorStats(sectorStats) {
+      const container = document.getElementById('sectorBreakdownGrid');
+      if (!container || !sectorStats) return;
+
+      container.innerHTML = Object.entries(sectorStats).map(([name, stat]) => {
+        const isPos = stat.avgChange >= 0;
+        return `
+          <div class="bg-[#0c121e] border border-slate-800 p-3 rounded-xl flex flex-col justify-between">
+            <div>
+              <span class="text-[11px] font-sans text-slate-400 block line-clamp-1" title="${name}">${name}</span>
+              <span class="text-sm font-bold font-mono ${isPos ? 'text-emerald-400' : 'text-rose-400'} mt-1 block">
+                ${isPos ? '+' : ''}${stat.avgChange}%
+              </span>
+            </div>
+            <div class="text-[10px] text-slate-500 font-mono mt-2">
+              ${stat.positiveCount} ▲ / ${stat.negativeCount} ▼
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function applyAllFilters() {
+      if (!globalData?.stocks) return;
+
+      const q = (document.getElementById('searchInput')?.value || '').trim().toUpperCase();
+      const sortMode = document.getElementById('sortSelect')?.value || 'default';
+      const favs = getFavorites();
+
+      let stocks = Object.values(globalData.stocks);
+
+      // 1. Sector Filter
+      if (currentSectorFilter === 'FAVORITES') {
+        stocks = stocks.filter(s => favs.includes(s.symbol));
+      } else if (currentSectorFilter === 'BIST30') {
+        stocks = stocks.filter(s => s.bist30);
+      } else if (currentSectorFilter === 'DIVIDEND') {
+        stocks = stocks.filter(s => s.dividend);
+      } else if (currentSectorFilter !== 'ALL') {
+        stocks = stocks.filter(s => s.sector === currentSectorFilter);
+      }
+
+      // 2. Search Query Filter
+      if (q) {
+        stocks = stocks.filter(s => {
+          return s.symbol.toUpperCase().includes(q) || 
+                 (s.name && s.name.toUpperCase().includes(q)) || 
+                 (s.shortName && s.shortName.toUpperCase().includes(q)) ||
+                 (s.sector && s.sector.toUpperCase().includes(q));
+        });
+      }
+
+      // 3. Sorting
+      if (sortMode === 'gain_desc') {
+        stocks.sort((a, b) => b.changePercent - a.changePercent);
+      } else if (sortMode === 'gain_asc') {
+        stocks.sort((a, b) => a.changePercent - b.changePercent);
+      } else if (sortMode === 'volume_desc') {
+        stocks.sort((a, b) => (b.volume * b.price) - (a.volume * a.price));
+      } else if (sortMode === 'price_desc') {
+        stocks.sort((a, b) => b.price - a.price);
+      } else if (sortMode === 'price_asc') {
+        stocks.sort((a, b) => a.price - b.price);
+      } else if (sortMode === 'rsi_asc') {
+        stocks.sort((a, b) => (a.rsi14 ?? 50) - (b.rsi14 ?? 50));
+      } else if (sortMode === 'rsi_desc') {
+        stocks.sort((a, b) => (b.rsi14 ?? 50) - (a.rsi14 ?? 50));
+      }
+
+      // Render based on current view mode
+      renderGridCards(stocks);
+      renderTable(stocks);
+      renderHeatmap(stocks);
+    }
+
+    function setSectorFilter(sec, btnEl) {
+      currentSectorFilter = sec;
+      document.querySelectorAll('.sector-tab-btn').forEach(btn => {
+        btn.className = 'sector-tab-btn px-3.5 py-1.5 rounded-xl font-medium bg-[#0c121e] border border-slate-800 text-slate-300 hover:text-white shrink-0 transition-all';
+      });
+      if (btnEl) {
+        btnEl.className = 'sector-tab-btn px-3.5 py-1.5 rounded-xl font-bold bg-sky-600 text-white shrink-0 transition-all';
+      }
+      applyAllFilters();
+    }
+
+    function switchViewMode(mode) {
+      currentViewMode = mode;
+      document.getElementById('viewContainerGrid').classList.toggle('hidden', mode !== 'grid');
+      document.getElementById('viewContainerTable').classList.toggle('hidden', mode !== 'table');
+      document.getElementById('viewContainerHeat').classList.toggle('hidden', mode !== 'heat');
+
+      const btnGrid = document.getElementById('viewBtnGrid');
+      const btnTable = document.getElementById('viewBtnTable');
+      const btnHeat = document.getElementById('viewBtnHeat');
+
+      btnGrid.className = mode === 'grid' ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-sky-600 text-white transition-all flex items-center gap-1.5' : 'px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1.5';
+      btnTable.className = mode === 'table' ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-sky-600 text-white transition-all flex items-center gap-1.5' : 'px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1.5';
+      btnHeat.className = mode === 'heat' ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-sky-600 text-white transition-all flex items-center gap-1.5' : 'px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1.5';
     }
 
     async function loadDataFromCDN() {
@@ -324,85 +895,150 @@
 
       try {
         const res = await fetch(`data.json?_t=${Date.now()}`);
-        if (!res.ok) throw new Error('data.json henüz oluşturulmamış');
+        if (!res.ok) throw new Error('data.json yüklenemedi');
         globalData = await res.json();
 
-        document.getElementById('lastSyncText').textContent = globalData.updatedAtFormatted || 'Bugün';
+        // 1. Session Status
+        const sess = globalData.marketSession || {};
+        document.getElementById('sessionStatusText').textContent = sess.sessionName || 'Canlı Seans';
+        if (sess.nextEvent) document.getElementById('sessionCountdownText').textContent = `(${sess.nextEvent})`;
 
+        // 2. Hero Indices & Metals
         applyIndex('xu100', globalData.indices?.XU100);
+        if (globalData.indices?.XU100) {
+          document.getElementById('xu100Rsi').textContent = globalData.indices.XU100.rsi14 ? globalData.indices.XU100.rsi14.toFixed(1) : '-';
+          document.getElementById('xu100Range').textContent = `G: ${formatNumber(globalData.indices.XU100.dayLow)} - ${formatNumber(globalData.indices.XU100.dayHigh)}`;
+        }
         applyIndex('xu030', globalData.indices?.XU030);
+        if (globalData.indices?.XU030) {
+          document.getElementById('xu030Prev').textContent = formatNumber(globalData.indices.XU030.prevClose);
+        }
         applyIndex('xbank', globalData.indices?.XBANK);
         applyIndex('altin', globalData.indices?.ALTIN, true);
+        if (globalData.indices?.CEYREK) {
+          document.getElementById('ceyrekQuick').textContent = `₺${formatNumber(globalData.indices.CEYREK.price)}`;
+        }
+        if (globalData.indices?.GUMUS) {
+          document.getElementById('gumusQuick').textContent = `₺${formatNumber(globalData.indices.GUMUS.price)}`;
+        }
 
-        renderStockCards();
+        // 3. Secondary Strip
+        if (globalData.currencies?.USDTRY) document.getElementById('stripUsd').textContent = `₺${formatNumber(globalData.currencies.USDTRY.price)}`;
+        if (globalData.currencies?.EURTRY) document.getElementById('stripEur').textContent = `₺${formatNumber(globalData.currencies.EURTRY.price)}`;
+        if (globalData.currencies?.GBPTRY) document.getElementById('stripGbp').textContent = `₺${formatNumber(globalData.currencies.GBPTRY.price)}`;
+        if (globalData.indices?.XUSIN) document.getElementById('stripXusin').textContent = formatNumber(globalData.indices.XUSIN.price);
+        if (globalData.commodities?.BRENT) document.getElementById('stripBrent').textContent = `$${formatNumber(globalData.commodities.BRENT.price)}`;
+        if (globalData.commodities?.BITCOIN) document.getElementById('stripBtc').textContent = `$${formatNumber(globalData.commodities.BITCOIN.price)}`;
+
+        // 4. Counts & Ticker Tape
+        document.getElementById('totalStocksCount').textContent = Object.keys(globalData.stocks || {}).length;
+        updateFavCount();
+        buildTickerTape(globalData);
+        renderSectorStats(globalData.sectorStats);
+
+        // 5. Render Lists
+        applyAllFilters();
+
       } catch (err) {
-        console.warn('Veri yüklenemedi:', err);
+        console.warn('Veri yüklenirken hata:', err);
       } finally {
         if (icon) icon.classList.remove('animate-spin');
       }
     }
 
+    // Modal Operations
     function openStockModal(sym) {
-      const item = globalData?.stocks?.[sym];
-      if (!item) return;
+      const stock = globalData?.stocks?.[sym];
+      if (!stock) return;
 
+      activeModalSymbol = sym;
       document.getElementById('stockModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
 
-      const isPos = item.change >= 0;
+      const isPos = stock.change >= 0;
       document.getElementById('modalSymbol').textContent = sym;
-      document.getElementById('modalName').textContent = item.shortName || sym;
-      document.getElementById('modalPrice').textContent = `₺${formatNumber(item.price)}`;
-      document.getElementById('modalChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(item.change)} (%${item.changePercent.toFixed(2)})`;
-      document.getElementById('modalChange').className = `text-sm font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('modalName').textContent = stock.name || stock.shortName || sym;
+      document.getElementById('modalSector').textContent = stock.sector || 'BIST';
+      document.getElementById('modalPrice').textContent = `₺${formatNumber(stock.price)}`;
+      document.getElementById('modalChange').className = `text-sm font-semibold font-num ${isPos ? 'text-emerald-400' : 'text-rose-400'}`;
+      document.getElementById('modalChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(stock.change)} (%${stock.changePercent.toFixed(2)})`;
 
       const badge = document.getElementById('modalBadge');
-      badge.className = `text-xs font-semibold px-2.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
-      badge.textContent = `${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%`;
+      badge.className = `text-xs font-bold font-mono px-3 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+      badge.textContent = `${isPos ? '+' : ''}${stock.changePercent.toFixed(2)}%`;
 
-      document.getElementById('modalHigh52').textContent = item.fiftyTwoWeekHigh ? `₺${formatNumber(item.fiftyTwoWeekHigh)}` : '-';
-      document.getElementById('modalLow52').textContent = item.fiftyTwoWeekLow ? `₺${formatNumber(item.fiftyTwoWeekLow)}` : '-';
-      document.getElementById('modalDayRange').textContent = (item.dayLow && item.dayHigh)
-        ? `₺${formatNumber(item.dayLow)} - ₺${formatNumber(item.dayHigh)}`
-        : '-';
-      document.getElementById('modalVolume').textContent = formatVolume(item.volume);
+      document.getElementById('modalHigh52').textContent = `₺${formatNumber(stock.fiftyTwoWeekHigh)}`;
+      document.getElementById('modalLow52').textContent = `₺${formatNumber(stock.fiftyTwoWeekLow)}`;
+      document.getElementById('modalRsi').textContent = stock.rsi14 ? `${stock.rsi14.toFixed(1)}` : '-';
+      document.getElementById('modalVolume').textContent = formatVolume(stock.volume);
+      document.getElementById('modalDeepLink').href = `hisse.html?sembol=${sym}`;
 
-      if (item.history && item.history.length > 0) {
-        const labels = item.history.map(h => h.date);
-        const prices = item.history.map(h => h.close);
-        renderChart(labels, prices, isPos);
-      }
+      updateModalFavIcon();
+      renderModalChart();
     }
 
-    function closeModal() {
+    function closeStockModal() {
       document.getElementById('stockModal').classList.add('hidden');
       document.body.style.overflow = 'auto';
     }
 
-    function renderChart(labels, prices, isPositive) {
-      const ctx = document.getElementById('modalChart').getContext('2d');
-      if (chartInstance) chartInstance.destroy();
+    function toggleFavoriteCurrentModal() {
+      if (!activeModalSymbol) return;
+      toggleFavorite(activeModalSymbol);
+      updateModalFavIcon();
+    }
 
-      const color = isPositive ? '#10b981' : '#f43f5e';
-      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
-      gradient.addColorStop(0, isPositive ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)');
+    function updateModalFavIcon() {
+      if (!activeModalSymbol) return;
+      const favs = getFavorites();
+      const isFav = favs.includes(activeModalSymbol);
+      const icon = document.getElementById('modalFavBtn');
+      if (icon) {
+        icon.className = isFav ? 'text-amber-400 p-1' : 'text-slate-500 hover:text-amber-400 p-1';
+      }
+    }
+
+    function setModalChartFilter(days, btnEl) {
+      modalCurrentDays = days;
+      document.querySelectorAll('.modal-time-btn').forEach(b => {
+        b.className = 'modal-time-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white';
+      });
+      btnEl.className = 'modal-time-btn px-3 py-1.5 rounded-lg bg-sky-600 text-white font-bold';
+      renderModalChart();
+    }
+
+    function renderModalChart() {
+      const stock = globalData?.stocks?.[activeModalSymbol];
+      if (!stock || !stock.history || stock.history.length === 0) return;
+
+      const sliceData = stock.history.slice(-modalCurrentDays);
+      const labels = sliceData.map(h => h.date);
+      const prices = sliceData.map(h => h.close);
+      const isPos = stock.change >= 0;
+
+      const ctx = document.getElementById('modalChartCanvas').getContext('2d');
+      if (modalChartInstance) modalChartInstance.destroy();
+
+      const color = isPos ? '#10b981' : '#f43f5e';
+      const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+      gradient.addColorStop(0, isPos ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)');
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      chartInstance = new Chart(ctx, {
+      modalChartInstance = new Chart(ctx, {
         type: 'line',
         data: {
           labels: labels,
           datasets: [{
-            label: 'Fiyat (₺)',
+            label: `${activeModalSymbol} Fiyat (₺)`,
             data: prices,
             borderColor: color,
             backgroundColor: gradient,
             fill: true,
-            tension: 0.25,
+            tension: 0.2,
             borderWidth: 2.5,
-            pointRadius: 2,
+            pointRadius: labels.length > 40 ? 0 : 2.5,
             pointHoverRadius: 6,
-            pointBackgroundColor: color,
+            pointBackgroundColor: color
           }]
         },
         options: {
@@ -411,27 +1047,28 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: '#0f172a',
+              backgroundColor: '#0c121e',
               titleColor: '#94a3b8',
               bodyColor: '#f8fafc',
-              borderColor: '#334155',
+              borderColor: '#1e293b',
               borderWidth: 1,
               padding: 10,
               displayColors: false,
               callbacks: {
-                label: (context) => `₺${context.parsed.y.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`
+                label: (ctx) => `₺${ctx.parsed.y.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`
               }
             }
           },
           scales: {
             x: {
-              grid: { color: 'rgba(51, 65, 85, 0.2)' },
-              ticks: { color: '#64748b', maxTicksLimit: 8 }
+              grid: { color: 'rgba(30, 41, 59, 0.4)' },
+              ticks: { color: '#64748b', maxTicksLimit: 8, font: { family: 'JetBrains Mono', size: 10 } }
             },
             y: {
-              grid: { color: 'rgba(51, 65, 85, 0.2)' },
+              grid: { color: 'rgba(30, 41, 59, 0.4)' },
               ticks: { 
                 color: '#64748b',
+                font: { family: 'JetBrains Mono', size: 10 },
                 callback: (val) => '₺' + val
               }
             }
@@ -439,6 +1076,15 @@
         }
       });
     }
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeStockModal();
+      if (e.key === '/' && document.activeElement !== document.getElementById('searchInput')) {
+        e.preventDefault();
+        document.getElementById('searchInput').focus();
+      }
+    });
 
     window.addEventListener('DOMContentLoaded', () => {
       loadDataFromCDN();

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Canlı Portföy & Takip Listesi | BIST Terminal</title>
+  <meta name="description" content="Borsa İstanbul hisse senedi portföyünüzü canlı fiyatlarla anlık kâr/zarar, maliyet ve varlık dağılımı grafikleri ile takip edin.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #070b12; color: #f1f5f9; }
+    .font-num { font-family: 'JetBrains Mono', monospace; }
+    .font-display { font-family: 'Outfit', sans-serif; }
+    .glass-card {
+      background: rgba(13, 19, 31, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(27, 36, 54, 0.85);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#070b12] text-slate-100 antialiased p-3 sm:p-6 lg:p-8 flex flex-col justify-between">
+
+  <div class="max-w-7xl mx-auto w-full space-y-6 flex-grow">
+    
+    <!-- Navigation Header -->
+    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-300 hover:text-white bg-[#0d131f] border border-slate-800 hover:border-slate-700 px-4 py-2 rounded-xl transition-all shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <span>Piyasa Terminali</span>
+        </a>
+        <h1 class="text-xl sm:text-2xl font-black font-display text-white">Canlı Portföy Takip Portalı</h1>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button onclick="openAddModal()" class="bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-lg shadow-emerald-600/20 flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+          <span>Yeni Pozisyon Ekle</span>
+        </button>
+        <button onclick="exportPortfolioJson()" class="bg-[#0d131f] hover:bg-slate-800 text-slate-300 text-xs font-semibold px-3 py-2.5 rounded-xl border border-slate-800 transition-all" title="Yedekle / JSON İndir">
+          Yedekle
+        </button>
+      </div>
+    </header>
+
+    <!-- 4 Portfolio Summary KPI Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 font-mono">
+      
+      <!-- Total Value -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden shadow-xl">
+        <span class="text-[11px] font-sans font-semibold text-slate-400 block">Toplam Portföy Değeri</span>
+        <div id="totalValue" class="text-2xl sm:text-3xl font-black font-num text-white mt-1">₺0,00</div>
+        <div class="mt-2 text-xs text-slate-500 flex items-center justify-between border-t border-slate-800/80 pt-2">
+          <span>Toplam Maliyet:</span>
+          <span id="totalCost" class="text-slate-300 font-bold">₺0,00</span>
+        </div>
+      </div>
+
+      <!-- Total Profit / Loss -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden shadow-xl">
+        <span class="text-[11px] font-sans font-semibold text-slate-400 block">Toplam Kâr / Zarar</span>
+        <div id="totalProfit" class="text-2xl sm:text-3xl font-black font-num text-slate-400 mt-1">₺0,00</div>
+        <div class="mt-2 text-xs text-slate-500 flex items-center justify-between border-t border-slate-800/80 pt-2">
+          <span>Getiri Oranı:</span>
+          <span id="totalProfitPercent" class="font-bold">0.00%</span>
+        </div>
+      </div>
+
+      <!-- Daily Return -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden shadow-xl">
+        <span class="text-[11px] font-sans font-semibold text-slate-400 block">Günlük Portföy Değişimi</span>
+        <div id="dailyProfit" class="text-2xl sm:text-3xl font-black font-num text-slate-400 mt-1">₺0,00</div>
+        <div class="mt-2 text-xs text-slate-500 flex items-center justify-between border-t border-slate-800/80 pt-2">
+          <span>Günlük %:</span>
+          <span id="dailyProfitPercent" class="font-bold">0.00%</span>
+        </div>
+      </div>
+
+      <!-- Positions Count -->
+      <div class="glass-card rounded-2xl p-5 relative overflow-hidden shadow-xl">
+        <span class="text-[11px] font-sans font-semibold text-slate-400 block">Açık Pozisyon Sayısı</span>
+        <div id="positionsCount" class="text-2xl sm:text-3xl font-black font-num text-sky-400 mt-1">0 Hisse</div>
+        <div class="mt-2 text-xs text-slate-500 flex items-center justify-between border-t border-slate-800/80 pt-2">
+          <span>En Yüksek Pay:</span>
+          <span id="topHoldingSymbol" class="text-slate-300 font-bold">-</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Main Content: Positions Table & Allocation Donut Chart -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Positions Table (2 Cols) -->
+      <div class="lg:col-span-2 glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-2xl space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h2 class="text-base font-bold font-display text-white">Açık Hisse Pozisyonları</h2>
+          <span class="text-xs text-slate-500 font-mono">Canlı Fiyatlarla Güncellenir</span>
+        </div>
+
+        <div class="overflow-x-auto custom-scrollbar">
+          <table class="w-full text-left text-xs text-slate-300">
+            <thead class="bg-[#0c121e] text-slate-400 font-bold uppercase text-[10px] tracking-wider border-b border-slate-800">
+              <tr>
+                <th class="py-3 px-3">Hisse</th>
+                <th class="py-3 px-3 text-right">Adet</th>
+                <th class="py-3 px-3 text-right">Ort. Maliyet</th>
+                <th class="py-3 px-3 text-right">Canlı Fiyat</th>
+                <th class="py-3 px-3 text-right">Piyasa Değeri</th>
+                <th class="py-3 px-3 text-right">Kâr / Zarar</th>
+                <th class="py-3 px-3 text-right">Kâr %</th>
+                <th class="py-3 px-3 text-center">Sil</th>
+              </tr>
+            </thead>
+            <tbody id="positionsTableBody" class="divide-y divide-slate-800/60 font-mono">
+              <!-- Populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div id="emptyPortfolioNotice" class="hidden py-12 text-center text-slate-500 space-y-3 font-sans">
+          <div class="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-800 mx-auto flex items-center justify-center text-xl">💼</div>
+          <p class="text-sm font-bold text-slate-300">Henüz bir hisse pozisyonu eklemediniz.</p>
+          <p class="text-xs text-slate-500">"Yeni Pozisyon Ekle" butonuna basarak ilk hissenizi ekleyebilirsiniz.</p>
+        </div>
+      </div>
+
+      <!-- Asset Allocation Donut Chart (1 Col) -->
+      <div class="glass-card rounded-3xl p-5 sm:p-6 border border-slate-800 shadow-2xl flex flex-col justify-between">
+        <div>
+          <h2 class="text-base font-bold font-display text-white border-b border-slate-800 pb-3">Varlık Dağılımı (Portföy Ağırlığı)</h2>
+          <div class="h-64 w-full relative mt-4 flex items-center justify-center">
+            <canvas id="allocationChart"></canvas>
+          </div>
+        </div>
+        <div id="allocationLegend" class="mt-4 pt-3 border-t border-slate-800 space-y-1.5 font-mono text-xs max-h-36 overflow-y-auto custom-scrollbar">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ADD POSITION MODAL -->
+  <div id="addModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-[#0d1322] border border-slate-800 rounded-3xl w-full max-w-md p-6 shadow-2xl space-y-5">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold font-display text-lg text-white">Portföye Hisse Ekle</h3>
+        <button onclick="closeAddModal()" class="text-slate-400 hover:text-white p-1">✕</button>
+      </div>
+
+      <form id="positionForm" onsubmit="handleSavePosition(event)" class="space-y-4 text-xs font-sans">
+        <div>
+          <label class="block text-slate-400 font-semibold mb-1">Hisse Sembolü (Örn: THYAO, GARAN)</label>
+          <select id="modalStockSelect" required class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3 py-2.5 text-white font-mono uppercase focus:border-sky-500 outline-none">
+            <!-- Populated with stocks -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-slate-400 font-semibold mb-1">Lot / Adet Miktarı</label>
+          <input type="number" step="any" min="0.01" id="modalQuantity" placeholder="Örn: 100" required class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3 py-2.5 text-white font-mono focus:border-sky-500 outline-none">
+        </div>
+
+        <div>
+          <label class="block text-slate-400 font-semibold mb-1">Alış Fiyatı (Ortalama Maliyet ₺)</label>
+          <input type="number" step="any" min="0.01" id="modalCost" placeholder="Örn: 305.50" required class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3 py-2.5 text-white font-mono focus:border-sky-500 outline-none">
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold py-3 rounded-xl transition-all shadow-md">
+            Pozisyonu Kaydet
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const PORTFOLIO_STORAGE_KEY = 'bist_terminal_portfolio_positions_v1';
+    let globalData = null;
+    let donutChartInstance = null;
+
+    function getPositions() {
+      try {
+        return JSON.parse(localStorage.getItem(PORTFOLIO_STORAGE_KEY)) || [
+          { symbol: 'THYAO', quantity: 150, cost: 290.00 },
+          { symbol: 'GARAN', quantity: 300, cost: 125.00 },
+          { symbol: 'ASELS', quantity: 100, cost: 380.00 }
+        ];
+      } catch {
+        return [];
+      }
+    }
+
+    function savePositions(pos) {
+      localStorage.setItem(PORTFOLIO_STORAGE_KEY, JSON.stringify(pos));
+      renderPortfolio();
+    }
+
+    function formatNumber(val) {
+      if (val === null || val === undefined || isNaN(val)) return '-';
+      return Number(val).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    async function init() {
+      try {
+        const res = await fetch(`data.json?_t=${Date.now()}`);
+        globalData = await res.json();
+
+        // Populate stock select
+        const select = document.getElementById('modalStockSelect');
+        const stocks = Object.keys(globalData.stocks || {}).sort();
+        select.innerHTML = stocks.map(s => `<option value="${s}">${s} - ${globalData.stocks[s].name || s}</option>`).join('');
+
+        // Check query param
+        const urlParams = new URLSearchParams(window.location.search);
+        const addSym = urlParams.get('add');
+        if (addSym) {
+          openAddModal(addSym.toUpperCase());
+        }
+
+        renderPortfolio();
+      } catch (err) {
+        console.error('Veri yüklenemedi:', err);
+      }
+    }
+
+    function renderPortfolio() {
+      const positions = getPositions();
+      const tbody = document.getElementById('positionsTableBody');
+      const emptyNotice = document.getElementById('emptyPortfolioNotice');
+
+      let totalVal = 0;
+      let totalCostVal = 0;
+      let totalDailyChg = 0;
+
+      if (positions.length === 0) {
+        tbody.innerHTML = '';
+        emptyNotice.classList.remove('hidden');
+        document.getElementById('totalValue').textContent = '₺0,00';
+        document.getElementById('totalCost').textContent = '₺0,00';
+        document.getElementById('totalProfit').textContent = '₺0,00';
+        document.getElementById('totalProfitPercent').textContent = '0.00%';
+        document.getElementById('dailyProfit').textContent = '₺0,00';
+        document.getElementById('dailyProfitPercent').textContent = '0.00%';
+        document.getElementById('positionsCount').textContent = '0 Hisse';
+        if (donutChartInstance) donutChartInstance.destroy();
+        return;
+      }
+
+      emptyNotice.classList.add('hidden');
+
+      const chartLabels = [];
+      const chartValues = [];
+      const chartColors = [
+        '#0284c7', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316', '#84cc16'
+      ];
+
+      const html = positions.map((p, idx) => {
+        const currentPrice = globalData?.stocks?.[p.symbol]?.price || p.cost;
+        const changeDaily = globalData?.stocks?.[p.symbol]?.change || 0;
+
+        const posCost = p.quantity * p.cost;
+        const posValue = p.quantity * currentPrice;
+        const profit = posValue - posCost;
+        const profitPct = posCost > 0 ? (profit / posCost) * 100 : 0;
+        const dailyProfitPos = p.quantity * changeDaily;
+
+        totalCostVal += posCost;
+        totalVal += posValue;
+        totalDailyChg += dailyProfitPos;
+
+        chartLabels.push(p.symbol);
+        chartValues.push(Number(posValue.toFixed(2)));
+
+        const isPos = profit >= 0;
+
+        return `
+          <tr class="hover:bg-slate-850/60 transition-colors">
+            <td class="py-3 px-3 font-bold text-white font-display">
+              <a href="hisse.html?sembol=${p.symbol}" class="hover:text-sky-400">${p.symbol}</a>
+            </td>
+            <td class="py-3 px-3 text-right text-slate-300">${formatNumber(p.quantity)}</td>
+            <td class="py-3 px-3 text-right text-slate-300">₺${formatNumber(p.cost)}</td>
+            <td class="py-3 px-3 text-right font-bold text-white">₺${formatNumber(currentPrice)}</td>
+            <td class="py-3 px-3 text-right font-bold text-slate-100">₺${formatNumber(posValue)}</td>
+            <td class="py-3 px-3 text-right font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}">
+              ${isPos ? '▲ +' : '▼ '}₺${formatNumber(profit)}
+            </td>
+            <td class="py-3 px-3 text-right font-bold ${isPos ? 'text-emerald-400' : 'text-rose-400'}">
+              ${isPos ? '+' : ''}${profitPct.toFixed(2)}%
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button onclick="deletePosition(${idx})" class="text-rose-500 hover:text-rose-400 p-1 font-bold" title="Pozisyonu Sil">✕</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      tbody.innerHTML = html;
+
+      // Update KPI
+      const totalProfitVal = totalVal - totalCostVal;
+      const totalProfitPct = totalCostVal > 0 ? (totalProfitVal / totalCostVal) * 100 : 0;
+      const dailyProfitPct = totalVal > 0 ? (totalDailyChg / (totalVal - totalDailyChg)) * 100 : 0;
+
+      document.getElementById('totalValue').textContent = `₺${formatNumber(totalVal)}`;
+      document.getElementById('totalCost').textContent = `₺${formatNumber(totalCostVal)}`;
+      
+      const profitEl = document.getElementById('totalProfit');
+      profitEl.textContent = `${totalProfitVal >= 0 ? '+' : ''}₺${formatNumber(totalProfitVal)}`;
+      profitEl.className = `text-2xl sm:text-3xl font-black font-num ${totalProfitVal >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1`;
+
+      const profitPctEl = document.getElementById('totalProfitPercent');
+      profitPctEl.textContent = `${totalProfitPct >= 0 ? '+' : ''}${totalProfitPct.toFixed(2)}%`;
+      profitPctEl.className = `font-bold ${totalProfitPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      const dailyEl = document.getElementById('dailyProfit');
+      dailyEl.textContent = `${totalDailyChg >= 0 ? '+' : ''}₺${formatNumber(totalDailyChg)}`;
+      dailyEl.className = `text-2xl sm:text-3xl font-black font-num ${totalDailyChg >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1`;
+
+      const dailyPctEl = document.getElementById('dailyProfitPercent');
+      dailyPctEl.textContent = `${dailyProfitPct >= 0 ? '+' : ''}${dailyProfitPct.toFixed(2)}%`;
+      dailyPctEl.className = `font-bold ${dailyProfitPct >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      document.getElementById('positionsCount').textContent = `${positions.length} Hisse`;
+
+      // Render Donut Chart
+      renderAllocationChart(chartLabels, chartValues, chartColors, totalVal);
+    }
+
+    function renderAllocationChart(labels, values, colors, total) {
+      const ctx = document.getElementById('allocationChart').getContext('2d');
+      if (donutChartInstance) donutChartInstance.destroy();
+
+      donutChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels,
+          datasets: [{
+            data: values,
+            backgroundColor: colors,
+            borderWidth: 2,
+            borderColor: '#0d1322'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: (c) => `₺${c.parsed.toLocaleString('tr-TR')} (%${((c.parsed / total) * 100).toFixed(1)})`
+              }
+            }
+          },
+          cutout: '70%'
+        }
+      });
+
+      // Render custom legend
+      const legend = document.getElementById('allocationLegend');
+      legend.innerHTML = labels.map((l, i) => {
+        const pct = total > 0 ? ((values[i] / total) * 100).toFixed(1) : 0;
+        return `
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full inline-block" style="background-color: ${colors[i % colors.length]};"></span>${l}</span>
+            <span class="text-slate-400 font-bold">%${pct}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openAddModal(prefillSymbol) {
+      document.getElementById('addModal').classList.remove('hidden');
+      if (prefillSymbol) {
+        document.getElementById('modalStockSelect').value = prefillSymbol;
+        const currentPrice = globalData?.stocks?.[prefillSymbol]?.price;
+        if (currentPrice) document.getElementById('modalCost').value = currentPrice;
+      }
+    }
+
+    function closeAddModal() {
+      document.getElementById('addModal').classList.add('hidden');
+    }
+
+    function handleSavePosition(e) {
+      e.preventDefault();
+      const sym = document.getElementById('modalStockSelect').value;
+      const qty = Number(document.getElementById('modalQuantity').value);
+      const cost = Number(document.getElementById('modalCost').value);
+
+      if (!sym || qty <= 0 || cost <= 0) return;
+
+      const positions = getPositions();
+      const existing = positions.find(p => p.symbol === sym);
+      if (existing) {
+        // Weighted average cost
+        const totalCost = (existing.quantity * existing.cost) + (qty * cost);
+        const totalQty = existing.quantity + qty;
+        existing.quantity = totalQty;
+        existing.cost = Number((totalCost / totalQty).toFixed(2));
+      } else {
+        positions.push({ symbol: sym, quantity: qty, cost: cost });
+      }
+
+      savePositions(positions);
+      closeAddModal();
+      document.getElementById('positionForm').reset();
+    }
+
+    function deletePosition(index) {
+      if (!confirm('Bu pozisyonu silmek istediğinize emin misiniz?')) return;
+      const positions = getPositions();
+      positions.splice(index, 1);
+      savePositions(positions);
+    }
+
+    function exportPortfolioJson() {
+      const pos = getPositions();
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(pos, null, 2));
+      const a = document.createElement('a');
+      a.setAttribute("href", dataStr);
+      a.setAttribute("download", `bist_portfoy_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

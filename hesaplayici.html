@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finansal Hesaplayıcı & Simülatör | BIST Terminal</title>
+  <meta name="description" content="Borsa hisse kâr/zarar hesaplama, canlı döviz & altın dönüştürücü ve bileşik getiri yatırım simülatörü.">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #070b12; color: #f1f5f9; }
+    .font-num { font-family: 'JetBrains Mono', monospace; }
+    .font-display { font-family: 'Outfit', sans-serif; }
+    .glass-card {
+      background: rgba(13, 19, 31, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(27, 36, 54, 0.85);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-[#070b12] text-slate-100 antialiased p-3 sm:p-6 lg:p-8 flex flex-col justify-between">
+
+  <div class="max-w-6xl mx-auto w-full space-y-6 flex-grow">
+    
+    <!-- Top Header -->
+    <header class="flex items-center justify-between border-b border-slate-800/80 pb-4">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-300 hover:text-white bg-[#0d131f] border border-slate-800 hover:border-slate-700 px-4 py-2 rounded-xl transition-all shadow-sm">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <span>Piyasa Terminaline Dön</span>
+        </a>
+        <h1 class="text-xl sm:text-2xl font-black font-display text-white">Finansal Hesaplama Araçları</h1>
+      </div>
+    </header>
+
+    <!-- Tab Bar -->
+    <div class="flex items-center gap-2 border-b border-slate-800 pb-3 text-xs">
+      <button onclick="switchTab('stock', this)" class="calc-tab-btn px-4 py-2 rounded-xl font-bold bg-sky-600 text-white transition-all">
+        📈 Hisse Kâr / Zarar & Komisyon
+      </button>
+      <button onclick="switchTab('fx', this)" class="calc-tab-btn px-4 py-2 rounded-xl font-semibold bg-[#0d131f] border border-slate-800 text-slate-400 hover:text-white transition-all">
+        💱 Canlı Döviz & Altın Çevirici
+      </button>
+      <button onclick="switchTab('compound', this)" class="calc-tab-btn px-4 py-2 rounded-xl font-semibold bg-[#0d131f] border border-slate-800 text-slate-400 hover:text-white transition-all">
+        🌱 Bileşik Getiri & Temettü Büyümesi
+      </button>
+    </div>
+
+    <!-- TAB 1: Stock Profit Calculator -->
+    <div id="tabStock" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      
+      <!-- Input Form -->
+      <div class="glass-card rounded-3xl p-6 border border-slate-800 space-y-4">
+        <h2 class="text-base font-bold font-display text-white border-b border-slate-800 pb-3">Hisse Alım / Satım Parametreleri</h2>
+        
+        <div class="space-y-3.5 text-xs font-sans">
+          <div>
+            <label class="block text-slate-400 font-semibold mb-1">Hisse Seçin (İsteğe Bağlı)</label>
+            <select id="calcStockSelect" onchange="onStockSelectChange()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono uppercase focus:border-sky-500 outline-none">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Alış Fiyatı (₺)</label>
+              <input type="number" step="any" id="calcBuyPrice" value="300" oninput="calculateStockProfit()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-sky-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Hedef Satış Fiyatı (₺)</label>
+              <input type="number" step="any" id="calcSellPrice" value="345" oninput="calculateStockProfit()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-sky-500 outline-none">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Lot / Adet Miktarı</label>
+              <input type="number" step="any" id="calcLotCount" value="100" oninput="calculateStockProfit()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-sky-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Aracı Kurum Komisyonu</label>
+              <select id="calcCommissionRate" onchange="calculateStockProfit()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono focus:border-sky-500 outline-none">
+                <option value="0.0005">Onbinde 5 (%0.05)</option>
+                <option value="0.001">Onbinde 10 / Binde 1 (%0.10)</option>
+                <option value="0.0015">Binde 1.5 (%0.15)</option>
+                <option value="0.002" selected>Binde 2 (%0.20)</option>
+                <option value="0">Komisyonsuz (%0.00)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="glass-card rounded-3xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
+        <div>
+          <h2 class="text-base font-bold font-display text-white border-b border-slate-800 pb-3">Hesaplama Özeti</h2>
+          
+          <div class="mt-4 space-y-3 font-mono text-xs">
+            <div class="flex justify-between py-1.5 border-b border-slate-800/60">
+              <span class="text-slate-400 font-sans">Toplam Alış Maliyeti (Anapara)</span>
+              <span id="resTotalBuy" class="font-bold text-white">₺30.000,00</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-800/60">
+              <span class="text-slate-400 font-sans">Toplam Satış Tutarı (Brüt)</span>
+              <span id="resTotalSell" class="font-bold text-white">₺34.500,00</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-800/60 text-slate-400">
+              <span class="font-sans">Toplam Aracı Kurum Komisyonu (Alış+Satış)</span>
+              <span id="resCommission" class="font-bold text-amber-400">₺129,00</span>
+            </div>
+            <div class="flex justify-between py-1.5 border-b border-slate-800/60">
+              <span class="text-slate-400 font-sans">Hisse Başına Kâr/Zarar</span>
+              <span id="resPerShare" class="font-bold text-emerald-400">₺45,00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[#090e18] border border-slate-800 p-4 rounded-2xl">
+          <div class="text-xs font-sans text-slate-400 font-semibold">Net Kâr / Zarar (Komisyon Sonrası)</div>
+          <div id="resNetProfit" class="text-3xl font-black font-num text-emerald-400 mt-1">+₺4.371,00</div>
+          <div id="resNetPercent" class="text-xs font-mono font-bold text-emerald-400 mt-0.5">+%14.57 Net Getiri</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- TAB 2: Currency & Gold Converter -->
+    <div id="tabFx" class="hidden glass-card rounded-3xl p-6 border border-slate-800 space-y-6">
+      <h2 class="text-base font-bold font-display text-white border-b border-slate-800 pb-3">Canlı Döviz, Altın & Gümüş Dönüştürücü</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans">
+        <div>
+          <label class="block text-slate-400 font-semibold mb-1">Miktar</label>
+          <input type="number" id="fxAmount" value="10000" oninput="convertFx()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-3 text-white font-mono text-base focus:border-sky-500 outline-none">
+        </div>
+        <div>
+          <label class="block text-slate-400 font-semibold mb-1">Çevrilecek Varlık (Kaynak)</label>
+          <select id="fxFrom" onchange="convertFx()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-3 text-white font-mono text-sm focus:border-sky-500 outline-none">
+            <option value="TRY" selected>Türk Lirası (₺ TRY)</option>
+            <option value="USD">Amerikan Doları ($ USD)</option>
+            <option value="EUR">Euro (€ EUR)</option>
+            <option value="GBP">İngiliz Sterlini (£ GBP)</option>
+            <option value="ALTIN">Gram Altın (24K)</option>
+            <option value="CEYREK">Çeyrek Altın</option>
+            <option value="GUMUS">Gram Gümüş</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-400 font-semibold mb-1">Hedef Varlık</label>
+          <select id="fxTo" onchange="convertFx()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-3 text-white font-mono text-sm focus:border-sky-500 outline-none">
+            <option value="USD" selected>Amerikan Doları ($ USD)</option>
+            <option value="TRY">Türk Lirası (₺ TRY)</option>
+            <option value="EUR">Euro (€ EUR)</option>
+            <option value="GBP">İngiliz Sterlini (£ GBP)</option>
+            <option value="ALTIN">Gram Altın (24K)</option>
+            <option value="CEYREK">Çeyrek Altın</option>
+            <option value="GUMUS">Gram Gümüş</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Result Card -->
+      <div class="bg-[#090e18] border border-slate-800 p-6 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="text-xs text-slate-400 font-semibold">Dönüştürme Sonucu</div>
+          <div id="fxResultValue" class="text-3xl sm:text-4xl font-black font-num text-sky-400 mt-1">--</div>
+          <div id="fxRateInfo" class="text-xs font-mono text-slate-500 mt-1">Canlı piyasa kurları baz alınmaktadır.</div>
+        </div>
+        <button onclick="swapFx()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-4 py-2.5 rounded-xl transition-all self-start sm:self-auto">
+          ⇄ Yönü Tersine Çevir
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 3: Compound Growth Simulator -->
+    <div id="tabCompound" class="hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Form -->
+        <div class="glass-card rounded-3xl p-6 border border-slate-800 space-y-4">
+          <h2 class="text-base font-bold font-display text-white border-b border-slate-800 pb-3">Yatırım Parametreleri</h2>
+          
+          <div class="space-y-3.5 text-xs font-sans">
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Başlangıç Sermayesi (₺)</label>
+              <input type="number" id="cmpInitial" value="50000" oninput="calculateCompound()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono outline-none focus:border-sky-500">
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Aylık Düzenli İlave Yatırım (₺)</label>
+              <input type="number" id="cmpMonthly" value="5000" oninput="calculateCompound()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono outline-none focus:border-sky-500">
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Beklenen Yıllık Getiri Oranı (%)</label>
+              <input type="number" id="cmpRate" value="35" oninput="calculateCompound()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono outline-none focus:border-sky-500">
+            </div>
+            <div>
+              <label class="block text-slate-400 font-semibold mb-1">Yatırım Vadesi (Yıl)</label>
+              <input type="number" id="cmpYears" value="5" min="1" max="30" oninput="calculateCompound()" class="w-full bg-[#080d16] border border-slate-800 rounded-xl px-3.5 py-2.5 text-white font-mono outline-none focus:border-sky-500">
+            </div>
+          </div>
+        </div>
+
+        <!-- Visual Projection Chart (2 cols) -->
+        <div class="lg:col-span-2 glass-card rounded-3xl p-6 border border-slate-800 flex flex-col justify-between space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+              <h2 class="text-base font-bold font-display text-white">Gelecek Varlık Büyüme Projeksiyonu</h2>
+              <span id="cmpTotalResultText" class="text-xs text-emerald-400 font-mono font-bold">5 Yıl Sonunda: ₺0</span>
+            </div>
+          </div>
+
+          <div class="h-64 sm:h-72 w-full relative">
+            <canvas id="compoundChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="border-t border-slate-800/80 mt-12 py-6 text-center text-xs text-slate-600 font-mono">
+    BIST Terminal • Finansal Simülatör ve Hesaplayıcı Portalı
+  </footer>
+
+  <script>
+    let globalData = null;
+    let compoundChartInstance = null;
+
+    function formatNumber(val) {
+      if (val === null || val === undefined || isNaN(val)) return '-';
+      return Number(val).toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    async function init() {
+      try {
+        const res = await fetch(`data.json?_t=${Date.now()}`);
+        globalData = await res.json();
+
+        // Populate stock select
+        const select = document.getElementById('calcStockSelect');
+        const stocks = Object.keys(globalData.stocks || {}).sort();
+        select.innerHTML = '<option value="">-- Hisse Seçin (Örn: THYAO) --</option>' + 
+          stocks.map(s => `<option value="${s}">${s} (Canlı: ₺${formatNumber(globalData.stocks[s].price)})</option>`).join('');
+
+        calculateStockProfit();
+        convertFx();
+        calculateCompound();
+      } catch (err) {
+        console.error('Veri yüklenemedi:', err);
+      }
+    }
+
+    function switchTab(tab, btn) {
+      document.getElementById('tabStock').classList.toggle('hidden', tab !== 'stock');
+      document.getElementById('tabFx').classList.toggle('hidden', tab !== 'fx');
+      document.getElementById('tabCompound').classList.toggle('hidden', tab !== 'compound');
+
+      document.querySelectorAll('.calc-tab-btn').forEach(b => {
+        b.className = 'calc-tab-btn px-4 py-2 rounded-xl font-semibold bg-[#0d131f] border border-slate-800 text-slate-400 hover:text-white transition-all';
+      });
+      btn.className = 'calc-tab-btn px-4 py-2 rounded-xl font-bold bg-sky-600 text-white transition-all';
+    }
+
+    function onStockSelectChange() {
+      const sym = document.getElementById('calcStockSelect').value;
+      if (sym && globalData?.stocks?.[sym]) {
+        const price = globalData.stocks[sym].price;
+        document.getElementById('calcBuyPrice').value = price;
+        document.getElementById('calcSellPrice').value = Number((price * 1.15).toFixed(2));
+        calculateStockProfit();
+      }
+    }
+
+    function calculateStockProfit() {
+      const buyPrice = Number(document.getElementById('calcBuyPrice').value) || 0;
+      const sellPrice = Number(document.getElementById('calcSellPrice').value) || 0;
+      const lot = Number(document.getElementById('calcLotCount').value) || 0;
+      const commRate = Number(document.getElementById('calcCommissionRate').value) || 0;
+
+      const totalBuy = buyPrice * lot;
+      const totalSell = sellPrice * lot;
+      const buyCommission = totalBuy * commRate;
+      const sellCommission = totalSell * commRate;
+      const totalCommission = buyCommission + sellCommission;
+
+      const grossProfit = totalSell - totalBuy;
+      const netProfit = grossProfit - totalCommission;
+      const netPercent = totalBuy > 0 ? (netProfit / totalBuy) * 100 : 0;
+      const perShareProfit = lot > 0 ? netProfit / lot : 0;
+
+      document.getElementById('resTotalBuy').textContent = `₺${formatNumber(totalBuy)}`;
+      document.getElementById('resTotalSell').textContent = `₺${formatNumber(totalSell)}`;
+      document.getElementById('resCommission').textContent = `₺${formatNumber(totalCommission)}`;
+      
+      const perShareEl = document.getElementById('resPerShare');
+      perShareEl.textContent = `${perShareProfit >= 0 ? '+' : ''}₺${formatNumber(perShareProfit)}`;
+      perShareEl.className = `font-bold ${perShareProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+
+      const netEl = document.getElementById('resNetProfit');
+      netEl.textContent = `${netProfit >= 0 ? '+' : ''}₺${formatNumber(netProfit)}`;
+      netEl.className = `text-3xl font-black font-num ${netProfit >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-1`;
+
+      const netPctEl = document.getElementById('resNetPercent');
+      netPctEl.textContent = `${netPercent >= 0 ? '+' : ''}%${netPercent.toFixed(2)} Net Getiri`;
+      netPctEl.className = `text-xs font-mono font-bold ${netPercent >= 0 ? 'text-emerald-400' : 'text-rose-400'} mt-0.5`;
+    }
+
+    function getUnitRateInTry(code) {
+      if (code === 'TRY') return 1;
+      if (code === 'USD') return globalData?.currencies?.USDTRY?.price || 38.0;
+      if (code === 'EUR') return globalData?.currencies?.EURTRY?.price || 42.0;
+      if (code === 'GBP') return globalData?.currencies?.GBPTRY?.price || 50.0;
+      if (code === 'ALTIN') return globalData?.indices?.ALTIN?.price || 3000.0;
+      if (code === 'CEYREK') return globalData?.indices?.CEYREK?.price || 4900.0;
+      if (code === 'GUMUS') return globalData?.indices?.GUMUS?.price || 36.0;
+      return 1;
+    }
+
+    function convertFx() {
+      const amount = Number(document.getElementById('fxAmount').value) || 0;
+      const from = document.getElementById('fxFrom').value;
+      const to = document.getElementById('fxTo').value;
+
+      const fromRateInTry = getUnitRateInTry(from);
+      const toRateInTry = getUnitRateInTry(to);
+
+      const totalInTry = amount * fromRateInTry;
+      const finalVal = toRateInTry > 0 ? totalInTry / toRateInTry : 0;
+
+      document.getElementById('fxResultValue').textContent = `${formatNumber(finalVal)} ${to}`;
+      document.getElementById('fxRateInfo').textContent = `1 ${from} = ${formatNumber(fromRateInTry / toRateInTry)} ${to}`;
+    }
+
+    function swapFx() {
+      const fromEl = document.getElementById('fxFrom');
+      const toEl = document.getElementById('fxTo');
+      const temp = fromEl.value;
+      fromEl.value = toEl.value;
+      toEl.value = temp;
+      convertFx();
+    }
+
+    function calculateCompound() {
+      const initial = Number(document.getElementById('cmpInitial').value) || 0;
+      const monthly = Number(document.getElementById('cmpMonthly').value) || 0;
+      const annualRate = (Number(document.getElementById('cmpRate').value) || 0) / 100;
+      const years = Number(document.getElementById('cmpYears').value) || 5;
+
+      const monthlyRate = annualRate / 12;
+      const totalMonths = years * 12;
+
+      const labels = [];
+      const principalData = [];
+      const totalData = [];
+
+      let currentTotal = initial;
+      let currentPrincipal = initial;
+
+      for (let y = 1; y <= years; y++) {
+        labels.push(`${y}. Yıl`);
+        for (let m = 1; m <= 12; m++) {
+          currentTotal = (currentTotal + monthly) * (1 + monthlyRate);
+          currentPrincipal += monthly;
+        }
+        principalData.push(Number(currentPrincipal.toFixed(2)));
+        totalData.push(Number(currentTotal.toFixed(2)));
+      }
+
+      document.getElementById('cmpTotalResultText').textContent = `${years} Yıl Sonunda: ₺${formatNumber(currentTotal)} (Net Kâr: ₺${formatNumber(currentTotal - currentPrincipal)})`;
+
+      const ctx = document.getElementById('compoundChart').getContext('2d');
+      if (compoundChartInstance) compoundChartInstance.destroy();
+
+      compoundChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Yatırılan Anapara (₺)',
+              data: principalData,
+              backgroundColor: '#334155',
+              borderRadius: 6
+            },
+            {
+              label: 'Toplam Portföy Değeri (₺)',
+              data: totalData,
+              backgroundColor: '#10b981',
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (c) => `${c.dataset.label}: ₺${c.parsed.y.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(30, 41, 59, 0.4)' },
+              ticks: { color: '#64748b' }
+            },
+            y: {
+              grid: { color: 'rgba(30, 41, 59, 0.4)' },
+              ticks: { 
+                color: '#64748b',
+                callback: (v) => '₺' + Number(v).toLocaleString('tr-TR')
+              }
+            }
+          }
+        }
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

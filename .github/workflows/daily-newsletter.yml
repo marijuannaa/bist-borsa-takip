@@ -2,7 +2,7 @@ name: Sabah Bulteni Otomatik Gonder
 
 on:
   schedule:
-    # Hafta ici her sabah 06:00 UTC = 09:00 TSI
+    # Hafta ici her sabah 06:00 UTC = 09:00 TSI (Seans oncesi)
     - cron: '0 6 * * 1-5'
   workflow_dispatch:
 
@@ -17,9 +17,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: 'npm'
 
       - name: Paketleri Kur
-        run: npm install resend
+        run: npm ci || npm install
 
       - name: Guncel Verileri Cek
         run: node fetch-data.js
@@ -27,4 +28,5 @@ jobs:
       - name: Sabah Bultenini Gonder
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          NEWSLETTER_RECIPIENT: ${{ secrets.NEWSLETTER_RECIPIENT }}
         run: node send-newsletter.js

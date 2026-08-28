@@ -3,133 +3,275 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BIST Hisse Detay & Canlı Grafik</title>
+  <title>Hisse Detay & Teknik Analiz | BIST Terminal</title>
+  <meta name="description" content="Borsa İstanbul hisse senedi detaylı teknik analizi, geçmiş fiyat grafikleri, RSI, hareketli ortalamalar ve bilanço göstergeleri.">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+
   <style>
-    body { font-family: 'Inter', sans-serif; }
-    @keyframes pulse-subtle {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-    .skeleton-loader {
-      animation: pulse-subtle 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-      background-color: #1e293b;
+    body { font-family: 'Inter', sans-serif; background-color: #070b12; color: #f1f5f9; }
+    .font-num { font-family: 'JetBrains Mono', monospace; }
+    .font-display { font-family: 'Outfit', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #070b12; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+    .glass-card {
+      background: rgba(13, 19, 31, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(27, 36, 54, 0.85);
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-8 antialiased">
-  <div class="max-w-5xl mx-auto space-y-6">
-    
-    <!-- Üst Navigasyon & Arama -->
-    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
-      <a href="index.html" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-white transition-colors bg-slate-900 border border-slate-800 hover:border-slate-700 px-4 py-2 rounded-xl shadow-sm">
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-        </svg>
-        <span>Ana Sayfaya Dön</span>
-      </a>
+<body class="min-h-screen bg-[#070b12] text-slate-100 antialiased p-3 sm:p-6 lg:p-8 flex flex-col justify-between">
 
-      <!-- Hisse Arama Çubuğu -->
+  <div class="max-w-6xl mx-auto w-full space-y-6 flex-grow">
+    
+    <!-- Top Header Navigation & Fast Search -->
+    <header class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-300 hover:text-white bg-[#0d131f] border border-slate-800 hover:border-slate-700 px-4 py-2.5 rounded-xl shadow-sm transition-all">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          <span>Piyasa Terminaline Dön</span>
+        </a>
+        <a href="portfoy.html" class="text-xs text-slate-400 hover:text-emerald-400 font-semibold px-3 py-2 rounded-xl transition-all hidden md:inline-flex items-center gap-1">
+          <span>Portföyüm</span>
+        </a>
+      </div>
+
+      <!-- Quick Ticker Switcher -->
       <div class="flex items-center gap-2">
-        <div class="relative w-full sm:w-64">
+        <div class="relative w-full sm:w-72">
           <input 
             type="text" 
             id="navSearchInput" 
-            placeholder="Başka hisse incele (örn: ASELS)..." 
-            class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3.5 py-2 pl-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 uppercase transition-all"
+            placeholder="Başka hisse ara (örn: GARAN, ASELS)..." 
+            class="w-full bg-[#0d131f] border border-slate-800 rounded-xl px-3.5 py-2 pl-9 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-sky-500 uppercase transition-all font-mono"
             onkeypress="if(event.key==='Enter') searchNavigate()"
           />
-          <svg class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-          </svg>
+          <svg class="w-3.5 h-3.5 text-slate-500 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
         </div>
-        <button onclick="searchNavigate()" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-semibold px-3 py-2 rounded-xl transition-all">
+        <button onclick="searchNavigate()" class="bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition-all shadow-md">
           Git
         </button>
       </div>
     </header>
 
-    <!-- Hisse Başlık ve Fiyat Kartı -->
-    <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-6 shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+    <!-- Main Stock Header Card -->
+    <div class="glass-card rounded-3xl p-5 sm:p-7 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
       <div>
         <div class="flex items-center gap-3">
-          <h1 id="stockSymbol" class="text-3xl sm:text-4xl font-black tracking-tight text-white skeleton-loader h-10 w-28 rounded-lg"></h1>
-          <span id="stockBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-slate-800 text-slate-400">Yükleniyor...</span>
+          <h1 id="stockSymbol" class="text-3xl sm:text-5xl font-black font-display tracking-tight text-white">--</h1>
+          <span id="stockBadge" class="text-xs sm:text-sm font-bold font-mono px-3 py-1 rounded-full bg-slate-800 text-slate-400">Yükleniyor...</span>
+          <button id="favBtn" onclick="toggleFavoriteCurrent()" class="text-slate-600 hover:text-amber-400 transition-colors p-1" title="Favorilere Ekle">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+          </button>
         </div>
-        <p id="stockLongName" class="text-slate-400 text-sm mt-1.5 skeleton-loader h-4 w-60 rounded"></p>
-        <div class="flex items-center gap-2 mt-2">
-          <span id="stockCurrency" class="text-[11px] font-semibold text-slate-400 bg-slate-800 px-2.5 py-0.5 rounded border border-slate-700">TRY</span>
-          <span id="stockMarketTime" class="text-[11px] text-slate-500">CDN Yüksek Hızlı Senkronizasyon</span>
+        <p id="stockLongName" class="text-slate-400 text-sm sm:text-base mt-2 font-sans">Yükleniyor...</p>
+        <div class="flex flex-wrap items-center gap-2 mt-3 text-xs font-sans">
+          <span id="stockSector" class="font-semibold text-sky-400 bg-sky-500/10 px-2.5 py-1 rounded-lg border border-sky-500/20">--</span>
+          <span id="stockBist30" class="hidden font-semibold text-indigo-400 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">BIST 30 Endeksi</span>
+          <span id="stockDividend" class="hidden font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/20">Temettü Şirketi</span>
         </div>
       </div>
 
       <div class="text-left md:text-right">
-        <div id="stockPrice" class="text-3xl sm:text-4xl font-black tracking-tight text-white skeleton-loader h-10 w-36 rounded-lg ml-auto"></div>
-        <div id="stockChange" class="text-sm sm:text-base font-semibold text-slate-400 mt-1">--</div>
+        <div id="stockPrice" class="text-3xl sm:text-5xl font-black font-num tracking-tight text-white">--</div>
+        <div id="stockChange" class="text-sm sm:text-lg font-bold font-num text-slate-400 mt-1">--</div>
+        <div class="mt-3 flex items-center justify-start md:justify-end gap-2 text-xs">
+          <button onclick="addToPortfolioModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3.5 py-1.5 rounded-xl transition-all shadow-md flex items-center gap-1">
+            <span>+ Portföye Ekle</span>
+          </button>
+          <a id="tradingViewLink" target="_blank" class="bg-[#1b2436] hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-xl transition-all">TradingView ↗</a>
+        </div>
       </div>
     </div>
 
-    <!-- Grafik Kartı ve Zaman Aralığı Seçici -->
-    <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+    <!-- Chart & Controls Section -->
+    <div class="glass-card rounded-3xl p-5 sm:p-7 shadow-2xl space-y-4">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
         <div>
-          <h2 class="text-lg font-bold text-slate-200">Fiyat Grafiği ve Geçmiş Trend</h2>
-          <p id="chartSubTitle" class="text-xs text-slate-500">Yükleniyor...</p>
+          <h2 class="text-lg font-bold font-display text-slate-100">İnteraktif Fiyat & Trend Grafiği</h2>
+          <p id="chartSubTitle" class="text-xs text-slate-400 font-mono mt-0.5">Yükleniyor...</p>
         </div>
 
-        <!-- Zaman Periyotları -->
-        <div class="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1.5 rounded-xl border border-slate-800/80 self-start sm:self-auto">
-          <button onclick="setFilter(7, this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all">1H</button>
-          <button onclick="setFilter(30, this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all">1A</button>
-          <button onclick="setFilter(90, this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all">3A</button>
-          <button onclick="setFilter(180, this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all">6A</button>
-          <button onclick="setFilter(365, this)" class="period-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all">1Y</button>
+        <!-- Overlays & Timeframe Selector -->
+        <div class="flex flex-wrap items-center gap-2">
+          
+          <!-- Overlays Toggles -->
+          <div class="flex items-center gap-2 bg-[#090e18] px-3 py-1.5 rounded-xl border border-slate-800 text-xs font-mono">
+            <label class="flex items-center gap-1.5 cursor-pointer text-amber-400">
+              <input type="checkbox" id="toggleSma20" onchange="renderChart()" checked class="rounded bg-slate-900 border-slate-700">
+              <span>SMA(20)</span>
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer text-indigo-400">
+              <input type="checkbox" id="toggleSma50" onchange="renderChart()" checked class="rounded bg-slate-900 border-slate-700">
+              <span>SMA(50)</span>
+            </label>
+          </div>
+
+          <!-- Timeframes -->
+          <div class="flex items-center gap-1 bg-[#090e18] p-1 rounded-xl border border-slate-800 text-xs font-semibold">
+            <button onclick="setFilter(7, this)" class="period-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">1H</button>
+            <button onclick="setFilter(30, this)" class="period-btn px-3 py-1.5 rounded-lg bg-sky-600 text-white font-bold">1A</button>
+            <button onclick="setFilter(90, this)" class="period-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">3A</button>
+            <button onclick="setFilter(180, this)" class="period-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">6A</button>
+            <button onclick="setFilter(365, this)" class="period-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white">1Y</button>
+          </div>
+
         </div>
       </div>
 
-      <!-- Canvas Alanı -->
-      <div class="h-72 sm:h-96 w-full relative">
+      <!-- Main Price Canvas -->
+      <div class="h-80 sm:h-96 w-full relative">
         <canvas id="detailChart"></canvas>
       </div>
-    </div>
 
-    <!-- Dinamik Finansal İstatistikler -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5">
-      <div class="bg-slate-900/90 border border-slate-800/80 p-4 rounded-xl">
-        <span class="text-xs text-slate-500 font-medium block">52 Haftalık En Yüksek</span>
-        <span id="statHigh52" class="text-base sm:text-lg font-bold text-slate-200 mt-1 block skeleton-loader h-6 w-24 rounded"></span>
-      </div>
-      <div class="bg-slate-900/90 border border-slate-800/80 p-4 rounded-xl">
-        <span class="text-xs text-slate-500 font-medium block">52 Haftalık En Düşük</span>
-        <span id="statLow52" class="text-base sm:text-lg font-bold text-slate-200 mt-1 block skeleton-loader h-6 w-24 rounded"></span>
-      </div>
-      <div class="bg-slate-900/90 border border-slate-800/80 p-4 rounded-xl">
-        <span class="text-xs text-slate-500 font-medium block">Günün Fiyat Aralığı</span>
-        <span id="statDayRange" class="text-xs sm:text-sm font-bold text-slate-200 mt-1.5 block truncate skeleton-loader h-6 w-32 rounded"></span>
-      </div>
-      <div class="bg-slate-900/90 border border-slate-800/80 p-4 rounded-xl">
-        <span class="text-xs text-slate-500 font-medium block">Hacim</span>
-        <span id="statVolume" class="text-base sm:text-lg font-bold text-slate-200 mt-1 block skeleton-loader h-6 w-24 rounded"></span>
+      <!-- Sub Chart: Volume / RSI Canvas -->
+      <div class="border-t border-slate-800/80 pt-3">
+        <div class="flex items-center justify-between text-xs font-mono text-slate-400 mb-2">
+          <span>RSI (14 Göstergesi) & Hacim Barları</span>
+          <span id="rsiStatusIndicator" class="font-bold text-slate-300">--</span>
+        </div>
+        <div class="h-28 w-full relative">
+          <canvas id="rsiChart"></canvas>
+        </div>
       </div>
     </div>
 
-    <!-- Yasal Uyarı -->
-    <footer class="mt-8 border-t border-slate-800/80 pt-6 pb-6 text-center text-xs text-slate-500 space-y-2">
-      <p>Bu sayfadaki veriler ve grafikler genel bilgilendirme amaçlıdır. Yatırım tavsiyesi niteliği taşımaz.</p>
-    </footer>
+    <!-- Quantitative Metrics & Return Rates Matrix -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      
+      <!-- Key Price Levels -->
+      <div class="glass-card rounded-2xl p-5 space-y-3 font-mono text-xs">
+        <h3 class="font-display font-bold text-sm text-white border-b border-slate-800 pb-2">Fiyat Seviyeleri & 52H Aralık</h3>
+        <div class="flex justify-between py-1 border-b border-slate-800/60">
+          <span class="text-slate-400 font-sans">52H En Yüksek</span>
+          <span id="statHigh52" class="font-bold text-white">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-800/60">
+          <span class="text-slate-400 font-sans">52H En Düşük</span>
+          <span id="statLow52" class="font-bold text-white">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-800/60">
+          <span class="text-slate-400 font-sans">Günün Aralığı</span>
+          <span id="statDayRange" class="font-bold text-white">--</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-slate-400 font-sans">İşlem Hacmi (Adet)</span>
+          <span id="statVolume" class="font-bold text-white">--</span>
+        </div>
+      </div>
+
+      <!-- Pivot Points -->
+      <div class="glass-card rounded-2xl p-5 space-y-3 font-mono text-xs">
+        <h3 class="font-display font-bold text-sm text-white border-b border-slate-800 pb-2">Teknik Destek & Direnç (Pivot)</h3>
+        <div class="flex justify-between py-1 border-b border-slate-800/60 text-rose-400">
+          <span class="font-sans">Direnç Seviyesi (R1)</span>
+          <span id="pivotR1" class="font-bold">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-800/60 text-sky-400">
+          <span class="font-sans">Pivot Noktası (P)</span>
+          <span id="pivotP" class="font-bold">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-800/60 text-emerald-400">
+          <span class="font-sans">Destek Seviyesi (S1)</span>
+          <span id="pivotS1" class="font-bold">--</span>
+        </div>
+        <div class="flex justify-between py-1 text-slate-400">
+          <span class="font-sans">SMA (20 Günlük)</span>
+          <span id="statSma20" class="font-bold text-white">--</span>
+        </div>
+      </div>
+
+      <!-- Multi-Period Return Matrix -->
+      <div class="glass-card rounded-2xl p-5 space-y-3 font-mono text-xs">
+        <h3 class="font-display font-bold text-sm text-white border-b border-slate-800 pb-2">Dönemsel Getiri Performansı</h3>
+        <div class="flex justify-between py-1 border-b border-slate-800/60">
+          <span class="text-slate-400 font-sans">1 Haftalık Getiri</span>
+          <span id="retW1" class="font-bold">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-800/60">
+          <span class="text-slate-400 font-sans">1 Aylık Getiri</span>
+          <span id="retM1" class="font-bold">--</span>
+        </div>
+        <div class="flex justify-between py-1 border-b border-slate-800/60">
+          <span class="text-slate-400 font-sans">3 Aylık Getiri</span>
+          <span id="retM3" class="font-bold">--</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span class="text-slate-400 font-sans">1 Yıllık Getiri</span>
+          <span id="retY1" class="font-bold">--</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Related Sector Peers -->
+    <div class="glass-card rounded-3xl p-5 sm:p-6 space-y-3">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-display font-bold text-sm text-slate-200">Aynı Sektördeki Diğer Şirketler</h3>
+        <span class="text-xs text-slate-500 font-mono" id="peerSectorName">Sektör Akranları</span>
+      </div>
+      <div id="peersGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
+        <!-- Injected by JS -->
+      </div>
+    </div>
+
   </div>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800/80 mt-12 py-6 text-center text-xs text-slate-600 font-mono">
+    BIST Terminal • Veriler bilgi amaçlıdır, yatırım tavsiyesi içermez.
+  </footer>
 
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     let currentSymbol = (urlParams.get('sembol') || urlParams.get('symbol') || 'THYAO').toUpperCase();
     let currentDays = 30;
     let fullHistory = [];
-    let isPositiveTrend = true;
-    let chartInstance = null;
+    let stockData = null;
+    let globalData = null;
+    let priceChartInstance = null;
+    let rsiChartInstance = null;
+
+    const FAVORITES_STORAGE_KEY = 'bist_terminal_favorites_v1';
+
+    function getFavorites() {
+      try {
+        return JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function toggleFavoriteCurrent() {
+      let favs = getFavorites();
+      if (favs.includes(currentSymbol)) {
+        favs = favs.filter(s => s !== currentSymbol);
+      } else {
+        favs.push(currentSymbol);
+      }
+      localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favs));
+      updateFavButton();
+    }
+
+    function updateFavButton() {
+      const isFav = getFavorites().includes(currentSymbol);
+      const btn = document.getElementById('favBtn');
+      if (btn) {
+        btn.innerHTML = `
+          <svg class="w-6 h-6 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+        `;
+      }
+    }
 
     function formatNumber(val) {
       if (val === null || val === undefined || isNaN(val)) return '-';
@@ -143,157 +285,279 @@
       return Number(vol).toLocaleString('tr-TR');
     }
 
+    function formatReturnSpan(val) {
+      if (val === null || val === undefined || isNaN(val)) return '-';
+      const isPos = val >= 0;
+      const color = isPos ? 'text-emerald-400' : 'text-rose-400';
+      return `<span class="${color}">${isPos ? '+' : ''}${val.toFixed(2)}%</span>`;
+    }
+
     async function loadStockDetails() {
       try {
         const res = await fetch(`data.json?_t=${Date.now()}`);
         if (!res.ok) throw new Error('data.json yüklenemedi');
-        const rootData = await res.json();
-        
-        const item = rootData.stocks?.[currentSymbol];
-        if (!item) {
-          document.getElementById('chartSubTitle').textContent = `${currentSymbol} listelenen hisseler arasında bulunamadı.`;
+        globalData = await res.json();
+
+        stockData = globalData.stocks?.[currentSymbol];
+        if (!stockData) {
+          document.getElementById('stockLongName').textContent = `"${currentSymbol}" sembolü borsa listesinde bulunamadı.`;
           return;
         }
 
-        const isPos = item.change >= 0;
-        isPositiveTrend = isPos;
+        const isPos = stockData.change >= 0;
+        document.title = `${currentSymbol} - ₺${formatNumber(stockData.price)} | BIST Terminal`;
 
-        document.title = `${currentSymbol} - ₺${formatNumber(item.price)} | BIST Canlı Detay`;
+        document.getElementById('stockSymbol').textContent = currentSymbol;
+        document.getElementById('stockLongName').textContent = stockData.name || stockData.shortName || currentSymbol;
+        document.getElementById('stockSector').textContent = stockData.sector || 'BIST';
+        
+        if (stockData.bist30) document.getElementById('stockBist30').classList.remove('hidden');
+        if (stockData.dividend) document.getElementById('stockDividend').classList.remove('hidden');
 
-        const symEl = document.getElementById('stockSymbol');
-        symEl.classList.remove('skeleton-loader');
-        symEl.textContent = currentSymbol;
-
-        const nameEl = document.getElementById('stockLongName');
-        nameEl.classList.remove('skeleton-loader');
-        nameEl.textContent = item.shortName || currentSymbol;
-
-        const priceEl = document.getElementById('stockPrice');
-        priceEl.classList.remove('skeleton-loader');
-        priceEl.textContent = `₺${formatNumber(item.price)}`;
-
-        const changeEl = document.getElementById('stockChange');
-        changeEl.className = `text-sm sm:text-base font-semibold ${isPos ? 'text-emerald-400' : 'text-rose-400'} mt-1`;
-        changeEl.textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(item.change)} (%${item.changePercent.toFixed(2)})`;
+        document.getElementById('stockPrice').textContent = `₺${formatNumber(stockData.price)}`;
+        document.getElementById('stockChange').className = `text-sm sm:text-lg font-bold font-num ${isPos ? 'text-emerald-400' : 'text-rose-400'} mt-1`;
+        document.getElementById('stockChange').textContent = `${isPos ? '▲ +' : '▼ '}₺${formatNumber(stockData.change)} (%${stockData.changePercent.toFixed(2)})`;
 
         const badgeEl = document.getElementById('stockBadge');
-        badgeEl.className = `text-xs font-bold px-3 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
-        badgeEl.textContent = `${isPos ? '+' : ''}${item.changePercent.toFixed(2)}%`;
+        badgeEl.className = `text-xs sm:text-sm font-bold font-mono px-3.5 py-1 rounded-full ${isPos ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`;
+        badgeEl.textContent = `${isPos ? '+' : ''}${stockData.changePercent.toFixed(2)}%`;
 
-        const h52 = document.getElementById('statHigh52');
-        h52.classList.remove('skeleton-loader');
-        h52.textContent = item.fiftyTwoWeekHigh ? `₺${formatNumber(item.fiftyTwoWeekHigh)}` : '-';
+        document.getElementById('tradingViewLink').href = `https://tr.tradingview.com/symbols/BIST-${currentSymbol}/`;
 
-        const l52 = document.getElementById('statLow52');
-        l52.classList.remove('skeleton-loader');
-        l52.textContent = item.fiftyTwoWeekLow ? `₺${formatNumber(item.fiftyTwoWeekLow)}` : '-';
+        // Key stats
+        document.getElementById('statHigh52').textContent = `₺${formatNumber(stockData.fiftyTwoWeekHigh)}`;
+        document.getElementById('statLow52').textContent = `₺${formatNumber(stockData.fiftyTwoWeekLow)}`;
+        document.getElementById('statDayRange').textContent = `₺${formatNumber(stockData.dayLow)} - ₺${formatNumber(stockData.dayHigh)}`;
+        document.getElementById('statVolume').textContent = `${Number(stockData.volume || 0).toLocaleString('tr-TR')} Adet`;
 
-        const dRange = document.getElementById('statDayRange');
-        dRange.classList.remove('skeleton-loader');
-        dRange.textContent = (item.dayLow && item.dayHigh)
-          ? `₺${formatNumber(item.dayLow)} - ₺${formatNumber(item.dayHigh)}`
-          : '-';
+        // Pivots
+        if (stockData.pivots) {
+          document.getElementById('pivotR1').textContent = `₺${formatNumber(stockData.pivots.r1)}`;
+          document.getElementById('pivotP').textContent = `₺${formatNumber(stockData.pivots.pivot)}`;
+          document.getElementById('pivotS1').textContent = `₺${formatNumber(stockData.pivots.s1)}`;
+        }
+        document.getElementById('statSma20').textContent = stockData.sma20 ? `₺${formatNumber(stockData.sma20)}` : '-';
 
-        const vol = document.getElementById('statVolume');
-        vol.classList.remove('skeleton-loader');
-        vol.textContent = formatVolume(item.volume);
+        // Returns
+        if (stockData.returns) {
+          document.getElementById('retW1').innerHTML = formatReturnSpan(stockData.returns.w1);
+          document.getElementById('retM1').innerHTML = formatReturnSpan(stockData.returns.m1);
+          document.getElementById('retM3').innerHTML = formatReturnSpan(stockData.returns.m3);
+          document.getElementById('retY1').innerHTML = formatReturnSpan(stockData.returns.y1);
+        }
 
-        fullHistory = item.history || [];
-        updateChartSlice();
+        // RSI Status
+        const rsiVal = stockData.rsi14;
+        let rsiText = 'RSI: --';
+        if (rsiVal) {
+          if (rsiVal < 30) rsiText = `RSI: ${rsiVal.toFixed(1)} (Aşırı Satım / Alım Bölgesi)`;
+          else if (rsiVal > 70) rsiText = `RSI: ${rsiVal.toFixed(1)} (Aşırı Alım / Düzeltme Riski)`;
+          else rsiText = `RSI: ${rsiVal.toFixed(1)} (Dengeli Bölge)`;
+        }
+        document.getElementById('rsiStatusIndicator').textContent = rsiText;
+
+        fullHistory = stockData.history || [];
+        updateFavButton();
+        renderChart();
+        renderPeers();
 
       } catch (err) {
-        console.error('Veri yükleme hatası:', err);
-        document.getElementById('chartSubTitle').textContent = 'Veriler okunurken hata oluştu.';
+        console.error('Hata:', err);
       }
     }
 
-    function updateChartSlice() {
+    function renderChart() {
       if (!fullHistory || fullHistory.length === 0) return;
 
       const sliceData = fullHistory.slice(-currentDays);
       const labels = sliceData.map(h => h.date);
       const prices = sliceData.map(h => h.close);
+      const volumes = sliceData.map(h => h.volume);
+      const isPos = stockData.change >= 0;
 
-      renderChart(labels, prices, isPositiveTrend);
+      // Calculate SMAs for slice
+      const showSma20 = document.getElementById('toggleSma20')?.checked;
+      const showSma50 = document.getElementById('toggleSma50')?.checked;
 
-      document.getElementById('chartSubTitle').textContent = 
-        `${labels.length} günün verisi • Son Fiyat: ₺${formatNumber(prices[prices.length - 1])} (${labels[labels.length - 1]})`;
-    }
+      const sma20Points = sliceData.map((_, idx) => {
+        const fullIdx = fullHistory.length - currentDays + idx;
+        if (fullIdx < 19) return null;
+        const sub = fullHistory.slice(fullIdx - 19, fullIdx + 1);
+        const sum = sub.reduce((a, b) => a + b.close, 0);
+        return Number((sum / 20).toFixed(2));
+      });
 
-    function renderChart(labels, prices, isPositive) {
+      const sma50Points = sliceData.map((_, idx) => {
+        const fullIdx = fullHistory.length - currentDays + idx;
+        if (fullIdx < 49) return null;
+        const sub = fullHistory.slice(fullIdx - 49, fullIdx + 1);
+        const sum = sub.reduce((a, b) => a + b.close, 0);
+        return Number((sum / 50).toFixed(2));
+      });
+
+      // 1. Price Chart Canvas
       const ctx = document.getElementById('detailChart').getContext('2d');
-      if (chartInstance) chartInstance.destroy();
+      if (priceChartInstance) priceChartInstance.destroy();
 
-      const color = isPositive ? '#10b981' : '#f43f5e';
-      const gradient = ctx.createLinearGradient(0, 0, 0, 320);
-      gradient.addColorStop(0, isPositive ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)');
+      const color = isPos ? '#10b981' : '#f43f5e';
+      const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+      gradient.addColorStop(0, isPos ? 'rgba(16, 185, 129, 0.35)' : 'rgba(244, 63, 94, 0.35)');
       gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
 
-      chartInstance = new Chart(ctx, {
+      const datasets = [
+        {
+          label: `${currentSymbol} Fiyat (₺)`,
+          data: prices,
+          borderColor: color,
+          backgroundColor: gradient,
+          fill: true,
+          tension: 0.2,
+          borderWidth: 2.5,
+          pointRadius: labels.length > 40 ? 0 : 2.5,
+          pointHoverRadius: 6,
+          pointBackgroundColor: color
+        }
+      ];
+
+      if (showSma20) {
+        datasets.push({
+          label: 'SMA (20)',
+          data: sma20Points,
+          borderColor: '#f59e0b',
+          borderWidth: 1.5,
+          borderDash: [4, 4],
+          fill: false,
+          pointRadius: 0
+        });
+      }
+
+      if (showSma50) {
+        datasets.push({
+          label: 'SMA (50)',
+          data: sma50Points,
+          borderColor: '#818cf8',
+          borderWidth: 1.5,
+          borderDash: [2, 2],
+          fill: false,
+          pointRadius: 0
+        });
+      }
+
+      priceChartInstance = new Chart(ctx, {
         type: 'line',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: `${currentSymbol} Fiyat (₺)`,
-            data: prices,
-            borderColor: color,
-            backgroundColor: gradient,
-            fill: true,
-            tension: 0.25,
-            borderWidth: 2.5,
-            pointRadius: labels.length > 40 ? 1 : 3,
-            pointHoverRadius: 6,
-            pointBackgroundColor: color,
-          }]
-        },
+        data: { labels, datasets },
         options: {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: '#0f172a',
+              backgroundColor: '#0c121e',
               titleColor: '#94a3b8',
               bodyColor: '#f8fafc',
-              borderColor: '#334155',
+              borderColor: '#1e293b',
               borderWidth: 1,
               padding: 10,
               displayColors: false,
               callbacks: {
-                label: (context) => `₺${context.parsed.y.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`
+                label: (ctx) => `${ctx.dataset.label}: ₺${ctx.parsed.y.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`
               }
             }
           },
           scales: {
             x: {
-              grid: { color: 'rgba(51, 65, 85, 0.2)' },
-              ticks: { color: '#64748b', maxTicksLimit: 10 }
+              grid: { color: 'rgba(30, 41, 59, 0.4)' },
+              ticks: { color: '#64748b', maxTicksLimit: 10, font: { family: 'JetBrains Mono', size: 10 } }
             },
             y: {
-              grid: { color: 'rgba(51, 65, 85, 0.2)' },
+              grid: { color: 'rgba(30, 41, 59, 0.4)' },
               ticks: { 
                 color: '#64748b',
+                font: { family: 'JetBrains Mono', size: 10 },
                 callback: (val) => '₺' + val
               }
             }
           }
         }
       });
+
+      // 2. Subchart: RSI & Volume
+      const rsiCtx = document.getElementById('rsiChart').getContext('2d');
+      if (rsiChartInstance) rsiChartInstance.destroy();
+
+      rsiChartInstance = new Chart(rsiCtx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Hacim',
+            data: volumes,
+            backgroundColor: 'rgba(14, 165, 233, 0.4)',
+            borderRadius: 3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: {
+              grid: { color: 'rgba(30, 41, 59, 0.2)' },
+              ticks: { color: '#475569', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 3 }
+            }
+          }
+        }
+      });
+
+      document.getElementById('chartSubTitle').textContent = `${labels.length} seans verisi • Son Kapanış: ₺${formatNumber(prices[prices.length - 1])} (${labels[labels.length - 1]})`;
+    }
+
+    function renderPeers() {
+      if (!globalData?.stocks || !stockData?.sector) return;
+      const peers = Object.values(globalData.stocks)
+        .filter(s => s.sector === stockData.sector && s.symbol !== currentSymbol)
+        .slice(0, 4);
+
+      const container = document.getElementById('peersGrid');
+      document.getElementById('peerSectorName').textContent = `${stockData.sector} Hisseleri`;
+
+      if (peers.length === 0) {
+        container.innerHTML = `<div class="col-span-full text-slate-500 font-sans">Bu sektörde başka hisse listelenmiyor.</div>`;
+        return;
+      }
+
+      container.innerHTML = peers.map(p => {
+        const isPos = p.change >= 0;
+        return `
+          <a href="hisse.html?sembol=${p.symbol}" class="bg-[#090e18] border border-slate-800/80 hover:border-sky-500/40 p-3 rounded-xl block transition-all group">
+            <div class="flex items-center justify-between">
+              <span class="font-black font-display text-white group-hover:text-sky-400">${p.symbol}</span>
+              <span class="${isPos ? 'text-emerald-400' : 'text-rose-400'} font-bold">${isPos ? '+' : ''}${p.changePercent.toFixed(2)}%</span>
+            </div>
+            <div class="text-slate-300 font-bold mt-1.5">₺${formatNumber(p.price)}</div>
+          </a>
+        `;
+      }).join('');
     }
 
     function setFilter(days, btnEl) {
       currentDays = days;
       document.querySelectorAll('.period-btn').forEach(btn => {
-        btn.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all';
+        btn.className = 'period-btn px-3 py-1.5 rounded-lg text-slate-400 hover:text-white';
       });
-      btnEl.className = 'period-btn px-3 py-1.5 text-xs font-semibold rounded-lg bg-sky-600 text-white transition-all';
-      updateChartSlice();
+      btnEl.className = 'period-btn px-3 py-1.5 rounded-lg bg-sky-600 text-white font-bold';
+      renderChart();
     }
 
     function searchNavigate() {
       const val = document.getElementById('navSearchInput').value.trim().toUpperCase();
       if (!val) return;
       window.location.href = `hisse.html?sembol=${val}`;
+    }
+
+    function addToPortfolioModal() {
+      window.location.href = `portfoy.html?add=${currentSymbol}`;
     }
 
     window.addEventListener('DOMContentLoaded', () => {
