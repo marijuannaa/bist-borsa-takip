@@ -2,6 +2,8 @@ import http from 'http';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getMarketSessionStatus } from './src/indicators.js';
+import { fetchAllData } from './fetch-data.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
@@ -17,15 +19,85 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon'
 };
 
-const server = http.createServer((req, res) => {
-  // CORS headers
+let isRefreshing = false;
+
+const server = http.createServer(async (req, res) => {
+  // CORS & Cache Headers
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  let reqPath = req.url.split('?')[0];
-  if (reqPath === '/') reqPath = '/index.html';
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
 
-  const filePath = path.join(__dirname, reqPath);
+  const urlObj = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  const reqPath = urlObj.pathname;
+
+  // API 1: Live Market Session Check
+  if (reqPath === '/api/session') {
+    const session = getMarketSessionStatus();
+    res.writeHead(200, { 
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-cache, no-store, must-revalidate'
+    });
+    res.end(JSON.stringify({ success: true, timestamp: Date.now(), session }));
+    return;
+  }
+
+  // API 2: Live Refresh Data
+  if (reqPath === '/api/refresh') {
+    if (isRefreshing) {
+      // If already refreshing, return current data.json with a note
+      res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ success: true, refreshing: true, message: 'Veri güncelleme zaten arka planda devam ediyor.' }));
+      return;
+    }
+
+    isRefreshing = true;
+    try {
+      console.log('🔄 İstemciden gelen istek üzerine canlı veriler yenileniyor...');
+      const freshData = await fetchAllData();
+      isRefreshing = false;
+      res.writeHead(200, { 
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-cache, no-store, must-revalidate'
+      });
+      res.end(JSON.stringify({ 
+        success: true, 
+        message: 'Veriler başarıyla güncellendi', 
+        updatedAt: freshData.updatedAt,
+        data: freshData 
+      }));
+    } catch (err) {
+      isRefreshing = false;
+      console.error('Veri yenileme hatası:', err);
+      res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8' });
+      res.end(JSON.stringify({ success: false, error: err.message }));
+    }
+    return;
+  }
+
+  // API 3: Get latest data.json without cache
+  if (reqPath === '/api/data' || reqPath === '/data.json') {
+    const dataPath = path.join(__dirname, 'data.json');
+    if (fs.existsSync(dataPath)) {
+      const content = fs.readFileSync(dataPath, 'utf-8');
+      res.writeHead(200, { 
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-cache, no-store, must-revalidate, max-age=0'
+      });
+      res.end(content);
+      return;
+    }
+  }
+
+  let servePath = reqPath;
+  if (servePath === '/') servePath = '/index.html';
+
+  const filePath = path.join(__dirname, servePath);
   const ext = path.extname(filePath).toLowerCase();
 
   fs.readFile(filePath, (err, content) => {
@@ -38,7 +110,10 @@ const server = http.createServer((req, res) => {
         res.end(`Sunucu Hatası: ${err.code}`);
       }
     } else {
-      res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
+      res.writeHead(200, { 
+        'Content-Type': MIME_TYPES[ext] || 'application/octet-stream',
+        'Cache-Control': ext === '.json' ? 'no-cache, no-store, must-revalidate' : 'public, max-age=3600'
+      });
       res.end(content);
     }
   });

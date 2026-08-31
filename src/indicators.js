@@ -119,75 +119,174 @@ export function calculateReturns(history) {
 
 /**
  * Checks market trading session status in Istanbul Time (UTC+3)
- * @returns {object} { isOpen, status, statusColor, nextEvent, sessionName, timeStr }
+ * @param {Date|string|number} [customDate] Optional custom date/timestamp to evaluate
+ * @returns {object} { isOpen, isPrePost, status, statusColor, nextEvent, countdownStr, sessionName, timeStr, dateStr }
  */
-export function getMarketSessionStatus() {
-  const now = new Date();
-  const trDate = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Istanbul' }));
-  const day = trDate.getDay(); // 0 = Sunday, 6 = Saturday
-  const hours = trDate.getHours();
-  const minutes = trDate.getMinutes();
-  const totalMinutes = hours * 60 + minutes;
+export function getMarketSessionStatus(customDate = null) {
+  const now = customDate ? new Date(customDate) : new Date();
+  
+  // Format to Istanbul timezone parts
+  const formatter = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Istanbul',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+    weekday: 'short',
+    hour12: false
+  });
 
-  const timeStr = trDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const parts = formatter.formatToParts(now);
+  const partMap = {};
+  for (const p of parts) {
+    partMap[p.type] = p.value;
+  }
 
-  // Weekend
-  if (day === 0 || day === 6) {
+  const year = parseInt(partMap.year, 10);
+  const month = parseInt(partMap.month, 10);
+  const day = parseInt(partMap.day, 10);
+  let hour = parseInt(partMap.hour, 10);
+  if (hour === 24) hour = 0;
+  const minute = parseInt(partMap.minute, 10);
+  const second = parseInt(partMap.second, 10);
+
+  const weekdayMap = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
+  const dayOfWeek = weekdayMap[partMap.weekday] ?? 0;
+
+  const totalMinutes = hour * 60 + minute;
+  const pad = (n) => String(n).padStart(2, '0');
+  const timeStr = `${pad(hour)}:${pad(minute)}:${pad(second)}`;
+  const dateStr = `${pad(day)}.${pad(month)}.${year}`;
+
+  // Check Official Turkish Public Holidays (Fixed date holidays)
+  const holidayKey = `${pad(day)}-${pad(month)}`;
+  const holidays = {
+    '01-01': 'Yılbaşı Tatili',
+    '23-04': 'Ulusal Egemenlik ve Çocuk Bayramı',
+    '01-05': 'Emek ve Dayanışma Günü',
+    '19-05': 'Atatürk\'ü Anma, Gençlik ve Spor Bayramı',
+    '15-07': 'Demokrasi ve Milli Birlik Günü',
+    '30-08': 'Zafer Bayramı',
+    '29-10': 'Cumhuriyet Bayramı'
+  };
+
+  if (holidays[holidayKey]) {
     return {
       isOpen: false,
+      isPrePost: false,
+      status: `Resmi Tatil (${holidays[holidayKey]}) - Kapalı`,
+      statusColor: 'rose',
+      sessionName: 'Borsa Kapalı',
+      nextEvent: 'Bir Sonraki İş Günü 09:40 Açılış Seansı',
+      countdownStr: 'Resmi Tatil',
+      timeStr,
+      dateStr
+    };
+  }
+
+  // Weekend (Saturday or Sunday)
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    return {
+      isOpen: false,
+      isPrePost: false,
       status: 'Hafta Sonu - Kapalı',
       statusColor: 'rose',
       sessionName: 'Borsa Kapalı',
       nextEvent: 'Pazartesi 09:40 Açılış Seansı',
-      timeStr
+      countdownStr: 'Hafta Sonu',
+      timeStr,
+      dateStr
+    };
+  }
+
+  // Helper function for countdown text
+  const calcRemaining = (targetMin) => {
+    const diff = targetMin - totalMinutes;
+    if (diff <= 0) return '0dk';
+    const h = Math.floor(diff / 60);
+    const m = diff % 60;
+    return h > 0 ? `${h}s ${m}dk` : `${m}dk`;
+  };
+
+  // 00:00 - 09:40: Seans Öncesi
+  if (totalMinutes < 580) {
+    const rem = calcRemaining(580);
+    return {
+      isOpen: false,
+      isPrePost: false,
+      status: 'Gün Başı - Seans Öncesi',
+      statusColor: 'slate',
+      sessionName: 'Borsa Kapalı',
+      nextEvent: '09:40 Açılış Seansı',
+      countdownStr: `Açılışa: ${rem}`,
+      timeStr,
+      dateStr
     };
   }
 
   // 09:40 - 09:55: Açılış Seansı (Emir Toplama)
   if (totalMinutes >= 580 && totalMinutes < 595) {
+    const rem = calcRemaining(600);
     return {
       isOpen: false,
+      isPrePost: true,
       status: 'Açılış Seansı (Emir Toplama)',
       statusColor: 'amber',
       sessionName: 'Açılış Emir Toplama',
       nextEvent: '10:00 Sürekli İşlem Başlangıcı',
-      timeStr
+      countdownStr: `Sürekli İşleme: ${rem}`,
+      timeStr,
+      dateStr
     };
   }
 
-  // 09:55 - 10:00: Eşleştirme
+  // 09:55 - 10:00: Açılış Eşleştirme
   if (totalMinutes >= 595 && totalMinutes < 600) {
+    const rem = calcRemaining(600);
     return {
       isOpen: false,
+      isPrePost: true,
       status: 'Açılış Eşleştirme Fiyatı',
       statusColor: 'amber',
       sessionName: 'Açılış Eşleştirme',
       nextEvent: '10:00 Sürekli İşlem Başlangıcı',
-      timeStr
+      countdownStr: `Sürekli İşleme: ${rem}`,
+      timeStr,
+      dateStr
     };
   }
 
-  // 10:00 - 18:00: Sürekli İşlem Seansı
+  // 10:00 - 18:00: Canlı Sürekli Müzayede (AÇIK)
   if (totalMinutes >= 600 && totalMinutes < 1080) {
+    const rem = calcRemaining(1080);
     return {
       isOpen: true,
+      isPrePost: false,
       status: 'Canlı Sürekli Müzayede',
       statusColor: 'emerald',
       sessionName: 'Canlı Seans Açık',
       nextEvent: '18:00 Kapanış Seansı',
-      timeStr
+      countdownStr: `Kapanışa: ${rem}`,
+      timeStr,
+      dateStr
     };
   }
 
-  // 18:01 - 18:05: Kapanış Emir Toplama
+  // 18:00 - 18:05: Kapanış Emir Toplama
   if (totalMinutes >= 1080 && totalMinutes < 1085) {
+    const rem = calcRemaining(1090);
     return {
       isOpen: false,
+      isPrePost: true,
       status: 'Kapanış Seansı (Emir Toplama)',
       statusColor: 'amber',
       sessionName: 'Kapanış Emir Toplama',
       nextEvent: '18:05 Kapanış Eşleştirme',
-      timeStr
+      countdownStr: `Kapanış Eşleştirmeye: ${calcRemaining(1085)}`,
+      timeStr,
+      dateStr
     };
   }
 
@@ -195,21 +294,27 @@ export function getMarketSessionStatus() {
   if (totalMinutes >= 1085 && totalMinutes <= 1090) {
     return {
       isOpen: false,
+      isPrePost: true,
       status: 'Kapanış Fiyatlı İşlemler',
       statusColor: 'amber',
       sessionName: 'Kapanış Seansı',
       nextEvent: '18:10 Gün Sonu',
-      timeStr
+      countdownStr: `Gün Sonuna: ${calcRemaining(1090)}`,
+      timeStr,
+      dateStr
     };
   }
 
-  // 18:10 sonrası veya 09:40 öncesi
+  // 18:10 sonrası: Gün Sonu - Seans Kapalı
   return {
     isOpen: false,
+    isPrePost: false,
     status: 'Gün Sonu - Seans Kapalı',
     statusColor: 'slate',
     sessionName: 'Borsa Kapalı',
-    nextEvent: 'Yarın 09:40 Açılış Seansı',
-    timeStr
+    nextEvent: dayOfWeek === 5 ? 'Pazartesi 09:40 Açılış Seansı' : 'Yarın 09:40 Açılış Seansı',
+    countdownStr: 'Seans Kapandı',
+    timeStr,
+    dateStr
   };
 }

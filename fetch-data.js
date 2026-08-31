@@ -251,7 +251,7 @@ async function calculateMetalsAndCurrencies(fetchedData) {
   return results;
 }
 
-async function main() {
+export async function fetchAllData() {
   const sessionStatus = getMarketSessionStatus();
   console.log(`\n📊 BIST Borsa Takip - Veri Motoru`);
   console.log(`Durum: ${sessionStatus.sessionName} (${sessionStatus.status}) | Zaman: ${sessionStatus.timeStr}`);
@@ -461,9 +461,13 @@ async function main() {
 
   fs.writeFileSync('./data.json', JSON.stringify(output, null, 2), 'utf-8');
   console.log(`\n🎉 data.json (${Object.keys(output.stocks).length} hisse + ${Object.keys(output.indices).length} endeks/emtia) başarıyla kaydedildi!\n`);
+  return output;
 }
 
-main().catch(err => {
-  console.error('Kritik veri motoru hatası:', err);
-  process.exit(1);
-});
+import { fileURLToPath } from 'url';
+if (process.argv[1] && (process.argv[1] === fileURLToPath(import.meta.url) || process.argv[1].endsWith('fetch-data.js'))) {
+  fetchAllData().catch(err => {
+    console.error('Kritik veri motoru hatası:', err);
+    process.exit(1);
+  });
+}

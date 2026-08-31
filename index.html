@@ -132,14 +132,27 @@
         </div>
       </div>
 
-      <!-- Market Clock & Quick Action Links -->
-      <div class="flex flex-wrap items-center gap-2.5">
+      <!-- Market Clock, Status & Quick Action Links -->
+      <div class="flex flex-wrap items-center gap-2 sm:gap-2.5">
         
+        <!-- Live Clock Pill (TSİ) -->
+        <div id="liveClockBadge" class="flex items-center gap-1.5 bg-[#0d131f] border border-slate-800 px-3 py-2 rounded-xl text-xs shadow-sm font-mono text-slate-300">
+          <svg class="w-3.5 h-3.5 text-sky-400 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          <span>TSİ: <strong id="liveClockText" class="text-white font-bold">--:--:--</strong></span>
+        </div>
+
         <!-- Live Market Status Pill -->
-        <div id="marketStatusBadge" class="flex items-center gap-2 bg-[#0d131f] border border-slate-800 px-3.5 py-2 rounded-xl text-xs shadow-sm">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <span class="text-slate-400">Seans: <strong id="sessionStatusText" class="text-slate-200">Yükleniyor...</strong></span>
+        <div id="marketStatusBadge" class="flex items-center gap-2 bg-[#0d131f] border border-slate-800 px-3 py-2 rounded-xl text-xs shadow-sm">
+          <span id="sessionStatusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-500/50"></span>
+          <span class="text-slate-400">Seans: <strong id="sessionStatusText" class="text-slate-200">Canlı Seans Açık</strong></span>
           <span id="sessionCountdownText" class="text-slate-500 font-mono text-[11px] hidden sm:inline-block"></span>
+        </div>
+
+        <!-- Data Freshness Pill -->
+        <div id="dataFreshnessBadge" class="hidden md:flex items-center gap-1.5 bg-[#0d131f] border border-slate-800 px-3 py-2 rounded-xl text-xs shadow-sm font-mono text-slate-400">
+          <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1 3 3 3h10c2 0 3-1 3-3V7c0-2-1-3-3-3H7c-2 0-3 1-3 3zM9 12h6m-6 4h4"></path></svg>
+          <span>Veri: <strong id="dataFreshnessTime" class="text-slate-300 font-medium">Yükleniyor...</strong></span>
+          <span id="dataFreshnessAgo" class="text-[10px] text-sky-400 bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.5 rounded font-sans">Canlı</span>
         </div>
 
         <!-- Navigation Links -->
@@ -150,18 +163,18 @@
 
         <a href="hesaplayici.html" class="flex items-center gap-1.5 bg-[#0d131f] hover:bg-slate-800/80 border border-slate-800 hover:border-purple-500/40 text-purple-400 text-xs font-semibold px-3 py-2 rounded-xl transition-all shadow-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-          <span>Hesaplayıcı</span>
+          <span class="hidden sm:inline">Hesaplayıcı</span>
         </a>
 
         <a href="abone.html" class="flex items-center gap-1.5 bg-[#0d131f] hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/40 text-amber-400 text-xs font-semibold px-3 py-2 rounded-xl transition-all shadow-sm">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-          <span>Sabah Bülteni</span>
+          <span class="hidden sm:inline">Bülten</span>
         </a>
 
-        <!-- Live Refresh -->
-        <button id="refreshBtn" onclick="loadDataFromCDN()" class="flex items-center gap-1.5 bg-sky-600 hover:bg-sky-500 active:scale-95 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-sky-600/20 transition-all cursor-pointer">
-          <svg id="refreshIcon" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-          <span class="hidden sm:inline">Yenile</span>
+        <!-- Live Refresh Button -->
+        <button id="refreshBtn" onclick="refreshMarketData()" class="flex items-center gap-1.5 bg-sky-600 hover:bg-sky-500 active:scale-95 text-white text-xs font-bold px-3.5 py-2 rounded-xl shadow-lg shadow-sky-600/20 transition-all cursor-pointer">
+          <svg id="refreshIcon" class="w-3.5 h-3.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <span id="refreshBtnText">Yenile</span>
         </button>
       </div>
     </header>
@@ -889,21 +902,312 @@
       btnHeat.className = mode === 'heat' ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-sky-600 text-white transition-all flex items-center gap-1.5' : 'px-3 py-1.5 text-xs font-semibold rounded-lg text-slate-400 hover:text-white transition-all flex items-center gap-1.5';
     }
 
-    async function loadDataFromCDN() {
+    // ================= CLIENT-SIDE LIVE SESSION ENGINE =================
+    function getClientMarketSessionStatus(customDate = null) {
+      const now = customDate ? new Date(customDate) : new Date();
+      
+      const formatter = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Istanbul',
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        weekday: 'short',
+        hour12: false
+      });
+
+      const parts = formatter.formatToParts(now);
+      const partMap = {};
+      for (const p of parts) partMap[p.type] = p.value;
+
+      const year = parseInt(partMap.year, 10);
+      const month = parseInt(partMap.month, 10);
+      const day = parseInt(partMap.day, 10);
+      let hour = parseInt(partMap.hour, 10);
+      if (hour === 24) hour = 0;
+      const minute = parseInt(partMap.minute, 10);
+      const second = parseInt(partMap.second, 10);
+
+      const weekdayMap = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
+      const dayOfWeek = weekdayMap[partMap.weekday] ?? 0;
+
+      const totalMinutes = hour * 60 + minute;
+      const pad = (n) => String(n).padStart(2, '0');
+      const timeStr = `${pad(hour)}:${pad(minute)}:${pad(second)}`;
+      const dateStr = `${pad(day)}.${pad(month)}.${year}`;
+
+      const holidayKey = `${pad(day)}-${pad(month)}`;
+      const holidays = {
+        '01-01': 'Yılbaşı Tatili',
+        '23-04': 'Ulusal Egemenlik Bayramı',
+        '01-05': 'Emek ve Dayanışma Günü',
+        '19-05': 'Gençlik ve Spor Bayramı',
+        '15-07': 'Demokrasi ve Milli Birlik Günü',
+        '30-08': 'Zafer Bayramı',
+        '29-10': 'Cumhuriyet Bayramı'
+      };
+
+      if (holidays[holidayKey]) {
+        return {
+          isOpen: false,
+          isPrePost: false,
+          status: `Resmi Tatil (${holidays[holidayKey]}) - Kapalı`,
+          statusColor: 'rose',
+          sessionName: 'Borsa Kapalı',
+          nextEvent: 'Bir Sonraki İş Günü 09:40 Açılış',
+          countdownStr: 'Resmi Tatil',
+          timeStr,
+          dateStr
+        };
+      }
+
+      if (dayOfWeek === 0 || dayOfWeek === 6) {
+        return {
+          isOpen: false,
+          isPrePost: false,
+          status: 'Hafta Sonu - Kapalı',
+          statusColor: 'rose',
+          sessionName: 'Borsa Kapalı',
+          nextEvent: 'Pazartesi 09:40 Açılış Seansı',
+          countdownStr: 'Hafta Sonu',
+          timeStr,
+          dateStr
+        };
+      }
+
+      const calcRemaining = (targetMin) => {
+        const diff = targetMin - totalMinutes;
+        if (diff <= 0) return '0dk';
+        const h = Math.floor(diff / 60);
+        const m = diff % 60;
+        return h > 0 ? `${h}sa ${m}dk` : `${m}dk`;
+      };
+
+      if (totalMinutes < 580) {
+        return {
+          isOpen: false,
+          isPrePost: false,
+          status: 'Gün Başı - Seans Öncesi',
+          statusColor: 'slate',
+          sessionName: 'Borsa Kapalı',
+          nextEvent: '09:40 Açılış Seansı',
+          countdownStr: `Açılışa: ${calcRemaining(580)}`,
+          timeStr,
+          dateStr
+        };
+      }
+
+      if (totalMinutes >= 580 && totalMinutes < 595) {
+        return {
+          isOpen: false,
+          isPrePost: true,
+          status: 'Açılış Seansı (Emir Toplama)',
+          statusColor: 'amber',
+          sessionName: 'Açılış Emir Toplama',
+          nextEvent: '10:00 Sürekli İşlem Başlangıcı',
+          countdownStr: `Sürekli İşleme: ${calcRemaining(600)}`,
+          timeStr,
+          dateStr
+        };
+      }
+
+      if (totalMinutes >= 595 && totalMinutes < 600) {
+        return {
+          isOpen: false,
+          isPrePost: true,
+          status: 'Açılış Eşleştirme Fiyatı',
+          statusColor: 'amber',
+          sessionName: 'Açılış Eşleştirme',
+          nextEvent: '10:00 Sürekli İşlem Başlangıcı',
+          countdownStr: `Sürekli İşleme: ${calcRemaining(600)}`,
+          timeStr,
+          dateStr
+        };
+      }
+
+      if (totalMinutes >= 600 && totalMinutes < 1080) {
+        return {
+          isOpen: true,
+          isPrePost: false,
+          status: 'Canlı Sürekli Müzayede',
+          statusColor: 'emerald',
+          sessionName: 'Canlı Seans Açık',
+          nextEvent: '18:00 Kapanış Seansı',
+          countdownStr: `Kapanışa: ${calcRemaining(1080)}`,
+          timeStr,
+          dateStr
+        };
+      }
+
+      if (totalMinutes >= 1080 && totalMinutes < 1085) {
+        return {
+          isOpen: false,
+          isPrePost: true,
+          status: 'Kapanış Seansı (Emir Toplama)',
+          statusColor: 'amber',
+          sessionName: 'Kapanış Emir Toplama',
+          nextEvent: '18:05 Kapanış Eşleştirme',
+          countdownStr: `Eşleştirmeye: ${calcRemaining(1085)}`,
+          timeStr,
+          dateStr
+        };
+      }
+
+      if (totalMinutes >= 1085 && totalMinutes <= 1090) {
+        return {
+          isOpen: false,
+          isPrePost: true,
+          status: 'Kapanış Fiyatlı İşlemler',
+          statusColor: 'amber',
+          sessionName: 'Kapanış Seansı',
+          nextEvent: '18:10 Gün Sonu',
+          countdownStr: `Gün Sonuna: ${calcRemaining(1090)}`,
+          timeStr,
+          dateStr
+        };
+      }
+
+      return {
+        isOpen: false,
+        isPrePost: false,
+        status: 'Gün Sonu - Seans Kapalı',
+        statusColor: 'slate',
+        sessionName: 'Borsa Kapalı',
+        nextEvent: dayOfWeek === 5 ? 'Pazartesi 09:40 Açılış Seansı' : 'Yarın 09:40 Açılış Seansı',
+        countdownStr: 'Seans Kapandı',
+        timeStr,
+        dateStr
+      };
+    }
+
+    function updateLiveClockAndSession() {
+      const sess = getClientMarketSessionStatus();
+      
+      const clockEl = document.getElementById('liveClockText');
+      if (clockEl) clockEl.textContent = sess.timeStr;
+
+      const statusTextEl = document.getElementById('sessionStatusText');
+      if (statusTextEl) statusTextEl.textContent = sess.sessionName;
+
+      const countdownEl = document.getElementById('sessionCountdownText');
+      if (countdownEl) {
+        countdownEl.textContent = `(${sess.countdownStr || sess.nextEvent})`;
+      }
+
+      const dotEl = document.getElementById('sessionStatusDot');
+      if (dotEl) {
+        if (sess.statusColor === 'emerald') {
+          dotEl.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-500/50';
+        } else if (sess.statusColor === 'amber') {
+          dotEl.className = 'w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shadow-sm shadow-amber-500/50';
+        } else if (sess.statusColor === 'rose') {
+          dotEl.className = 'w-2.5 h-2.5 rounded-full bg-rose-500 shadow-sm';
+        } else {
+          dotEl.className = 'w-2.5 h-2.5 rounded-full bg-slate-500 shadow-sm';
+        }
+      }
+
+      updateDataFreshnessBadge();
+    }
+
+    function updateDataFreshnessBadge() {
+      if (!globalData || !globalData.updatedAt) return;
+      const updatedTimeEl = document.getElementById('dataFreshnessTime');
+      const updatedAgoEl = document.getElementById('dataFreshnessAgo');
+      
+      const updatedAtDate = new Date(globalData.updatedAt);
+      if (updatedTimeEl) {
+        const trTime = updatedAtDate.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Europe/Istanbul' });
+        updatedTimeEl.textContent = trTime;
+      }
+
+      if (updatedAgoEl) {
+        const diffMs = Date.now() - updatedAtDate.getTime();
+        const diffSec = Math.floor(diffMs / 1000);
+        if (diffSec < 60) {
+          updatedAgoEl.textContent = 'Canlı';
+          updatedAgoEl.className = 'text-[10px] text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded font-sans font-bold';
+        } else if (diffSec < 3600) {
+          const m = Math.floor(diffSec / 60);
+          updatedAgoEl.textContent = `${m} dk önce`;
+          updatedAgoEl.className = 'text-[10px] text-sky-400 bg-sky-500/10 border border-sky-500/20 px-1.5 py-0.5 rounded font-sans';
+        } else {
+          const h = Math.floor(diffSec / 3600);
+          updatedAgoEl.textContent = `${h} sa önce`;
+          updatedAgoEl.className = 'text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 rounded font-sans';
+        }
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      const colors = {
+        success: 'bg-[#0f1d2e] border-emerald-500/40 text-emerald-200',
+        error: 'bg-[#2a0e14] border-rose-500/40 text-rose-200',
+        info: 'bg-[#0e1626] border-slate-700 text-slate-200'
+      };
+      const colorClass = colors[type] || colors.info;
+
+      toast.className = `flex items-center gap-2.5 px-4 py-3 rounded-2xl border ${colorClass} backdrop-blur-xl shadow-2xl text-xs font-semibold transform transition-all duration-300 translate-y-2 opacity-0 pointer-events-auto`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('translate-y-2', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    async function refreshMarketData({ silent = false } = {}) {
+      const btn = document.getElementById('refreshBtn');
       const icon = document.getElementById('refreshIcon');
+      const btnText = document.getElementById('refreshBtnText');
+
+      if (btn) btn.disabled = true;
       if (icon) icon.classList.add('animate-spin');
+      if (btnText && !silent) btnText.textContent = 'Yenileniyor...';
+
+      let freshData = null;
 
       try {
-        const res = await fetch(`data.json?_t=${Date.now()}`);
-        if (!res.ok) throw new Error('data.json yüklenemedi');
-        globalData = await res.json();
+        // Step 1: Try local API endpoint if running server
+        try {
+          const apiRes = await fetch('/api/refresh', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            cache: 'no-store'
+          });
+          if (apiRes.ok) {
+            const json = await apiRes.json();
+            if (json && json.data) {
+              freshData = json.data;
+            }
+          }
+        } catch {
+          // Static server fallback
+        }
 
-        // 1. Session Status
-        const sess = globalData.marketSession || {};
-        document.getElementById('sessionStatusText').textContent = sess.sessionName || 'Canlı Seans';
-        if (sess.nextEvent) document.getElementById('sessionCountdownText').textContent = `(${sess.nextEvent})`;
+        // Step 2: Fallback to data.json with cache buster
+        if (!freshData) {
+          const fileRes = await fetch(`data.json?_t=${Date.now()}`, {
+            headers: { 'Cache-Control': 'no-cache, no-store' }
+          });
+          if (!fileRes.ok) throw new Error(`data.json yüklenemedi (HTTP ${fileRes.status})`);
+          freshData = await fileRes.json();
+        }
 
-        // 2. Hero Indices & Metals
+        globalData = freshData;
+
+        // 1. Hero Indices & Metals
         applyIndex('xu100', globalData.indices?.XU100);
         if (globalData.indices?.XU100) {
           document.getElementById('xu100Rsi').textContent = globalData.indices.XU100.rsi14 ? globalData.indices.XU100.rsi14.toFixed(1) : '-';
@@ -922,7 +1226,7 @@
           document.getElementById('gumusQuick').textContent = `₺${formatNumber(globalData.indices.GUMUS.price)}`;
         }
 
-        // 3. Secondary Strip
+        // 2. Secondary Strip
         if (globalData.currencies?.USDTRY) document.getElementById('stripUsd').textContent = `₺${formatNumber(globalData.currencies.USDTRY.price)}`;
         if (globalData.currencies?.EURTRY) document.getElementById('stripEur').textContent = `₺${formatNumber(globalData.currencies.EURTRY.price)}`;
         if (globalData.currencies?.GBPTRY) document.getElementById('stripGbp').textContent = `₺${formatNumber(globalData.currencies.GBPTRY.price)}`;
@@ -930,20 +1234,38 @@
         if (globalData.commodities?.BRENT) document.getElementById('stripBrent').textContent = `$${formatNumber(globalData.commodities.BRENT.price)}`;
         if (globalData.commodities?.BITCOIN) document.getElementById('stripBtc').textContent = `$${formatNumber(globalData.commodities.BITCOIN.price)}`;
 
-        // 4. Counts & Ticker Tape
+        // 3. Counts & Ticker Tape
         document.getElementById('totalStocksCount').textContent = Object.keys(globalData.stocks || {}).length;
         updateFavCount();
         buildTickerTape(globalData);
         renderSectorStats(globalData.sectorStats);
 
-        // 5. Render Lists
+        // 4. Render Lists
         applyAllFilters();
+
+        // 5. Update session and freshness
+        updateLiveClockAndSession();
+
+        if (!silent) {
+          const sess = getClientMarketSessionStatus();
+          showToast(`✅ Veriler başarıyla güncellendi (TSİ ${sess.timeStr})`, 'success');
+        }
 
       } catch (err) {
         console.warn('Veri yüklenirken hata:', err);
+        if (!silent) {
+          showToast('⚠️ Veriler yüklenirken bağlantı sorunu oluştu', 'error');
+        }
       } finally {
+        if (btn) btn.disabled = false;
         if (icon) icon.classList.remove('animate-spin');
+        if (btnText) btnText.textContent = 'Yenile';
       }
+    }
+
+    // Backwards compatibility alias
+    function loadDataFromCDN() {
+      return refreshMarketData({ silent: false });
     }
 
     // Modal Operations
@@ -1087,8 +1409,24 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      loadDataFromCDN();
+      // 1. Start live clock & session checks immediately
+      updateLiveClockAndSession();
+      setInterval(updateLiveClockAndSession, 1000);
+
+      // 2. Initial data load
+      refreshMarketData({ silent: true });
+
+      // 3. Periodic background auto-refresh (every 60 seconds)
+      setInterval(() => {
+        const sess = getClientMarketSessionStatus();
+        if (sess.isOpen || sess.isPrePost) {
+          refreshMarketData({ silent: true });
+        }
+      }, 60000);
     });
   </script>
+
+  <!-- Floating Toast Notification Area -->
+  <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 </body>
 </html>

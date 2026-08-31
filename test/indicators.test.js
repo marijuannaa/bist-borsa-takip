@@ -86,4 +86,56 @@ test('getMarketSessionStatus returns a valid status object', () => {
   assert.ok(typeof status.status === 'string');
   assert.ok(typeof status.sessionName === 'string');
   assert.ok(typeof status.timeStr === 'string');
+  assert.ok(typeof status.dateStr === 'string');
+  assert.ok(typeof status.countdownStr === 'string');
+});
+
+test('getMarketSessionStatus correctly identifies Continuous Trading (Open)', () => {
+  // Wednesday 11:30:00 UTC+3
+  const openTime = new Date('2026-09-02T11:30:00+03:00');
+  const status = getMarketSessionStatus(openTime);
+  assert.equal(status.isOpen, true);
+  assert.equal(status.sessionName, 'Canlı Seans Açık');
+  assert.equal(status.statusColor, 'emerald');
+  assert.ok(status.countdownStr.includes('Kapanışa'));
+});
+
+test('getMarketSessionStatus correctly identifies Opening Auction (Pre-market)', () => {
+  // Wednesday 09:45:00 UTC+3
+  const preTime = new Date('2026-09-02T09:45:00+03:00');
+  const status = getMarketSessionStatus(preTime);
+  assert.equal(status.isOpen, false);
+  assert.equal(status.isPrePost, true);
+  assert.equal(status.sessionName, 'Açılış Emir Toplama');
+  assert.equal(status.statusColor, 'amber');
+});
+
+test('getMarketSessionStatus correctly identifies Closing Auction', () => {
+  // Wednesday 18:02:00 UTC+3
+  const closingTime = new Date('2026-09-02T18:02:00+03:00');
+  const status = getMarketSessionStatus(closingTime);
+  assert.equal(status.isOpen, false);
+  assert.equal(status.isPrePost, true);
+  assert.equal(status.sessionName, 'Kapanış Emir Toplama');
+  assert.equal(status.statusColor, 'amber');
+});
+
+test('getMarketSessionStatus correctly identifies Weekend as Closed', () => {
+  // Sunday 14:00:00 UTC+3
+  const weekendTime = new Date('2026-09-06T14:00:00+03:00');
+  const status = getMarketSessionStatus(weekendTime);
+  assert.equal(status.isOpen, false);
+  assert.equal(status.sessionName, 'Borsa Kapalı');
+  assert.equal(status.status, 'Hafta Sonu - Kapalı');
+  assert.equal(status.statusColor, 'rose');
+});
+
+test('getMarketSessionStatus correctly identifies National Holiday as Closed', () => {
+  // 29 October Republic Day
+  const holidayTime = new Date('2026-10-29T12:00:00+03:00');
+  const status = getMarketSessionStatus(holidayTime);
+  assert.equal(status.isOpen, false);
+  assert.equal(status.sessionName, 'Borsa Kapalı');
+  assert.ok(status.status.includes('Cumhuriyet Bayramı'));
+  assert.equal(status.statusColor, 'rose');
 });
