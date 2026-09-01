@@ -1,38 +1,40 @@
 {
-  "updatedAt": "2026-08-28T09:40:33.513Z",
-  "updatedAtFormatted": "28.08.2026 12:40:33",
+  "updatedAt": "2026-09-01T06:38:49.501Z",
+  "updatedAtFormatted": "01.09.2026 09:38:49",
   "marketSession": {
-    "isOpen": true,
-    "status": "Canlı Sürekli Müzayede",
-    "statusColor": "emerald",
-    "sessionName": "Canlı Seans Açık",
-    "nextEvent": "18:00 Kapanış Seansı",
-    "timeStr": "12:40:33"
+    "isOpen": false,
+    "isPrePost": false,
+    "status": "Gün Başı - Seans Öncesi",
+    "statusColor": "slate",
+    "sessionName": "Borsa Kapalı",
+    "nextEvent": "09:40 Açılış Seansı",
+    "countdownStr": "Açılışa: 2dk",
+    "timeStr": "09:38:49",
+    "dateStr": "01.09.2026"
   },
   "indices": {
     "XU100": {
       "name": "BIST 100",
       "desc": "Borsa İstanbul Ulusal 100 Endeksi",
       "symbol": "XU100.IS",
-      "price": 14554.4,
-      "change": -21.1,
-      "changePercent": -0.14,
-      "prevClose": 14575.5,
-      "dayHigh": 14617.21,
-      "dayLow": 14511.04,
-      "rsi14": 63.58,
-      "sma20": 14132.83,
+      "price": 14334.06,
+      "change": -307.54,
+      "changePercent": -2.1,
+      "prevClose": 14641.6,
+      "dayHigh": 14662.89,
+      "dayLow": 14282.17,
+      "rsi14": 53.77,
+      "sma20": 14183.36,
       "returns": {
-        "d1": -0.14,
-        "w1": 0.27,
-        "m1": 9.49,
-        "m3": 6.21,
-        "m6": 4.45,
-        "y1": 28.02,
-        "ytd": 26.58
+        "d1": -2.1,
+        "w1": -1.15,
+        "m1": 6.51,
+        "m3": 0.94,
+        "m6": 1.94,
+        "y1": 27.07,
+        "ytd": 24.66
       },
       "sparkline": [
-        14132.2,
         14172.3,
         14132.1,
         14128,
@@ -43,27 +45,10 @@
         14473.4,
         14610.9,
         14575.5,
-        14554.4
+        14641.6,
+        14334.06
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 11392,
-          "high": 11478.3,
-          "low": 11347.6,
-          "close": 11368.8,
-          "volume": 6767600000
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 11388.3,
-          "high": 11405.5,
-          "low": 11262.8,
-          "close": 11288.1,
-          "volume": 7167500000
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -2300,10 +2285,19 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 14543.7,
-          "high": 14617.21,
-          "low": 14511.04,
-          "close": 14554.4,
-          "volume": 0
+          "high": 14641.6,
+          "low": 14511,
+          "close": 14641.6,
+          "volume": 7757500000
+        },
+        {
+          "timestamp": 1788157800,
+          "date": "31.08.2026",
+          "open": 14604.3,
+          "high": 14662.9,
+          "low": 14282.2,
+          "close": 14334.06,
+          "volume": 8489700000
         }
       ]
     },
@@ -2311,25 +2305,24 @@
       "name": "BIST 30",
       "desc": "Borsa İstanbul 30 Endeksi",
       "symbol": "XU030.IS",
-      "price": 16720.08,
-      "change": -40.82,
-      "changePercent": -0.24,
-      "prevClose": 16760.9,
-      "dayHigh": 16809,
-      "dayLow": 16665.55,
-      "rsi14": 63.35,
-      "sma20": 16117.69,
+      "price": 16467.75,
+      "change": -321.35,
+      "changePercent": -1.91,
+      "prevClose": 16789.1,
+      "dayHigh": 16851.57,
+      "dayLow": 16371.35,
+      "rsi14": 55.18,
+      "sma20": 16184.26,
       "returns": {
-        "d1": -0.24,
-        "w1": -0.03,
-        "m1": 11.22,
-        "m3": 7.79,
-        "m6": 7.93,
-        "y1": 33.27,
-        "ytd": 33.61
+        "d1": -1.91,
+        "w1": -1.78,
+        "m1": 8,
+        "m3": 2.06,
+        "m6": 4.84,
+        "y1": 32.76,
+        "ytd": 31.59
       },
       "sparkline": [
-        16023.6,
         16029.1,
         16064.3,
         16083,
@@ -2340,27 +2333,10 @@
         16707.2,
         16854.5,
         16760.9,
-        16720.08
+        16789.1,
+        16467.75
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 12585.2,
-          "high": 12685.6,
-          "low": 12529.4,
-          "close": 12545.9,
-          "volume": 3229600
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 12564.3,
-          "high": 12581.9,
-          "low": 12393.6,
-          "close": 12423.2,
-          "volume": 3580200
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -4598,9 +4574,18 @@
           "date": "28.08.2026",
           "open": 16704.8,
           "high": 16809,
-          "low": 16665.55,
-          "close": 16720.08,
-          "volume": 0
+          "low": 16665.6,
+          "close": 16789.1,
+          "volume": 3904700
+        },
+        {
+          "timestamp": 1788157800,
+          "date": "31.08.2026",
+          "open": 16758.3,
+          "high": 16851.6,
+          "low": 16371.4,
+          "close": 16467.75,
+          "volume": 3832200
         }
       ]
     },
@@ -4608,25 +4593,24 @@
       "name": "BIST Banka",
       "desc": "Bankacılık Sektör Endeksi",
       "symbol": "XBANK.IS",
-      "price": 16577.1,
-      "change": 64.1,
-      "changePercent": 0.39,
-      "prevClose": 16513,
-      "dayHigh": 16663.03,
-      "dayLow": 16541.8,
-      "rsi14": 61.23,
-      "sma20": 15814.23,
+      "price": 16321.26,
+      "change": -398.64,
+      "changePercent": -2.38,
+      "prevClose": 16719.9,
+      "dayHigh": 16745.21,
+      "dayLow": 16236.4,
+      "rsi14": 54.92,
+      "sma20": 15864.43,
       "returns": {
-        "d1": 0.39,
-        "w1": 5.08,
-        "m1": 13.63,
-        "m3": 6.84,
-        "m6": -16.98,
-        "y1": 0.98,
-        "ytd": -3.87
+        "d1": -2.38,
+        "w1": 0.69,
+        "m1": 8.73,
+        "m3": 0.63,
+        "m6": -20.04,
+        "y1": -0.06,
+        "ytd": -5.35
       },
       "sparkline": [
-        15793.1,
         15773.3,
         15600.9,
         15560.8,
@@ -4637,27 +4621,10 @@
         16203.7,
         16525.4,
         16513,
-        16577.1
+        16719.9,
+        16321.26
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 16343.8,
-          "high": 16594.8,
-          "low": 16343.8,
-          "close": 16416.6,
-          "volume": 699300
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 16437.5,
-          "high": 16544.8,
-          "low": 16159.5,
-          "close": 16216.7,
-          "volume": 969800
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -6893,11 +6860,20 @@
         {
           "timestamp": 1787898600,
           "date": "28.08.2026",
-          "open": 16623.87,
-          "high": 16663.03,
+          "open": 16623.9,
+          "high": 16777.1,
           "low": 16541.8,
-          "close": 16577.1,
-          "volume": 0
+          "close": 16719.9,
+          "volume": 1303800
+        },
+        {
+          "timestamp": 1788157800,
+          "date": "31.08.2026",
+          "open": 16745.2,
+          "high": 16745.2,
+          "low": 16236.4,
+          "close": 16321.26,
+          "volume": 1419300
         }
       ]
     },
@@ -6905,25 +6881,24 @@
       "name": "BIST Sınai",
       "desc": "Sınai Şirketler Endeksi",
       "symbol": "XUSIN.IS",
-      "price": 20321.53,
-      "change": 142.53,
-      "changePercent": 0.71,
-      "prevClose": 20179,
-      "dayHigh": 20383.6,
-      "dayLow": 20232.88,
-      "rsi14": 67.78,
-      "sma20": 19481.58,
+      "price": 20014.87,
+      "change": -385.03,
+      "changePercent": -1.89,
+      "prevClose": 20399.9,
+      "dayHigh": 20465.81,
+      "dayLow": 19980.66,
+      "rsi14": 59.59,
+      "sma20": 19572.29,
       "returns": {
-        "d1": 0.71,
-        "w1": 0.23,
-        "m1": 10.63,
-        "m3": 10.43,
-        "m6": 20.54,
-        "y1": 37.64,
-        "ytd": 42.82
+        "d1": -1.89,
+        "w1": -1.35,
+        "m1": 8.33,
+        "m3": 5.69,
+        "m6": 16.81,
+        "y1": 35.72,
+        "ytd": 40.66
       },
       "sparkline": [
-        19286.3,
         19414.5,
         19579.8,
         19443.8,
@@ -6934,27 +6909,10 @@
         19908.3,
         20099.2,
         20179,
-        20321.53
+        20399.9,
+        20014.87
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 14759.9,
-          "high": 14872.4,
-          "low": 14739.3,
-          "close": 14764.5,
-          "volume": 5116800
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 14810.6,
-          "high": 14830.9,
-          "low": 14677.9,
-          "close": 14695.5,
-          "volume": 5087900
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -9191,10 +9149,19 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 20252.9,
-          "high": 20383.6,
-          "low": 20232.88,
-          "close": 20321.53,
-          "volume": 0
+          "high": 20399.9,
+          "low": 20232.9,
+          "close": 20399.9,
+          "volume": 5441800
+        },
+        {
+          "timestamp": 1788157800,
+          "date": "31.08.2026",
+          "open": 20465.7,
+          "high": 20465.8,
+          "low": 19980.7,
+          "close": 20014.87,
+          "volume": 5216900
         }
       ]
     },
@@ -9202,12 +9169,12 @@
       "name": "BIST Bilişim",
       "desc": "Bilişim ve Teknoloji Endeksi",
       "symbol": "XBLSM.IS",
-      "price": 9370.27,
-      "change": -223.77,
-      "changePercent": -2.33,
-      "prevClose": 9594.04,
-      "dayHigh": 9525.78,
-      "dayLow": 9259.66,
+      "price": 9653.72,
+      "change": 199.78,
+      "changePercent": 2.11,
+      "prevClose": 9453.94,
+      "dayHigh": 9694.38,
+      "dayLow": 9236.03,
       "rsi14": null,
       "sma20": null,
       "returns": {
@@ -9220,36 +9187,28 @@
         "ytd": 0
       },
       "sparkline": [
-        9370.27
+        9653.72
       ],
       "history": [
         {
-          "timestamp": 1787909130,
-          "date": "28.08.2026",
-          "open": 9408.43,
-          "high": 9525.78,
-          "low": 9259.66,
-          "close": 9370.27,
+          "timestamp": 1788189012,
+          "date": "31.08.2026",
+          "open": 9305.32,
+          "high": 9694.38,
+          "low": 9236.03,
+          "close": 9653.72,
           "volume": 0
         }
       ]
     },
     "ALTIN": {
       "name": "Gram Altın (24K)",
-      "price": 7221.23,
-      "prevClose": 7133.12,
-      "change": 88.11,
-      "changePercent": 1.24,
+      "price": 6950.41,
+      "prevClose": 6873.85,
+      "change": 76.56,
+      "changePercent": 1.11,
       "unit": "₺/gr",
       "history": [
-        {
-          "date": "28.08.2025",
-          "close": 4529.25
-        },
-        {
-          "date": "29.08.2025",
-          "close": 4594.6
-        },
         {
           "date": "02.09.2025",
           "close": 4694.73
@@ -10248,24 +10207,32 @@
         },
         {
           "date": "28.08.2026",
-          "close": 7170.34
+          "close": 6896.37
+        },
+        {
+          "date": "31.08.2026",
+          "close": 6825.41
+        },
+        {
+          "date": "01.09.2026",
+          "close": 6902.9
         }
       ]
     },
     "CEYREK": {
       "name": "Çeyrek Altın (Yeni)",
-      "price": 11806.71,
-      "prevClose": 11662.65,
-      "change": 144.06,
-      "changePercent": 1.24,
+      "price": 11363.92,
+      "prevClose": 11238.74,
+      "change": 125.18,
+      "changePercent": 1.11,
       "unit": "₺/Adet"
     },
     "GUMUS": {
       "name": "Gram Gümüş",
-      "price": 110.51,
-      "prevClose": 107.44,
-      "change": 3.07,
-      "changePercent": 2.86,
+      "price": 104.27,
+      "prevClose": 102.73,
+      "change": 1.54,
+      "changePercent": 1.5,
       "unit": "₺/gr"
     }
   },
@@ -10273,29 +10240,11 @@
     "USDTRY": {
       "name": "Dolar / TL",
       "symbol": "USDTRY=X",
-      "price": 48.24,
-      "change": 0.11,
-      "changePercent": 0.23,
-      "prevClose": 48.13,
+      "price": 48.27,
+      "change": 0.02,
+      "changePercent": 0.04,
+      "prevClose": 48.25,
       "history": [
-        {
-          "timestamp": 1756335600,
-          "date": "28.08.2025",
-          "open": 41.05,
-          "high": 41.05,
-          "low": 41.02,
-          "close": 41.05,
-          "volume": 0
-        },
-        {
-          "timestamp": 1756422000,
-          "date": "29.08.2025",
-          "open": 41.14,
-          "high": 41.15,
-          "low": 41.09,
-          "close": 41.14,
-          "volume": 0
-        },
         {
           "timestamp": 1756681200,
           "date": "01.09.2025",
@@ -12610,12 +12559,30 @@
           "volume": 0
         },
         {
-          "timestamp": 1787910037,
+          "timestamp": 1787871600,
           "date": "28.08.2026",
-          "open": 48.08,
-          "high": 48.25,
-          "low": 47.68,
-          "close": 48.24,
+          "open": 48.17,
+          "high": 48.24,
+          "low": 48.15,
+          "close": 47.99,
+          "volume": 0
+        },
+        {
+          "timestamp": 1788130800,
+          "date": "31.08.2026",
+          "open": 48.25,
+          "high": 48.26,
+          "low": 48.24,
+          "close": 48.25,
+          "volume": 0
+        },
+        {
+          "timestamp": 1788244741,
+          "date": "01.09.2026",
+          "open": 48.25,
+          "high": 48.29,
+          "low": 48.17,
+          "close": 48.27,
           "volume": 0
         }
       ]
@@ -12623,29 +12590,11 @@
     "EURTRY": {
       "name": "Euro / TL",
       "symbol": "EURTRY=X",
-      "price": 56.2,
-      "change": 0.03,
-      "changePercent": 0.05,
-      "prevClose": 56.17,
+      "price": 56.04,
+      "change": 0.12,
+      "changePercent": 0.21,
+      "prevClose": 55.92,
       "history": [
-        {
-          "timestamp": 1756335600,
-          "date": "28.08.2025",
-          "open": 47.93,
-          "high": 48.1,
-          "low": 47.78,
-          "close": 47.91,
-          "volume": 0
-        },
-        {
-          "timestamp": 1756422000,
-          "date": "29.08.2025",
-          "open": 48.17,
-          "high": 48.17,
-          "low": 47.95,
-          "close": 48.17,
-          "volume": 0
-        },
         {
           "timestamp": 1756681200,
           "date": "01.09.2025",
@@ -14960,12 +14909,30 @@
           "volume": 0
         },
         {
-          "timestamp": 1787910037,
+          "timestamp": 1787871600,
           "date": "28.08.2026",
-          "open": 56.22,
-          "high": 56.26,
-          "low": 55.57,
-          "close": 56.2,
+          "open": 56.04,
+          "high": 56.25,
+          "low": 55.94,
+          "close": 55.91,
+          "volume": 0
+        },
+        {
+          "timestamp": 1788130800,
+          "date": "31.08.2026",
+          "open": 55.93,
+          "high": 56.11,
+          "low": 55.92,
+          "close": 55.92,
+          "volume": 0
+        },
+        {
+          "timestamp": 1788244741,
+          "date": "01.09.2026",
+          "open": 56.12,
+          "high": 56.15,
+          "low": 55.94,
+          "close": 56.04,
           "volume": 0
         }
       ]
@@ -14973,29 +14940,11 @@
     "GBPTRY": {
       "name": "Sterlin / TL",
       "symbol": "GBPTRY=X",
-      "price": 65.54,
-      "change": -0.02,
-      "changePercent": -0.03,
-      "prevClose": 65.56,
+      "price": 65.35,
+      "change": 0.01,
+      "changePercent": 0.02,
+      "prevClose": 65.34,
       "history": [
-        {
-          "timestamp": 1756335600,
-          "date": "28.08.2025",
-          "open": 55.57,
-          "high": 55.68,
-          "low": 55.4,
-          "close": 55.55,
-          "volume": 0
-        },
-        {
-          "timestamp": 1756422000,
-          "date": "29.08.2025",
-          "open": 55.72,
-          "high": 55.72,
-          "low": 55.33,
-          "close": 55.72,
-          "volume": 0
-        },
         {
           "timestamp": 1756681200,
           "date": "01.09.2025",
@@ -17310,12 +17259,30 @@
           "volume": 0
         },
         {
-          "timestamp": 1787909766,
+          "timestamp": 1787871600,
           "date": "28.08.2026",
-          "open": 65.31,
-          "high": 65.59,
-          "low": 64.84,
-          "close": 65.54,
+          "open": 65.39,
+          "high": 65.68,
+          "low": 65.27,
+          "close": 65.24,
+          "volume": 0
+        },
+        {
+          "timestamp": 1788130800,
+          "date": "31.08.2026",
+          "open": 65.35,
+          "high": 65.5,
+          "low": 65.33,
+          "close": 65.34,
+          "volume": 0
+        },
+        {
+          "timestamp": 1788244671,
+          "date": "01.09.2026",
+          "open": 65.4,
+          "high": 65.46,
+          "low": 65.27,
+          "close": 65.35,
           "volume": 0
         }
       ]
@@ -17325,29 +17292,11 @@
     "BRENT": {
       "name": "Brent Petrol",
       "unit": "USD/Varil",
-      "price": 88.01,
-      "change": -1.69,
-      "changePercent": -1.88,
-      "prevClose": 89.7,
+      "price": 88.86,
+      "change": -1.63,
+      "changePercent": -1.8,
+      "prevClose": 90.49,
       "history": [
-        {
-          "timestamp": 1756353600,
-          "date": "28.08.2025",
-          "open": 67.71,
-          "high": 68.66,
-          "low": 67.4,
-          "close": 68.62,
-          "volume": 8829
-        },
-        {
-          "timestamp": 1756440000,
-          "date": "29.08.2025",
-          "open": 68.26,
-          "high": 68.36,
-          "low": 68.03,
-          "close": 68.12,
-          "volume": 0
-        },
         {
           "timestamp": 1756785600,
           "date": "02.09.2025",
@@ -19587,63 +19536,45 @@
           "high": 90.34,
           "low": 86.29,
           "close": 89.7,
-          "volume": 15243
+          "volume": 9814
         },
         {
           "timestamp": 1787889600,
           "date": "28.08.2026",
-          "open": 88.6,
-          "high": 88.71,
-          "low": 87.61,
-          "close": 88.01,
-          "volume": 6113
+          "open": 89.51,
+          "high": 90.16,
+          "low": 88.9,
+          "close": 89.31,
+          "volume": 26729
+        },
+        {
+          "timestamp": 1788148800,
+          "date": "31.08.2026",
+          "open": 89.31,
+          "high": 91.5,
+          "low": 89.03,
+          "close": 90.49,
+          "volume": 26729
+        },
+        {
+          "timestamp": 1788235200,
+          "date": "01.09.2026",
+          "open": 88.55,
+          "high": 89.21,
+          "low": 88.46,
+          "close": 88.86,
+          "volume": 1684
         }
       ]
     },
     "BITCOIN": {
       "name": "Bitcoin",
       "unit": "USD",
-      "price": 79424.58,
-      "change": -832.96,
-      "changePercent": -1.04,
-      "prevClose": 80257.54,
+      "price": 78875,
+      "change": 1207.43,
+      "changePercent": 1.55,
+      "prevClose": 77667.57,
       "history": [
-        {
-          "timestamp": 1756339200,
-          "date": "28.08.2025",
-          "open": 111219.05,
-          "high": 113450.08,
-          "low": 110900.92,
-          "close": 112544.8,
-          "volume": 58860155962
-        },
-        {
-          "timestamp": 1756425600,
-          "date": "29.08.2025",
-          "open": 112550.52,
-          "high": 112619.05,
-          "low": 107559.63,
-          "close": 108410.84,
-          "volume": 77843379644
-        },
-        {
-          "timestamp": 1756512000,
-          "date": "30.08.2025",
-          "open": 108409.41,
-          "high": 108929.35,
-          "low": 107444.45,
-          "close": 108808.07,
-          "volume": 51486264208
-        },
-        {
-          "timestamp": 1756598400,
-          "date": "31.08.2025",
-          "open": 108818.46,
-          "high": 109491,
-          "low": 108104.66,
-          "close": 108236.71,
-          "volume": 47986191770
-        },
         {
           "timestamp": 1756684800,
           "date": "01.09.2025",
@@ -22896,11 +22827,38 @@
         {
           "timestamp": 1787875200,
           "date": "28.08.2026",
-          "open": 80261.86,
-          "high": 81148.51,
-          "low": 79322.17,
-          "close": 79424.58,
-          "volume": 36404789248
+          "open": 80264.65,
+          "high": 81346.95,
+          "low": 76909.35,
+          "close": 77830.29,
+          "volume": 39362871737
+        },
+        {
+          "timestamp": 1787961600,
+          "date": "29.08.2026",
+          "open": 77830.89,
+          "high": 78327.95,
+          "low": 77381.9,
+          "close": 78245.81,
+          "volume": 14053131399
+        },
+        {
+          "timestamp": 1788048000,
+          "date": "30.08.2026",
+          "open": 78246.17,
+          "high": 79373.18,
+          "low": 77056.15,
+          "close": 77667.57,
+          "volume": 19314839672
+        },
+        {
+          "timestamp": 1788220800,
+          "date": "01.09.2026",
+          "open": 78559.11,
+          "high": 79159.34,
+          "low": 78191.72,
+          "close": 78875,
+          "volume": 29906868224
         }
       ]
     }
@@ -22909,33 +22867,33 @@
     "THYAO": {
       "symbol": "THYAO",
       "shortName": "TURK HAVA YOLLARI",
-      "price": 305.75,
+      "price": 302.25,
       "prevClose": 307.25,
-      "change": -1.5,
-      "changePercent": -0.49,
-      "dayHigh": 308.25,
-      "dayLow": 305.5,
+      "change": -5,
+      "changePercent": -1.63,
+      "dayHigh": 306.5,
+      "dayLow": 302,
       "fiftyTwoWeekHigh": 355.5,
       "fiftyTwoWeekLow": 262.75,
-      "volume": 10911645,
-      "rsi14": 46.21,
-      "sma20": 306.39,
-      "sma50": 318.63,
+      "volume": 36911929,
+      "rsi14": 42.74,
+      "sma20": 306.21,
+      "sma50": 318.56,
       "pivots": {
-        "pivot": 306.5,
-        "r1": 307.5,
-        "r2": 309.25,
-        "s1": 304.75,
-        "s2": 303.75
+        "pivot": 303.58,
+        "r1": 305.16,
+        "r2": 308.08,
+        "s1": 300.66,
+        "s2": 299.08
       },
       "returns": {
-        "d1": -0.49,
-        "w1": 1.58,
-        "m1": -0.81,
-        "m3": 4.89,
-        "m6": -0.41,
-        "y1": -10.07,
-        "ytd": 11.49
+        "d1": -1.63,
+        "w1": 0.42,
+        "m1": -1.95,
+        "m3": 3.69,
+        "m6": -1.55,
+        "y1": -10.44,
+        "ytd": 10.21
       },
       "sparkline": [
         308,
@@ -22949,27 +22907,9 @@
         302.5,
         308.5,
         307.25,
-        305.75
+        302.25
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 339,
-          "high": 344.25,
-          "low": 337.75,
-          "close": 340,
-          "volume": 20691413
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 340.25,
-          "high": 340.5,
-          "low": 333.75,
-          "close": 335,
-          "volume": 18346545
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -25243,9 +25183,9 @@
           "date": "28.08.2026",
           "open": 307,
           "high": 308.25,
-          "low": 305.5,
-          "close": 305.75,
-          "volume": 10911645
+          "low": 304.75,
+          "close": 302.25,
+          "volume": 42053946
         }
       ],
       "name": "Türk Hava Yolları",
@@ -25256,33 +25196,33 @@
     "PGSUS": {
       "symbol": "PGSUS",
       "shortName": "PEGASUS",
-      "price": 150.6,
+      "price": 147,
       "prevClose": 151.5,
-      "change": -0.9,
-      "changePercent": -0.59,
-      "dayHigh": 151.6,
-      "dayLow": 150.2,
-      "fiftyTwoWeekHigh": 253.75,
-      "fiftyTwoWeekLow": 148.1,
-      "volume": 3062306,
-      "rsi14": 40.44,
-      "sma20": 152.09,
-      "sma50": 162.23,
+      "change": -4.5,
+      "changePercent": -2.97,
+      "dayHigh": 150.1,
+      "dayLow": 146,
+      "fiftyTwoWeekHigh": 247.6,
+      "fiftyTwoWeekLow": 146,
+      "volume": 13753931,
+      "rsi14": 34.76,
+      "sma20": 151.91,
+      "sma50": 162.16,
       "pivots": {
-        "pivot": 150.8,
-        "r1": 151.4,
-        "r2": 152.2,
-        "s1": 150,
-        "s2": 149.4
+        "pivot": 147.7,
+        "r1": 149.4,
+        "r2": 151.8,
+        "s1": 145.3,
+        "s2": 143.6
       },
       "returns": {
-        "d1": -0.59,
-        "w1": 0.74,
-        "m1": 1.28,
-        "m3": -10.57,
-        "m6": -24.05,
-        "y1": -40.42,
-        "ytd": -22.77
+        "d1": -2.97,
+        "w1": -1.67,
+        "m1": -1.14,
+        "m3": -12.71,
+        "m6": -25.87,
+        "y1": -40.24,
+        "ytd": -24.62
       },
       "sparkline": [
         152.2,
@@ -25296,27 +25236,9 @@
         150.1,
         153.3,
         151.5,
-        150.6
+        147
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 255.75,
-          "high": 258.5,
-          "low": 252.5,
-          "close": 252.75,
-          "volume": 11953689
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 253.25,
-          "high": 253.75,
-          "low": 248,
-          "close": 249,
-          "volume": 16232522
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -27591,8 +27513,8 @@
           "open": 151.4,
           "high": 151.6,
           "low": 150.2,
-          "close": 150.6,
-          "volume": 3062306
+          "close": 147,
+          "volume": 6852989
         }
       ],
       "name": "Pegasus Hava Taşımacılığı",
@@ -27603,33 +27525,33 @@
     "TAVHL": {
       "symbol": "TAVHL",
       "shortName": "TAV HAVALIMANLARI",
-      "price": 285.25,
+      "price": 265,
       "prevClose": 283,
-      "change": 2.25,
-      "changePercent": 0.8,
-      "dayHigh": 286.75,
-      "dayLow": 282.75,
+      "change": -18,
+      "changePercent": -6.36,
+      "dayHigh": 282,
+      "dayLow": 265,
       "fiftyTwoWeekHigh": 369,
       "fiftyTwoWeekLow": 217.6,
-      "volume": 1304570,
-      "rsi14": 57.43,
-      "sma20": 279.29,
-      "sma50": 275.76,
+      "volume": 6566722,
+      "rsi14": 41.2,
+      "sma20": 278.27,
+      "sma50": 275.36,
       "pivots": {
-        "pivot": 284.92,
-        "r1": 287.09,
-        "r2": 288.92,
-        "s1": 283.09,
-        "s2": 280.92
+        "pivot": 270.67,
+        "r1": 276.34,
+        "r2": 287.67,
+        "s1": 259.34,
+        "s2": 253.67
       },
       "returns": {
-        "d1": 0.8,
-        "w1": 1.97,
-        "m1": 6.54,
-        "m3": 10.99,
-        "m6": -11.69,
-        "y1": 9.82,
-        "ytd": -8.21
+        "d1": -6.36,
+        "w1": -5.27,
+        "m1": -1.03,
+        "m3": 3.11,
+        "m6": -17.96,
+        "y1": 5.58,
+        "ytd": -14.72
       },
       "sparkline": [
         278.75,
@@ -27643,27 +27565,9 @@
         285.25,
         284.25,
         283,
-        285.25
+        265
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 259,
-          "high": 261.5,
-          "low": 258.25,
-          "close": 259.75,
-          "volume": 1174822
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 260,
-          "high": 260.25,
-          "low": 252.25,
-          "close": 253.5,
-          "volume": 2425649
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -29936,10 +29840,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 283.5,
-          "high": 286.75,
-          "low": 282.75,
-          "close": 285.25,
-          "volume": 1304570
+          "high": 287,
+          "low": 282.5,
+          "close": 265,
+          "volume": 2938464
         }
       ],
       "name": "TAV Havalimanları",
@@ -29950,33 +29854,33 @@
     "GARAN": {
       "symbol": "GARAN",
       "shortName": "GARANTI BANKASI",
-      "price": 133.5,
+      "price": 130.9,
       "prevClose": 133,
-      "change": 0.5,
-      "changePercent": 0.38,
+      "change": -2.1,
+      "changePercent": -1.58,
       "dayHigh": 134,
-      "dayLow": 132.6,
+      "dayLow": 130,
       "fiftyTwoWeekHigh": 169.7,
       "fiftyTwoWeekLow": 115.4,
-      "volume": 11125018,
-      "rsi14": 58.53,
-      "sma20": 130.12,
-      "sma50": 131.08,
+      "volume": 36379757,
+      "rsi14": 51.86,
+      "sma20": 129.99,
+      "sma50": 131.03,
       "pivots": {
-        "pivot": 133.37,
-        "r1": 134.14,
-        "r2": 134.77,
-        "s1": 132.74,
-        "s2": 131.97
+        "pivot": 131.63,
+        "r1": 133.26,
+        "r2": 135.63,
+        "s1": 129.26,
+        "s2": 127.63
       },
       "returns": {
-        "d1": 0.38,
-        "w1": 2.77,
-        "m1": 8.45,
-        "m3": 8.45,
-        "m6": -16.67,
-        "y1": -8.44,
-        "ytd": -10.82
+        "d1": -1.58,
+        "w1": 0.77,
+        "m1": 6.34,
+        "m3": 6.34,
+        "m6": -18.29,
+        "y1": -10.34,
+        "ytd": -12.56
       },
       "sparkline": [
         129.6,
@@ -29990,27 +29894,9 @@
         132.6,
         133.3,
         133,
-        133.5
+        130.9
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 145.1,
-          "high": 147.4,
-          "low": 145.1,
-          "close": 145.8,
-          "volume": 14669824
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 146.1,
-          "high": 146.6,
-          "low": 143.3,
-          "close": 144.1,
-          "volume": 20065557
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -32283,10 +32169,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 133,
-          "high": 134,
+          "high": 134.5,
           "low": 132.6,
-          "close": 133.5,
-          "volume": 11125018
+          "close": 130.9,
+          "volume": 30153435
         }
       ],
       "name": "Garanti BBVA",
@@ -32297,33 +32183,33 @@
     "AKBNK": {
       "symbol": "AKBNK",
       "shortName": "AKBANK",
-      "price": 72.65,
+      "price": 71.85,
       "prevClose": 72.85,
-      "change": -0.2,
-      "changePercent": -0.27,
-      "dayHigh": 73.2,
-      "dayLow": 72.5,
+      "change": -1,
+      "changePercent": -1.37,
+      "dayHigh": 73.4,
+      "dayLow": 71.25,
       "fiftyTwoWeekHigh": 93.5,
       "fiftyTwoWeekLow": 53.05,
-      "volume": 62488101,
-      "rsi14": 61.58,
-      "sma20": 69.17,
-      "sma50": 70.61,
+      "volume": 166818966,
+      "rsi14": 58.2,
+      "sma20": 69.13,
+      "sma50": 70.6,
       "pivots": {
-        "pivot": 72.78,
-        "r1": 73.06,
-        "r2": 73.48,
-        "s1": 72.36,
-        "s2": 72.08
+        "pivot": 72.17,
+        "r1": 73.09,
+        "r2": 74.32,
+        "s1": 70.94,
+        "s2": 70.02
       },
       "returns": {
-        "d1": -0.27,
-        "w1": 4.23,
-        "m1": 17.94,
-        "m3": 14.05,
-        "m6": -20.16,
-        "y1": 4.53,
-        "ytd": -1.16
+        "d1": -1.37,
+        "w1": 3.08,
+        "m1": 16.64,
+        "m3": 12.79,
+        "m6": -21.04,
+        "y1": 3.83,
+        "ytd": -2.24
       },
       "sparkline": [
         69.05,
@@ -32337,27 +32223,9 @@
         72,
         73.15,
         72.85,
-        72.65
+        71.85
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 69.1,
-          "high": 70.6,
-          "low": 69.05,
-          "close": 69.5,
-          "volume": 68689946
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 69.55,
-          "high": 70.3,
-          "low": 67.9,
-          "close": 68.25,
-          "volume": 74843072
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -34630,10 +34498,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 73.15,
-          "high": 73.2,
+          "high": 73.4,
           "low": 72.5,
-          "close": 72.65,
-          "volume": 62488101
+          "close": 71.85,
+          "volume": 135778198
         }
       ],
       "name": "Akbank",
@@ -34644,33 +34512,33 @@
     "ISCTR": {
       "symbol": "ISCTR",
       "shortName": "IS BANKASI (C)",
-      "price": 12.73,
+      "price": 12.64,
       "prevClose": 12.75,
-      "change": -0.02,
-      "changePercent": -0.16,
-      "dayHigh": 12.81,
-      "dayLow": 12.7,
+      "change": -0.11,
+      "changePercent": -0.86,
+      "dayHigh": 12.8,
+      "dayLow": 12.54,
       "fiftyTwoWeekHigh": 18.21,
       "fiftyTwoWeekLow": 11.11,
-      "volume": 164046325,
-      "rsi14": 50.02,
-      "sma20": 12.48,
-      "sma50": 13.34,
+      "volume": 495881549,
+      "rsi14": 48.14,
+      "sma20": 12.47,
+      "sma50": 13.33,
       "pivots": {
-        "pivot": 12.75,
-        "r1": 12.8,
-        "r2": 12.86,
-        "s1": 12.69,
-        "s2": 12.64
+        "pivot": 12.66,
+        "r1": 12.78,
+        "r2": 12.92,
+        "s1": 12.52,
+        "s2": 12.4
       },
       "returns": {
-        "d1": -0.16,
-        "w1": 2.74,
-        "m1": 5.82,
-        "m3": -2.82,
-        "m6": -24.9,
-        "y1": -15.92,
-        "ytd": -11.47
+        "d1": -0.86,
+        "w1": 2.02,
+        "m1": 5.07,
+        "m3": -3.51,
+        "m6": -25.43,
+        "y1": -14.77,
+        "ytd": -12.1
       },
       "sparkline": [
         12.51,
@@ -34684,27 +34552,9 @@
         12.48,
         12.91,
         12.75,
-        12.73
+        12.64
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 15.13,
-          "high": 15.29,
-          "low": 15.07,
-          "close": 15.14,
-          "volume": 247641482
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 15.14,
-          "high": 15.25,
-          "low": 15,
-          "close": 15.05,
-          "volume": 297118594
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -36977,10 +36827,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 12.77,
-          "high": 12.81,
+          "high": 12.84,
           "low": 12.7,
-          "close": 12.73,
-          "volume": 164046325
+          "close": 12.64,
+          "volume": 476270843
         }
       ],
       "name": "Türkiye İş Bankası (C)",
@@ -36991,33 +36841,33 @@
     "YKBNK": {
       "symbol": "YKBNK",
       "shortName": "YAPI VE KREDI BANK.",
-      "price": 36.72,
+      "price": 36.52,
       "prevClose": 36.86,
-      "change": -0.14,
-      "changePercent": -0.38,
-      "dayHigh": 37,
-      "dayLow": 36.64,
+      "change": -0.34,
+      "changePercent": -0.92,
+      "dayHigh": 37.4,
+      "dayLow": 36.3,
       "fiftyTwoWeekHigh": 44.5,
       "fiftyTwoWeekLow": 27.14,
-      "volume": 62982484,
-      "rsi14": 59.96,
-      "sma20": 35.25,
+      "volume": 237373163,
+      "rsi14": 58.3,
+      "sma20": 35.24,
       "sma50": 36.04,
       "pivots": {
-        "pivot": 36.79,
-        "r1": 36.94,
-        "r2": 37.15,
-        "s1": 36.58,
-        "s2": 36.43
+        "pivot": 36.74,
+        "r1": 37.18,
+        "r2": 37.84,
+        "s1": 36.08,
+        "s2": 35.64
       },
       "returns": {
-        "d1": -0.38,
-        "w1": 4.62,
-        "m1": 18.45,
-        "m3": 9.87,
-        "m6": -15,
-        "y1": 10.27,
-        "ytd": -3.67
+        "d1": -0.92,
+        "w1": 4.05,
+        "m1": 17.81,
+        "m3": 9.28,
+        "m6": -15.46,
+        "y1": 9.28,
+        "ytd": -4.2
       },
       "sparkline": [
         35.54,
@@ -37031,27 +36881,9 @@
         36.66,
         37.08,
         36.86,
-        36.72
+        36.52
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 33.34,
-          "high": 33.72,
-          "low": 33.24,
-          "close": 33.3,
-          "volume": 100251344
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 33.36,
-          "high": 33.6,
-          "low": 32.68,
-          "close": 32.88,
-          "volume": 126982544
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -39324,10 +39156,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 36.9,
-          "high": 37,
+          "high": 37.46,
           "low": 36.64,
-          "close": 36.72,
-          "volume": 62982484
+          "close": 36.52,
+          "volume": 185014963
         }
       ],
       "name": "Yapı ve Kredi Bankası",
@@ -39338,33 +39170,33 @@
     "VAKBN": {
       "symbol": "VAKBN",
       "shortName": "VAKIFLAR BANKASI",
-      "price": 32.56,
+      "price": 31.74,
       "prevClose": 32.2,
-      "change": 0.36,
-      "changePercent": 1.12,
-      "dayHigh": 32.66,
-      "dayLow": 32.16,
+      "change": -0.46,
+      "changePercent": -1.43,
+      "dayHigh": 33.24,
+      "dayLow": 31.62,
       "fiftyTwoWeekHigh": 43.06,
       "fiftyTwoWeekLow": 21.38,
-      "volume": 29642810,
-      "rsi14": 61.46,
-      "sma20": 30.93,
-      "sma50": 31.34,
+      "volume": 70774183,
+      "rsi14": 55.42,
+      "sma20": 30.89,
+      "sma50": 31.32,
       "pivots": {
-        "pivot": 32.46,
-        "r1": 32.76,
-        "r2": 32.96,
-        "s1": 32.26,
-        "s2": 31.96
+        "pivot": 32.2,
+        "r1": 32.78,
+        "r2": 33.82,
+        "s1": 31.16,
+        "s2": 30.58
       },
       "returns": {
-        "d1": 1.12,
-        "w1": 6.41,
-        "m1": 12.74,
-        "m3": 4.76,
-        "m6": -20.43,
-        "y1": 12.28,
-        "ytd": 2.78
+        "d1": -1.43,
+        "w1": 3.73,
+        "m1": 9.9,
+        "m3": 2.12,
+        "m6": -22.43,
+        "y1": 9.98,
+        "ytd": 0.19
       },
       "sparkline": [
         31.04,
@@ -39378,27 +39210,9 @@
         31.5,
         32.1,
         32.2,
-        32.56
+        31.74
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 29.02,
-          "high": 29.3,
-          "low": 28.86,
-          "close": 29,
-          "volume": 15795499
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 29.02,
-          "high": 29.18,
-          "low": 28.6,
-          "close": 28.8,
-          "volume": 15266229
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -41671,10 +41485,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 32.28,
-          "high": 32.66,
+          "high": 34.74,
           "low": 32.16,
-          "close": 32.56,
-          "volume": 29642810
+          "close": 31.74,
+          "volume": 137965156
         }
       ],
       "name": "Vakıflar Bankası",
@@ -41685,33 +41499,33 @@
     "HALKB": {
       "symbol": "HALKB",
       "shortName": "T. HALK BANKASI",
-      "price": 46.1,
+      "price": 42.18,
       "prevClose": 41.92,
-      "change": 4.18,
-      "changePercent": 9.97,
-      "dayHigh": 46.1,
-      "dayLow": 46.1,
+      "change": 0.26,
+      "changePercent": 0.62,
+      "dayHigh": 46.68,
+      "dayLow": 41.94,
       "fiftyTwoWeekHigh": 52.5,
       "fiftyTwoWeekLow": 23.38,
-      "volume": 16981095,
-      "rsi14": 77.21,
-      "sma20": 36.08,
-      "sma50": 38.9,
+      "volume": 179856005,
+      "rsi14": 70.62,
+      "sma20": 35.88,
+      "sma50": 38.83,
       "pivots": {
-        "pivot": 46.1,
-        "r1": 46.1,
-        "r2": 46.1,
-        "s1": 46.1,
-        "s2": 46.1
+        "pivot": 43.6,
+        "r1": 45.26,
+        "r2": 48.34,
+        "s1": 40.52,
+        "s2": 38.86
       },
       "returns": {
-        "d1": 9.97,
-        "w1": 34.8,
-        "m1": 28.99,
-        "m3": 5.98,
-        "m6": -6.68,
-        "y1": 69.11,
-        "ytd": 19.62
+        "d1": 0.62,
+        "w1": 23.33,
+        "m1": 18.02,
+        "m3": -3.03,
+        "m6": -14.62,
+        "y1": 55.65,
+        "ytd": 9.44
       },
       "sparkline": [
         34.64,
@@ -41725,27 +41539,9 @@
         34.66,
         38.12,
         41.92,
-        46.1
+        42.18
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 27.28,
-          "high": 27.58,
-          "low": 27.2,
-          "close": 27.26,
-          "volume": 18946336
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 27.3,
-          "high": 27.42,
-          "low": 26.72,
-          "close": 26.76,
-          "volume": 24774507
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -44020,8 +43816,8 @@
           "open": 46.1,
           "high": 46.1,
           "low": 46.1,
-          "close": 46.1,
-          "volume": 16981095
+          "close": 42.18,
+          "volume": 17697474
         }
       ],
       "name": "Türkiye Halk Bankası",
@@ -44032,33 +43828,33 @@
     "TSKB": {
       "symbol": "TSKB",
       "shortName": "T.S.K.B.",
-      "price": 11.1,
+      "price": 10.93,
       "prevClose": 11.12,
-      "change": -0.02,
-      "changePercent": -0.18,
-      "dayHigh": 11.16,
-      "dayLow": 11.07,
+      "change": -0.19,
+      "changePercent": -1.71,
+      "dayHigh": 11.3,
+      "dayLow": 10.89,
       "fiftyTwoWeekHigh": 14.73,
       "fiftyTwoWeekLow": 10.69,
-      "volume": 4430833,
-      "rsi14": 48.45,
-      "sma20": 11.07,
+      "volume": 21756976,
+      "rsi14": 44.1,
+      "sma20": 11.06,
       "sma50": 11.42,
       "pivots": {
-        "pivot": 11.11,
-        "r1": 11.15,
-        "r2": 11.2,
-        "s1": 11.06,
-        "s2": 11.02
+        "pivot": 11.04,
+        "r1": 11.19,
+        "r2": 11.45,
+        "s1": 10.78,
+        "s2": 10.63
       },
       "returns": {
-        "d1": -0.18,
-        "w1": 0.82,
-        "m1": 2.12,
-        "m3": -1.07,
-        "m6": -12.6,
-        "y1": -22.92,
-        "ytd": -13.55
+        "d1": -1.71,
+        "w1": -0.73,
+        "m1": 0.55,
+        "m3": -2.58,
+        "m6": -13.94,
+        "y1": -24.78,
+        "ytd": -14.88
       },
       "sparkline": [
         10.95,
@@ -44072,27 +43868,9 @@
         10.96,
         11.19,
         11.12,
-        11.1
+        10.93
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 14.3,
-          "high": 14.5,
-          "low": 14.08,
-          "close": 14.4,
-          "volume": 23427806
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 14.33,
-          "high": 14.57,
-          "low": 14.27,
-          "close": 14.51,
-          "volume": 25643238
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -46365,10 +46143,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 11.13,
-          "high": 11.16,
+          "high": 11.34,
           "low": 11.07,
-          "close": 11.1,
-          "volume": 4430833
+          "close": 10.93,
+          "volume": 20493411
         }
       ],
       "name": "T.S.K.B.",
@@ -46379,33 +46157,33 @@
     "ASELS": {
       "symbol": "ASELS",
       "shortName": "ASELSAN",
-      "price": 404.5,
+      "price": 386.25,
       "prevClose": 403.75,
-      "change": 0.75,
-      "changePercent": 0.19,
-      "dayHigh": 411,
-      "dayLow": 402.5,
+      "change": -17.5,
+      "changePercent": -4.33,
+      "dayHigh": 406.75,
+      "dayLow": 385.25,
       "fiftyTwoWeekHigh": 450,
       "fiftyTwoWeekLow": 168.7,
-      "volume": 13068542,
-      "rsi14": 61.44,
-      "sma20": 380.73,
-      "sma50": 373.07,
+      "volume": 33990305,
+      "rsi14": 51.91,
+      "sma20": 379.81,
+      "sma50": 372.7,
       "pivots": {
-        "pivot": 406,
-        "r1": 409.5,
-        "r2": 414.5,
-        "s1": 401,
-        "s2": 397.5
+        "pivot": 392.75,
+        "r1": 400.25,
+        "r2": 414.25,
+        "s1": 378.75,
+        "s2": 371.25
       },
       "returns": {
-        "d1": 0.19,
-        "w1": 0.31,
-        "m1": 19.85,
-        "m3": 5.34,
-        "m6": 32.08,
-        "y1": 120.08,
-        "ytd": 75.72
+        "d1": -4.33,
+        "w1": -4.22,
+        "m1": 14.44,
+        "m3": 0.59,
+        "m6": 26.12,
+        "y1": 116.39,
+        "ytd": 67.79
       },
       "sparkline": [
         395.75,
@@ -46419,27 +46197,9 @@
         403.75,
         398.25,
         403.75,
-        404.5
+        386.25
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 185,
-          "high": 186.8,
-          "low": 183,
-          "close": 183.8,
-          "volume": 19222348
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 183.8,
-          "high": 187.5,
-          "low": 183,
-          "close": 183.3,
-          "volume": 35688973
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -48713,9 +48473,9 @@
           "date": "28.08.2026",
           "open": 403.75,
           "high": 411,
-          "low": 402.5,
-          "close": 404.5,
-          "volume": 13068542
+          "low": 402,
+          "close": 386.25,
+          "volume": 26903505
         }
       ],
       "name": "Aselsan Elektronik Sanayi",
@@ -48726,33 +48486,33 @@
     "TCELL": {
       "symbol": "TCELL",
       "shortName": "TURKCELL",
-      "price": 102.8,
+      "price": 95.05,
       "prevClose": 102.8,
-      "change": 0,
-      "changePercent": 0,
-      "dayHigh": 103.8,
-      "dayLow": 102.4,
+      "change": -7.75,
+      "changePercent": -7.54,
+      "dayHigh": 103.5,
+      "dayLow": 93.5,
       "fiftyTwoWeekHigh": 129.6,
       "fiftyTwoWeekLow": 87.05,
-      "volume": 7992919,
-      "rsi14": 44.93,
-      "sma20": 103.98,
-      "sma50": 106.24,
+      "volume": 102736229,
+      "rsi14": 30.01,
+      "sma20": 103.6,
+      "sma50": 106.09,
       "pivots": {
-        "pivot": 103,
-        "r1": 103.6,
-        "r2": 104.4,
-        "s1": 102.2,
-        "s2": 101.6
+        "pivot": 97.35,
+        "r1": 101.2,
+        "r2": 107.35,
+        "s1": 91.2,
+        "s2": 87.35
       },
       "returns": {
-        "d1": 0,
-        "w1": -1.44,
-        "m1": 1.28,
-        "m3": 0.19,
-        "m6": -15.04,
-        "y1": 6.25,
-        "ytd": 7.08
+        "d1": -7.54,
+        "w1": -8.87,
+        "m1": -6.35,
+        "m3": -7.36,
+        "m6": -21.45,
+        "y1": 1.93,
+        "ytd": -0.99
       },
       "sparkline": [
         103.1,
@@ -48766,27 +48526,9 @@
         102.7,
         103.5,
         102.8,
-        102.8
+        95.05
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 99.8,
-          "high": 99.9,
-          "low": 96.15,
-          "close": 96.75,
-          "volume": 38647989
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 96.8,
-          "high": 96.95,
-          "low": 94.5,
-          "close": 94.8,
-          "volume": 22822919
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -51059,10 +50801,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 103.8,
-          "high": 103.8,
+          "high": 103.9,
           "low": 102.4,
-          "close": 102.8,
-          "volume": 7992919
+          "close": 95.05,
+          "volume": 23020770
         }
       ],
       "name": "Turkcell İletişim",
@@ -51073,33 +50815,33 @@
     "TTKOM": {
       "symbol": "TTKOM",
       "shortName": "TURK TELEKOM",
-      "price": 53.2,
+      "price": 51.1,
       "prevClose": 53.45,
-      "change": -0.25,
-      "changePercent": -0.47,
+      "change": -2.35,
+      "changePercent": -4.4,
       "dayHigh": 53.65,
-      "dayLow": 53.05,
+      "dayLow": 50.95,
       "fiftyTwoWeekHigh": 75.65,
       "fiftyTwoWeekLow": 47.48,
-      "volume": 7795160,
-      "rsi14": 42.85,
-      "sma20": 54.1,
-      "sma50": 56.56,
+      "volume": 44277921,
+      "rsi14": 35.81,
+      "sma20": 53.99,
+      "sma50": 56.52,
       "pivots": {
-        "pivot": 53.3,
-        "r1": 53.55,
-        "r2": 53.9,
-        "s1": 52.95,
-        "s2": 52.7
+        "pivot": 51.9,
+        "r1": 52.85,
+        "r2": 54.6,
+        "s1": 50.15,
+        "s2": 49.2
       },
       "returns": {
-        "d1": -0.47,
-        "w1": -3.01,
-        "m1": 4.93,
-        "m3": -12.79,
-        "m6": -25.07,
-        "y1": -8.9,
-        "ytd": -8.43
+        "d1": -4.4,
+        "w1": -6.84,
+        "m1": 0.79,
+        "m3": -16.23,
+        "m6": -28.03,
+        "y1": -5.98,
+        "ytd": -12.05
       },
       "sparkline": [
         54.95,
@@ -51113,27 +50855,9 @@
         53.3,
         53.85,
         53.45,
-        53.2
+        51.1
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 60,
-          "high": 60.15,
-          "low": 56.95,
-          "close": 58.4,
-          "volume": 75283222
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 58.4,
-          "high": 58.65,
-          "low": 55.55,
-          "close": 55.55,
-          "volume": 46281391
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -53408,8 +53132,8 @@
           "open": 53.6,
           "high": 53.65,
           "low": 53.05,
-          "close": 53.2,
-          "volume": 7795160
+          "close": 51.1,
+          "volume": 27171241
         }
       ],
       "name": "Türk Telekomünikasyon",
@@ -53420,33 +53144,33 @@
     "VBTYZ": {
       "symbol": "VBTYZ",
       "shortName": "VBT YAZILIM",
-      "price": 37.48,
+      "price": 37.74,
       "prevClose": 37.2,
-      "change": 0.28,
-      "changePercent": 0.75,
-      "dayHigh": 38.1,
-      "dayLow": 37.24,
+      "change": 0.54,
+      "changePercent": 1.45,
+      "dayHigh": 39.4,
+      "dayLow": 37.68,
       "fiftyTwoWeekHigh": 39.9,
       "fiftyTwoWeekLow": 15.02,
-      "volume": 729585,
-      "rsi14": 63.39,
-      "sma20": 33.69,
-      "sma50": 31.37,
+      "volume": 1694750,
+      "rsi14": 64.03,
+      "sma20": 33.7,
+      "sma50": 31.38,
       "pivots": {
-        "pivot": 37.61,
-        "r1": 37.98,
-        "r2": 38.47,
-        "s1": 37.12,
-        "s2": 36.75
+        "pivot": 38.27,
+        "r1": 38.86,
+        "r2": 39.99,
+        "s1": 37.14,
+        "s2": 36.55
       },
       "returns": {
-        "d1": 0.75,
-        "w1": 2.63,
-        "m1": 26.28,
-        "m3": 30.59,
-        "m6": 70.21,
-        "y1": 65.99,
-        "ytd": 126.47
+        "d1": 1.45,
+        "w1": 3.34,
+        "m1": 27.16,
+        "m3": 31.5,
+        "m6": 71.39,
+        "y1": 67.29,
+        "ytd": 128.04
       },
       "sparkline": [
         31.04,
@@ -53460,27 +53184,9 @@
         39.6,
         38.7,
         37.2,
-        37.48
+        37.74
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 22.94,
-          "high": 23.08,
-          "low": 22.46,
-          "close": 22.58,
-          "volume": 1365195
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 22.58,
-          "high": 23.26,
-          "low": 22.18,
-          "close": 22.18,
-          "volume": 1733039
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -55753,10 +55459,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 37.88,
-          "high": 38.1,
-          "low": 37.24,
-          "close": 37.48,
-          "volume": 729585
+          "high": 39.88,
+          "low": 37.2,
+          "close": 37.74,
+          "volume": 4464671
         }
       ],
       "name": "VBT Yazılım",
@@ -55767,33 +55473,33 @@
     "SDTTR": {
       "symbol": "SDTTR",
       "shortName": "SDT UZAY VE SAVUNMA",
-      "price": 24.18,
+      "price": 22.3,
       "prevClose": 24.4,
-      "change": -0.22,
-      "changePercent": -0.9,
-      "dayHigh": 25,
-      "dayLow": 24,
+      "change": -2.1,
+      "changePercent": -8.61,
+      "dayHigh": 23.72,
+      "dayLow": 22.2,
       "fiftyTwoWeekHigh": 27.273,
       "fiftyTwoWeekLow": 15.755,
-      "volume": 4255630,
-      "rsi14": 57.83,
-      "sma20": 22.91,
-      "sma50": 22.72,
+      "volume": 7934686,
+      "rsi14": 46.82,
+      "sma20": 22.82,
+      "sma50": 22.68,
       "pivots": {
-        "pivot": 24.39,
-        "r1": 24.78,
-        "r2": 25.39,
-        "s1": 23.78,
-        "s2": 23.39
+        "pivot": 22.74,
+        "r1": 23.28,
+        "r2": 24.26,
+        "s1": 21.76,
+        "s2": 21.22
       },
       "returns": {
-        "d1": -0.9,
-        "w1": 1.13,
-        "m1": 20.96,
-        "m3": -4.99,
-        "m6": 1.9,
-        "y1": 33,
-        "ytd": 46.46
+        "d1": -8.61,
+        "w1": -6.73,
+        "m1": 11.56,
+        "m3": -12.38,
+        "m6": -6.03,
+        "y1": 23.41,
+        "ytd": 35.07
       },
       "sparkline": [
         23.64,
@@ -55807,27 +55513,9 @@
         23.73,
         23.64,
         24.4,
-        24.18
+        22.3
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 18.38,
-          "high": 18.96,
-          "low": 17.68,
-          "close": 18.18,
-          "volume": 39036965
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 18.45,
-          "high": 19.13,
-          "low": 17.91,
-          "close": 18.85,
-          "volume": 34027356
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -58137,9 +57825,9 @@
           "date": "28.08.2026",
           "open": 24.8,
           "high": 25,
-          "low": 24,
-          "close": 24.18,
-          "volume": 4255630
+          "low": 23.3,
+          "close": 22.3,
+          "volume": 8354441
         }
       ],
       "name": "SDT Uzay ve Savunma",
@@ -58150,33 +57838,33 @@
     "KCHOL": {
       "symbol": "KCHOL",
       "shortName": "KOC HOLDING",
-      "price": 213.7,
+      "price": 214.9,
       "prevClose": 214.2,
-      "change": -0.5,
-      "changePercent": -0.23,
-      "dayHigh": 216.8,
-      "dayLow": 213.3,
+      "change": 0.7,
+      "changePercent": 0.33,
+      "dayHigh": 217.8,
+      "dayLow": 213.7,
       "fiftyTwoWeekHigh": 229.1,
       "fiftyTwoWeekLow": 146,
-      "volume": 10461306,
-      "rsi14": 58.09,
-      "sma20": 208.11,
-      "sma50": 199.81,
+      "volume": 32198163,
+      "rsi14": 59.43,
+      "sma20": 208.17,
+      "sma50": 199.84,
       "pivots": {
-        "pivot": 214.6,
-        "r1": 215.9,
-        "r2": 218.1,
-        "s1": 212.4,
-        "s2": 211.1
+        "pivot": 215.47,
+        "r1": 217.24,
+        "r2": 219.57,
+        "s1": 213.14,
+        "s2": 211.37
       },
       "returns": {
-        "d1": -0.23,
-        "w1": -3.91,
-        "m1": 11.59,
-        "m3": 14.89,
-        "m6": 4.45,
-        "y1": 15.64,
-        "ytd": 22.25
+        "d1": 0.33,
+        "w1": -3.37,
+        "m1": 12.22,
+        "m3": 15.54,
+        "m6": 5.03,
+        "y1": 16.73,
+        "ytd": 22.94
       },
       "sparkline": [
         202.4,
@@ -58190,27 +57878,9 @@
         217.5,
         214.2,
         214.2,
-        213.7
+        214.9
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 187.3,
-          "high": 189.6,
-          "low": 184.6,
-          "close": 184.8,
-          "volume": 19216001
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 185.1,
-          "high": 187.8,
-          "low": 182.6,
-          "close": 183.3,
-          "volume": 26149001
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -60485,8 +60155,8 @@
           "open": 214.6,
           "high": 216.8,
           "low": 213.3,
-          "close": 213.7,
-          "volume": 10461306
+          "close": 214.9,
+          "volume": 24753667
         }
       ],
       "name": "Koç Holding",
@@ -60497,33 +60167,33 @@
     "SAHOL": {
       "symbol": "SAHOL",
       "shortName": "SABANCI HOLDING",
-      "price": 93.7,
+      "price": 93.2,
       "prevClose": 93.75,
-      "change": -0.05,
-      "changePercent": -0.05,
-      "dayHigh": 94.35,
-      "dayLow": 93.5,
+      "change": -0.55,
+      "changePercent": -0.59,
+      "dayHigh": 95.1,
+      "dayLow": 92.5,
       "fiftyTwoWeekHigh": 115,
       "fiftyTwoWeekLow": 73.9,
-      "volume": 8192326,
-      "rsi14": 62.72,
-      "sma20": 90.16,
-      "sma50": 91.3,
+      "volume": 52097434,
+      "rsi14": 60.28,
+      "sma20": 90.13,
+      "sma50": 91.29,
       "pivots": {
-        "pivot": 93.85,
-        "r1": 94.2,
-        "r2": 94.7,
-        "s1": 93.35,
-        "s2": 93
+        "pivot": 93.6,
+        "r1": 94.7,
+        "r2": 96.2,
+        "s1": 92.1,
+        "s2": 91
       },
       "returns": {
-        "d1": -0.05,
-        "w1": 1.41,
-        "m1": 13.85,
-        "m3": 5.28,
-        "m6": -9.64,
-        "y1": -2.34,
-        "ytd": 6.6
+        "d1": -0.59,
+        "w1": 0.87,
+        "m1": 13.24,
+        "m3": 4.72,
+        "m6": -10.13,
+        "y1": -2.05,
+        "ytd": 6.03
       },
       "sparkline": [
         88.8,
@@ -60537,27 +60207,9 @@
         93.5,
         93.95,
         93.75,
-        93.7
+        93.2
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 96.3,
-          "high": 97.45,
-          "low": 95.6,
-          "close": 95.95,
-          "volume": 14599534
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 95.95,
-          "high": 96.45,
-          "low": 93.7,
-          "close": 94.2,
-          "volume": 24042723
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -62831,9 +62483,9 @@
           "date": "28.08.2026",
           "open": 93.7,
           "high": 94.35,
-          "low": 93.5,
-          "close": 93.7,
-          "volume": 8192326
+          "low": 93.45,
+          "close": 93.2,
+          "volume": 24032800
         }
       ],
       "name": "Sabancı Holding",
@@ -62844,33 +62496,33 @@
     "DOHOL": {
       "symbol": "DOHOL",
       "shortName": "DOGAN HOLDING",
-      "price": 22.22,
+      "price": 22.12,
       "prevClose": 22.34,
-      "change": -0.12,
-      "changePercent": -0.54,
-      "dayHigh": 22.6,
-      "dayLow": 22.1,
+      "change": -0.22,
+      "changePercent": -0.98,
+      "dayHigh": 22.62,
+      "dayLow": 21.86,
       "fiftyTwoWeekHigh": 25.24,
       "fiftyTwoWeekLow": 15.87,
-      "volume": 5663378,
-      "rsi14": 60,
+      "volume": 6706696,
+      "rsi14": 58.77,
       "sma20": 21.19,
       "sma50": 21.07,
       "pivots": {
-        "pivot": 22.31,
-        "r1": 22.52,
-        "r2": 22.81,
-        "s1": 22.02,
-        "s2": 21.81
+        "pivot": 22.2,
+        "r1": 22.54,
+        "r2": 22.96,
+        "s1": 21.78,
+        "s2": 21.44
       },
       "returns": {
-        "d1": -0.54,
-        "w1": 2.87,
-        "m1": 4.52,
-        "m3": -1.24,
-        "m6": 4.81,
-        "y1": 13.95,
-        "ytd": 27.19
+        "d1": -0.98,
+        "w1": 2.41,
+        "m1": 4.05,
+        "m3": -1.69,
+        "m6": 4.34,
+        "y1": 18.04,
+        "ytd": 26.62
       },
       "sparkline": [
         21.12,
@@ -62884,27 +62536,9 @@
         21.02,
         21.86,
         22.34,
-        22.22
+        22.12
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 19.36,
-          "high": 19.65,
-          "low": 19.04,
-          "close": 19.5,
-          "volume": 18555045
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 19.49,
-          "high": 19.6,
-          "low": 19.18,
-          "close": 19.24,
-          "volume": 12114337
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -65177,10 +64811,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 22.48,
-          "high": 22.6,
+          "high": 22.86,
           "low": 22.1,
-          "close": 22.22,
-          "volume": 5663378
+          "close": 22.12,
+          "volume": 14298210
         }
       ],
       "name": "Doğan Holding",
@@ -65191,33 +64825,33 @@
     "ENKAI": {
       "symbol": "ENKAI",
       "shortName": "ENKA INSAAT",
-      "price": 89,
+      "price": 87.4,
       "prevClose": 87.45,
-      "change": 1.55,
-      "changePercent": 1.77,
-      "dayHigh": 89,
-      "dayLow": 86.75,
+      "change": -0.05,
+      "changePercent": -0.06,
+      "dayHigh": 89.8,
+      "dayLow": 86.8,
       "fiftyTwoWeekHigh": 114.3,
       "fiftyTwoWeekLow": 65.55,
-      "volume": 7182607,
-      "rsi14": 57.22,
-      "sma20": 85.29,
-      "sma50": 88.31,
+      "volume": 18611522,
+      "rsi14": 53.32,
+      "sma20": 85.22,
+      "sma50": 88.28,
       "pivots": {
-        "pivot": 88.25,
-        "r1": 89.75,
-        "r2": 90.5,
-        "s1": 87.5,
-        "s2": 86
+        "pivot": 88,
+        "r1": 89.2,
+        "r2": 91,
+        "s1": 86.2,
+        "s2": 85
       },
       "returns": {
-        "d1": 1.77,
-        "w1": 6.91,
-        "m1": 4.4,
-        "m3": -9.64,
-        "m6": -12.57,
-        "y1": 23.7,
-        "ytd": 11.11
+        "d1": -0.06,
+        "w1": 4.98,
+        "m1": 2.52,
+        "m3": -11.27,
+        "m6": -14.15,
+        "y1": 19.81,
+        "ytd": 9.11
       },
       "sparkline": [
         85.85,
@@ -65231,27 +64865,9 @@
         83.95,
         87.75,
         87.45,
-        89
+        87.4
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 72.15,
-          "high": 72.65,
-          "low": 71.15,
-          "close": 71.95,
-          "volume": 7590752
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 71.95,
-          "high": 73.7,
-          "low": 71.15,
-          "close": 73.15,
-          "volume": 13912459
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -67524,10 +67140,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 87.15,
-          "high": 89,
+          "high": 90.35,
           "low": 86.75,
-          "close": 89,
-          "volume": 7182607
+          "close": 87.4,
+          "volume": 18743353
         }
       ],
       "name": "Enka İnşaat ve Sanayi",
@@ -67538,33 +67154,33 @@
     "ALARK": {
       "symbol": "ALARK",
       "shortName": "ALARKO HOLDING",
-      "price": 109.8,
+      "price": 108.3,
       "prevClose": 109.6,
-      "change": 0.2,
-      "changePercent": 0.18,
-      "dayHigh": 111.2,
-      "dayLow": 109.4,
+      "change": -1.3,
+      "changePercent": -1.19,
+      "dayHigh": 110.3,
+      "dayLow": 105.9,
       "fiftyTwoWeekHigh": 117,
       "fiftyTwoWeekLow": 75.3,
-      "volume": 1234790,
-      "rsi14": 57.93,
-      "sma20": 105.24,
-      "sma50": 104.26,
+      "volume": 3920345,
+      "rsi14": 55.14,
+      "sma20": 105.17,
+      "sma50": 104.23,
       "pivots": {
-        "pivot": 110.13,
-        "r1": 110.86,
-        "r2": 111.93,
-        "s1": 109.06,
-        "s2": 108.33
+        "pivot": 108.17,
+        "r1": 110.44,
+        "r2": 112.57,
+        "s1": 106.04,
+        "s2": 103.77
       },
       "returns": {
-        "d1": 0.18,
-        "w1": 3.29,
-        "m1": 8.82,
-        "m3": 14.32,
-        "m6": 4.37,
-        "y1": 23.58,
-        "ytd": 4.17
+        "d1": -1.19,
+        "w1": 1.88,
+        "m1": 7.33,
+        "m3": 12.75,
+        "m6": 2.95,
+        "y1": 23.42,
+        "ytd": 2.75
       },
       "sparkline": [
         102.5,
@@ -67578,27 +67194,9 @@
         105.9,
         108.5,
         109.6,
-        109.8
+        108.3
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 89.75,
-          "high": 90.5,
-          "low": 88.6,
-          "close": 88.85,
-          "volume": 3764228
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 88.95,
-          "high": 89.1,
-          "low": 87.75,
-          "close": 87.75,
-          "volume": 3043665
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -69872,9 +69470,9 @@
           "date": "28.08.2026",
           "open": 109.5,
           "high": 111.2,
-          "low": 109.4,
-          "close": 109.8,
-          "volume": 1234790
+          "low": 108.8,
+          "close": 108.3,
+          "volume": 3043049
         }
       ],
       "name": "Alarko Holding",
@@ -69885,33 +69483,33 @@
     "TKFEN": {
       "symbol": "TKFEN",
       "shortName": "TEKFEN HOLDING",
-      "price": 219.8,
+      "price": 209.3,
       "prevClose": 218.8,
-      "change": 1,
-      "changePercent": 0.46,
-      "dayHigh": 221,
-      "dayLow": 218.4,
+      "change": -9.5,
+      "changePercent": -4.34,
+      "dayHigh": 223,
+      "dayLow": 204.6,
       "fiftyTwoWeekHigh": 245.2,
       "fiftyTwoWeekLow": 67,
-      "volume": 924019,
-      "rsi14": 62.79,
-      "sma20": 214.82,
-      "sma50": 170.43,
+      "volume": 5845292,
+      "rsi14": 55.35,
+      "sma20": 214.29,
+      "sma50": 170.22,
       "pivots": {
-        "pivot": 219.73,
-        "r1": 221.06,
-        "r2": 222.33,
-        "s1": 218.46,
-        "s2": 217.13
+        "pivot": 212.3,
+        "r1": 220,
+        "r2": 230.7,
+        "s1": 201.6,
+        "s2": 193.9
       },
       "returns": {
-        "d1": 0.46,
-        "w1": 6.75,
-        "m1": 43.94,
-        "m3": 47.52,
-        "m6": 185.64,
-        "y1": 102.39,
-        "ytd": 201.72
+        "d1": -4.34,
+        "w1": 1.65,
+        "m1": 37.07,
+        "m3": 40.47,
+        "m6": 171.99,
+        "y1": 101.83,
+        "ytd": 187.3
       },
       "sparkline": [
         231,
@@ -69925,27 +69523,9 @@
         218,
         219.5,
         218.8,
-        219.8
+        209.3
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 110,
-          "high": 111.4,
-          "low": 108.4,
-          "close": 108.6,
-          "volume": 2662829
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 108.7,
-          "high": 109.3,
-          "low": 104.5,
-          "close": 104.5,
-          "volume": 3458117
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -72218,10 +71798,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 219.2,
-          "high": 221,
+          "high": 224.1,
           "low": 218.4,
-          "close": 219.8,
-          "volume": 924019
+          "close": 209.3,
+          "volume": 3965935
         }
       ],
       "name": "Tekfen Holding",
@@ -72232,33 +71812,33 @@
     "EREGL": {
       "symbol": "EREGL",
       "shortName": "EREGLI DEMIR CELIK",
-      "price": 39.42,
+      "price": 38.78,
       "prevClose": 38.6,
-      "change": 0.82,
-      "changePercent": 2.12,
-      "dayHigh": 39.48,
-      "dayLow": 38.64,
+      "change": 0.18,
+      "changePercent": 0.47,
+      "dayHigh": 40.1,
+      "dayLow": 38.66,
       "fiftyTwoWeekHigh": 45.1,
       "fiftyTwoWeekLow": 23.46,
-      "volume": 61268589,
-      "rsi14": 50.99,
-      "sma20": 38.7,
-      "sma50": 40.45,
+      "volume": 160253563,
+      "rsi14": 46.75,
+      "sma20": 38.67,
+      "sma50": 40.44,
       "pivots": {
         "pivot": 39.18,
-        "r1": 39.72,
-        "r2": 40.02,
-        "s1": 38.88,
-        "s2": 38.34
+        "r1": 39.7,
+        "r2": 40.62,
+        "s1": 38.26,
+        "s2": 37.74
       },
       "returns": {
-        "d1": 2.12,
-        "w1": 3.36,
-        "m1": -7.03,
-        "m3": -1.45,
-        "m6": 25.62,
-        "y1": 32.28,
-        "ytd": 62.76
+        "d1": 0.47,
+        "w1": 1.68,
+        "m1": -8.54,
+        "m3": -3.05,
+        "m6": 23.58,
+        "y1": 29.96,
+        "ytd": 60.12
       },
       "sparkline": [
         38.24,
@@ -72272,27 +71852,9 @@
         38.24,
         38.7,
         38.6,
-        39.42
+        38.78
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 29.7,
-          "high": 30.06,
-          "low": 29.66,
-          "close": 29.8,
-          "volume": 174066726
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 29.84,
-          "high": 30.14,
-          "low": 29.62,
-          "close": 29.86,
-          "volume": 182500594
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -74565,10 +74127,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 38.68,
-          "high": 39.48,
-          "low": 38.64,
-          "close": 39.42,
-          "volume": 61268589
+          "high": 39.52,
+          "low": 38.58,
+          "close": 38.78,
+          "volume": 196956485
         }
       ],
       "name": "Ereğli Demir ve Çelik",
@@ -74579,33 +74141,33 @@
     "KRDMD": {
       "symbol": "KRDMD",
       "shortName": "KARDEMIR (D)",
-      "price": 46.9,
+      "price": 47.38,
       "prevClose": 46.56,
-      "change": 0.34,
-      "changePercent": 0.73,
-      "dayHigh": 47.7,
-      "dayLow": 46.76,
-      "fiftyTwoWeekHigh": 47.7,
+      "change": 0.82,
+      "changePercent": 1.76,
+      "dayHigh": 47.96,
+      "dayLow": 46.56,
+      "fiftyTwoWeekHigh": 47.96,
       "fiftyTwoWeekLow": 23.5,
-      "volume": 23858627,
-      "rsi14": 65.65,
-      "sma20": 43.23,
-      "sma50": 41.6,
+      "volume": 82977247,
+      "rsi14": 66.96,
+      "sma20": 43.26,
+      "sma50": 41.61,
       "pivots": {
-        "pivot": 47.12,
-        "r1": 47.48,
-        "r2": 48.06,
-        "s1": 46.54,
-        "s2": 46.18
+        "pivot": 47.3,
+        "r1": 48.04,
+        "r2": 48.7,
+        "s1": 46.64,
+        "s2": 45.9
       },
       "returns": {
-        "d1": 0.73,
-        "w1": 4.27,
-        "m1": 14.73,
-        "m3": 15.57,
-        "m6": 50.03,
-        "y1": 57.28,
-        "ytd": 79.83
+        "d1": 1.76,
+        "w1": 5.34,
+        "m1": 15.9,
+        "m3": 16.76,
+        "m6": 51.57,
+        "y1": 64.97,
+        "ytd": 81.67
       },
       "sparkline": [
         41.76,
@@ -74619,27 +74181,9 @@
         44.9,
         45.6,
         46.56,
-        46.9
+        47.38
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 29.66,
-          "high": 30.3,
-          "low": 29.66,
-          "close": 29.82,
-          "volume": 33977282
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 29.84,
-          "high": 29.9,
-          "low": 29.26,
-          "close": 29.4,
-          "volume": 37126072
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -76913,9 +76457,9 @@
           "date": "28.08.2026",
           "open": 46.9,
           "high": 47.7,
-          "low": 46.76,
-          "close": 46.9,
-          "volume": 23858627
+          "low": 46.04,
+          "close": 47.38,
+          "volume": 55287388
         }
       ],
       "name": "Kardemir (D)",
@@ -76926,33 +76470,33 @@
     "SISE": {
       "symbol": "SISE",
       "shortName": "SISE CAM",
-      "price": 40.22,
+      "price": 39.62,
       "prevClose": 40.04,
-      "change": 0.18,
-      "changePercent": 0.45,
-      "dayHigh": 40.48,
-      "dayLow": 40.02,
+      "change": -0.42,
+      "changePercent": -1.05,
+      "dayHigh": 40.38,
+      "dayLow": 39.46,
       "fiftyTwoWeekHigh": 54.1,
       "fiftyTwoWeekLow": 32.44,
-      "volume": 13624699,
-      "rsi14": 44.05,
-      "sma20": 40.6,
-      "sma50": 42.52,
+      "volume": 54046067,
+      "rsi14": 40.22,
+      "sma20": 40.57,
+      "sma50": 42.51,
       "pivots": {
-        "pivot": 40.24,
-        "r1": 40.46,
-        "r2": 40.7,
-        "s1": 40,
-        "s2": 39.78
+        "pivot": 39.82,
+        "r1": 40.18,
+        "r2": 40.74,
+        "s1": 39.26,
+        "s2": 38.9
       },
       "returns": {
-        "d1": 0.45,
-        "w1": 0.8,
-        "m1": -2.71,
-        "m3": -11.6,
-        "m6": -12.07,
-        "y1": -1.28,
-        "ytd": 2.76
+        "d1": -1.05,
+        "w1": -0.7,
+        "m1": -4.16,
+        "m3": -12.92,
+        "m6": -13.38,
+        "y1": -2.37,
+        "ytd": 1.23
       },
       "sparkline": [
         41.64,
@@ -76966,27 +76510,9 @@
         39.7,
         40.24,
         40.04,
-        40.22
+        39.62
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 41,
-          "high": 41.42,
-          "low": 40.52,
-          "close": 40.74,
-          "volume": 49538189
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 40.92,
-          "high": 41.12,
-          "low": 40.5,
-          "close": 40.7,
-          "volume": 55538415
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -79261,8 +78787,8 @@
           "open": 40.12,
           "high": 40.48,
           "low": 40.02,
-          "close": 40.22,
-          "volume": 13624699
+          "close": 39.62,
+          "volume": 30877364
         }
       ],
       "name": "Türkiye Şişe ve Cam",
@@ -79273,33 +78799,33 @@
     "OYAKC": {
       "symbol": "OYAKC",
       "shortName": "OYAK CIMENTO",
-      "price": 22.98,
+      "price": 22.48,
       "prevClose": 23.02,
-      "change": -0.04,
-      "changePercent": -0.17,
-      "dayHigh": 23.22,
-      "dayLow": 22.94,
+      "change": -0.54,
+      "changePercent": -2.35,
+      "dayHigh": 23.1,
+      "dayLow": 22.46,
       "fiftyTwoWeekHigh": 28.56,
       "fiftyTwoWeekLow": 19.4,
-      "volume": 8035895,
-      "rsi14": 68.56,
-      "sma20": 21.64,
-      "sma50": 21.06,
+      "volume": 23664489,
+      "rsi14": 60.29,
+      "sma20": 21.61,
+      "sma50": 21.05,
       "pivots": {
-        "pivot": 23.05,
-        "r1": 23.16,
-        "r2": 23.33,
-        "s1": 22.88,
-        "s2": 22.77
+        "pivot": 22.68,
+        "r1": 22.9,
+        "r2": 23.32,
+        "s1": 22.26,
+        "s2": 22.04
       },
       "returns": {
-        "d1": -0.17,
-        "w1": 4.08,
-        "m1": 9.85,
-        "m3": 12.1,
-        "m6": -9.03,
-        "y1": -8.15,
-        "ytd": -2.38
+        "d1": -2.35,
+        "w1": 1.81,
+        "m1": 7.46,
+        "m3": 9.66,
+        "m6": -11.01,
+        "y1": -5.23,
+        "ytd": -4.5
       },
       "sparkline": [
         21.52,
@@ -79313,27 +78839,9 @@
         22.86,
         23.12,
         23.02,
-        22.98
+        22.48
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 24.84,
-          "high": 25.26,
-          "low": 24.7,
-          "close": 25.02,
-          "volume": 17885390
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 25.02,
-          "high": 25.2,
-          "low": 24.44,
-          "close": 24.44,
-          "volume": 16434589
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -81606,10 +81114,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 23.04,
-          "high": 23.22,
+          "high": 23.24,
           "low": 22.94,
-          "close": 22.98,
-          "volume": 8035895
+          "close": 22.48,
+          "volume": 18516175
         }
       ],
       "name": "OYAK Çimento",
@@ -81620,33 +81128,33 @@
     "CIMSA": {
       "symbol": "CIMSA",
       "shortName": "CIMSA",
-      "price": 46,
+      "price": 44.68,
       "prevClose": 46.16,
-      "change": -0.16,
-      "changePercent": -0.35,
-      "dayHigh": 46.42,
-      "dayLow": 45.82,
+      "change": -1.48,
+      "changePercent": -3.21,
+      "dayHigh": 46.64,
+      "dayLow": 44.68,
       "fiftyTwoWeekHigh": 60,
       "fiftyTwoWeekLow": 41.18,
-      "volume": 3245415,
-      "rsi14": 47.8,
-      "sma20": 45.5,
-      "sma50": 47.12,
+      "volume": 9619020,
+      "rsi14": 39.58,
+      "sma20": 45.44,
+      "sma50": 47.09,
       "pivots": {
-        "pivot": 46.08,
-        "r1": 46.34,
-        "r2": 46.68,
-        "s1": 45.74,
-        "s2": 45.48
+        "pivot": 45.33,
+        "r1": 45.98,
+        "r2": 47.29,
+        "s1": 44.02,
+        "s2": 43.37
       },
       "returns": {
-        "d1": -0.35,
-        "w1": 0.79,
-        "m1": -0.48,
-        "m3": -10.07,
-        "m6": -12.63,
-        "y1": -5.93,
-        "ytd": 1.01
+        "d1": -3.21,
+        "w1": -2.1,
+        "m1": -3.33,
+        "m3": -12.65,
+        "m6": -15.14,
+        "y1": -6.68,
+        "ytd": -1.89
       },
       "sparkline": [
         45.62,
@@ -81660,27 +81168,9 @@
         45.88,
         46.62,
         46.16,
-        46
+        44.68
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 49.4,
-          "high": 49.68,
-          "low": 48.6,
-          "close": 48.9,
-          "volume": 8232704
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 49,
-          "high": 49.14,
-          "low": 48.02,
-          "close": 48.4,
-          "volume": 7136418
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -83953,10 +83443,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 46.3,
-          "high": 46.42,
+          "high": 46.94,
           "low": 45.82,
-          "close": 46,
-          "volume": 3245415
+          "close": 44.68,
+          "volume": 8901703
         }
       ],
       "name": "Çimsa Çimento Sanayi",
@@ -83967,33 +83457,33 @@
     "FROTO": {
       "symbol": "FROTO",
       "shortName": "FORD OTOSAN",
-      "price": 78.3,
+      "price": 76.95,
       "prevClose": 78.45,
-      "change": -0.15,
-      "changePercent": -0.19,
-      "dayHigh": 78.9,
-      "dayLow": 78.05,
+      "change": -1.5,
+      "changePercent": -1.91,
+      "dayHigh": 78.7,
+      "dayLow": 76.35,
       "fiftyTwoWeekHigh": 135.4,
       "fiftyTwoWeekLow": 75.05,
-      "volume": 5784763,
-      "rsi14": 42.88,
-      "sma20": 79.18,
-      "sma50": 81.31,
+      "volume": 32074283,
+      "rsi14": 38.21,
+      "sma20": 79.11,
+      "sma50": 81.28,
       "pivots": {
-        "pivot": 78.42,
-        "r1": 78.79,
-        "r2": 79.27,
-        "s1": 77.94,
-        "s2": 77.57
+        "pivot": 77.33,
+        "r1": 78.31,
+        "r2": 79.68,
+        "s1": 75.96,
+        "s2": 74.98
       },
       "returns": {
-        "d1": -0.19,
-        "w1": -2.37,
-        "m1": 2.09,
-        "m3": -8.1,
-        "m6": -33.13,
-        "y1": -29.96,
-        "ytd": -18.1
+        "d1": -1.91,
+        "w1": -4.05,
+        "m1": 0.33,
+        "m3": -9.68,
+        "m6": -34.29,
+        "y1": -30.55,
+        "ytd": -19.51
       },
       "sparkline": [
         79.7,
@@ -84007,27 +83497,9 @@
         78.6,
         79.55,
         78.45,
-        78.3
+        76.95
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 113.4,
-          "high": 115.2,
-          "low": 111.8,
-          "close": 111.8,
-          "volume": 9244403
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 112.3,
-          "high": 113.2,
-          "low": 111.2,
-          "close": 111.7,
-          "volume": 10973332
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -86302,8 +85774,8 @@
           "open": 78.55,
           "high": 78.9,
           "low": 78.05,
-          "close": 78.3,
-          "volume": 5784763
+          "close": 76.95,
+          "volume": 14591088
         }
       ],
       "name": "Ford Otomotiv Sanayi",
@@ -86314,33 +85786,33 @@
     "TOASO": {
       "symbol": "TOASO",
       "shortName": "TOFAS OTO. FAB.",
-      "price": 272.25,
+      "price": 271.25,
       "prevClose": 273.5,
-      "change": -1.25,
-      "changePercent": -0.46,
-      "dayHigh": 276.5,
-      "dayLow": 271.5,
+      "change": -2.25,
+      "changePercent": -0.82,
+      "dayHigh": 275,
+      "dayLow": 268,
       "fiftyTwoWeekHigh": 358.25,
       "fiftyTwoWeekLow": 220.4,
-      "volume": 1003631,
-      "rsi14": 46.27,
-      "sma20": 269.64,
-      "sma50": 288.94,
+      "volume": 4758314,
+      "rsi14": 45.38,
+      "sma20": 269.59,
+      "sma50": 288.92,
       "pivots": {
-        "pivot": 273.42,
-        "r1": 275.34,
+        "pivot": 271.42,
+        "r1": 274.84,
         "r2": 278.42,
-        "s1": 270.34,
-        "s2": 268.42
+        "s1": 267.84,
+        "s2": 264.42
       },
       "returns": {
-        "d1": -0.46,
-        "w1": -3.2,
-        "m1": 4.51,
-        "m3": -8.02,
-        "m6": -15.25,
-        "y1": 6.97,
-        "ytd": 5.22
+        "d1": -0.82,
+        "w1": -3.56,
+        "m1": 4.13,
+        "m3": -8.36,
+        "m6": -15.56,
+        "y1": 9.86,
+        "ytd": 4.83
       },
       "sparkline": [
         269.75,
@@ -86354,27 +85826,9 @@
         275,
         275.25,
         273.5,
-        272.25
+        271.25
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 248,
-          "high": 257.25,
-          "low": 247.8,
-          "close": 254.5,
-          "volume": 7169899
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 255.75,
-          "high": 256,
-          "low": 249.8,
-          "close": 250.25,
-          "volume": 4854504
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -88648,9 +88102,9 @@
           "date": "28.08.2026",
           "open": 273.5,
           "high": 276.5,
-          "low": 271.5,
-          "close": 272.25,
-          "volume": 1003631
+          "low": 271,
+          "close": 271.25,
+          "volume": 2437543
         }
       ],
       "name": "Tofaş Türk Otomobil",
@@ -88661,33 +88115,33 @@
     "ARCLK": {
       "symbol": "ARCLK",
       "shortName": "ARCELIK",
-      "price": 93.45,
+      "price": 90.65,
       "prevClose": 93.95,
-      "change": -0.5,
-      "changePercent": -0.53,
-      "dayHigh": 94.5,
-      "dayLow": 93.3,
-      "fiftyTwoWeekHigh": 142.9,
-      "fiftyTwoWeekLow": 92.25,
-      "volume": 498947,
-      "rsi14": 39.17,
-      "sma20": 94.99,
-      "sma50": 97.58,
+      "change": -3.3,
+      "changePercent": -3.51,
+      "dayHigh": 93,
+      "dayLow": 90.5,
+      "fiftyTwoWeekHigh": 140.8,
+      "fiftyTwoWeekLow": 90.5,
+      "volume": 3501309,
+      "rsi14": 30.49,
+      "sma20": 94.85,
+      "sma50": 97.52,
       "pivots": {
-        "pivot": 93.75,
-        "r1": 94.2,
-        "r2": 94.95,
-        "s1": 93,
-        "s2": 92.55
+        "pivot": 91.38,
+        "r1": 92.26,
+        "r2": 93.88,
+        "s1": 89.76,
+        "s2": 88.88
       },
       "returns": {
-        "d1": -0.53,
-        "w1": 1.03,
-        "m1": -3.56,
-        "m3": -10.14,
-        "m6": -21.34,
-        "y1": -33.82,
-        "ytd": -10.92
+        "d1": -3.51,
+        "w1": -2,
+        "m1": -6.45,
+        "m3": -12.84,
+        "m6": -23.7,
+        "y1": -33.05,
+        "ytd": -13.58
       },
       "sparkline": [
         94.65,
@@ -88701,27 +88155,9 @@
         92.3,
         93.35,
         93.95,
-        93.45
+        90.65
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 142.3,
-          "high": 144.9,
-          "low": 140.8,
-          "close": 141.2,
-          "volume": 1889234
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 141.5,
-          "high": 142.9,
-          "low": 136.1,
-          "close": 137,
-          "volume": 3321013
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -90995,9 +90431,9 @@
           "date": "28.08.2026",
           "open": 94.05,
           "high": 94.5,
-          "low": 93.3,
-          "close": 93.45,
-          "volume": 498947
+          "low": 92.55,
+          "close": 90.65,
+          "volume": 1370906
         }
       ],
       "name": "Arçelik",
@@ -91008,33 +90444,33 @@
     "VESTL": {
       "symbol": "VESTL",
       "shortName": "VESTEL",
-      "price": 22.32,
+      "price": 22.96,
       "prevClose": 22.28,
-      "change": 0.04,
-      "changePercent": 0.18,
-      "dayHigh": 22.52,
-      "dayLow": 22.14,
-      "fiftyTwoWeekHigh": 46,
+      "change": 0.68,
+      "changePercent": 3.05,
+      "dayHigh": 24.18,
+      "dayLow": 22,
+      "fiftyTwoWeekHigh": 41.96,
       "fiftyTwoWeekLow": 21.1,
-      "volume": 1667015,
-      "rsi14": 44.25,
-      "sma20": 22.29,
-      "sma50": 23.8,
+      "volume": 34693108,
+      "rsi14": 51.71,
+      "sma20": 22.32,
+      "sma50": 23.81,
       "pivots": {
-        "pivot": 22.33,
-        "r1": 22.52,
-        "r2": 22.71,
-        "s1": 22.14,
-        "s2": 21.95
+        "pivot": 23.05,
+        "r1": 24.1,
+        "r2": 25.23,
+        "s1": 21.92,
+        "s2": 20.87
       },
       "returns": {
-        "d1": 0.18,
-        "w1": 1.45,
-        "m1": -3.38,
-        "m3": -15.58,
-        "m6": -28,
-        "y1": -48.19,
-        "ytd": -24.13
+        "d1": 3.05,
+        "w1": 4.36,
+        "m1": -0.61,
+        "m3": -13.16,
+        "m6": -25.94,
+        "y1": -44.86,
+        "ytd": -21.96
       },
       "sparkline": [
         22.66,
@@ -91048,27 +90484,9 @@
         21.9,
         22.08,
         22.28,
-        22.32
+        22.96
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 40.76,
-          "high": 44.2,
-          "low": 40.76,
-          "close": 43.08,
-          "volume": 33487756
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 43.1,
-          "high": 46,
-          "low": 42.1,
-          "close": 42.3,
-          "volume": 32241962
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -93342,9 +92760,9 @@
           "date": "28.08.2026",
           "open": 22.24,
           "high": 22.52,
-          "low": 22.14,
-          "close": 22.32,
-          "volume": 1667015
+          "low": 22.08,
+          "close": 22.96,
+          "volume": 5461133
         }
       ],
       "name": "Vestel Elektronik",
@@ -93355,33 +92773,33 @@
     "TUPRS": {
       "symbol": "TUPRS",
       "shortName": "TUPRAS",
-      "price": 384.75,
+      "price": 400.25,
       "prevClose": 380.75,
-      "change": 4,
-      "changePercent": 1.05,
-      "dayHigh": 390.75,
-      "dayLow": 380.75,
+      "change": 19.5,
+      "changePercent": 5.12,
+      "dayHigh": 406.25,
+      "dayLow": 397.25,
       "fiftyTwoWeekHigh": 407.5,
       "fiftyTwoWeekLow": 163.3,
-      "volume": 11872252,
-      "rsi14": 67.2,
-      "sma20": 356.25,
-      "sma50": 300.86,
+      "volume": 35328555,
+      "rsi14": 71.06,
+      "sma20": 357.02,
+      "sma50": 301.17,
       "pivots": {
-        "pivot": 385.42,
-        "r1": 390.09,
-        "r2": 395.42,
-        "s1": 380.09,
-        "s2": 375.42
+        "pivot": 401.25,
+        "r1": 405.25,
+        "r2": 410.25,
+        "s1": 396.25,
+        "s2": 392.25
       },
       "returns": {
-        "d1": 1.05,
-        "w1": -5.41,
-        "m1": 33.59,
-        "m3": 57.1,
-        "m6": 76.73,
-        "y1": 125,
-        "ytd": 105.75
+        "d1": 5.12,
+        "w1": -1.6,
+        "m1": 38.98,
+        "m3": 63.43,
+        "m6": 83.85,
+        "y1": 131.09,
+        "ytd": 114.04
       },
       "sparkline": [
         346,
@@ -93395,27 +92813,9 @@
         373.75,
         380,
         380.75,
-        384.75
+        400.25
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 171.1,
-          "high": 173.5,
-          "low": 171,
-          "close": 171,
-          "volume": 13549874
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 171.1,
-          "high": 174.3,
-          "low": 169.9,
-          "close": 172.2,
-          "volume": 24772954
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -95688,10 +95088,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 382,
-          "high": 390.75,
+          "high": 396,
           "low": 380.75,
-          "close": 384.75,
-          "volume": 11872252
+          "close": 400.25,
+          "volume": 28201225
         }
       ],
       "name": "Tüpraş Türkiye Petrol Rafinerileri",
@@ -95702,33 +95102,33 @@
     "PETKM": {
       "symbol": "PETKM",
       "shortName": "PETKIM",
-      "price": 20.12,
+      "price": 20.06,
       "prevClose": 19.88,
-      "change": 0.24,
-      "changePercent": 1.21,
-      "dayHigh": 20.28,
-      "dayLow": 19.9,
+      "change": 0.18,
+      "changePercent": 0.91,
+      "dayHigh": 20.4,
+      "dayLow": 19.91,
       "fiftyTwoWeekHigh": 28.06,
       "fiftyTwoWeekLow": 16.12,
-      "volume": 18467181,
-      "rsi14": 52.01,
-      "sma20": 19.57,
+      "volume": 77771184,
+      "rsi14": 51.53,
+      "sma20": 19.56,
       "sma50": 19.82,
       "pivots": {
-        "pivot": 20.1,
-        "r1": 20.3,
-        "r2": 20.48,
-        "s1": 19.92,
-        "s2": 19.72
+        "pivot": 20.12,
+        "r1": 20.33,
+        "r2": 20.61,
+        "s1": 19.84,
+        "s2": 19.63
       },
       "returns": {
-        "d1": 1.21,
-        "w1": -2.24,
-        "m1": 5.84,
-        "m3": -12.75,
-        "m6": 13.99,
-        "y1": -4.01,
-        "ytd": 21.35
+        "d1": 0.91,
+        "w1": -2.53,
+        "m1": 5.52,
+        "m3": -13.01,
+        "m6": 13.65,
+        "y1": 0.8,
+        "ytd": 20.99
       },
       "sparkline": [
         18.81,
@@ -95742,27 +95142,9 @@
         19.73,
         20.22,
         19.88,
-        20.12
+        20.06
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 21.5,
-          "high": 21.64,
-          "low": 20.94,
-          "close": 20.96,
-          "volume": 72581674
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 20.98,
-          "high": 21.64,
-          "low": 20,
-          "close": 20,
-          "volume": 101213490
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -98037,8 +97419,8 @@
           "open": 19.9,
           "high": 20.28,
           "low": 19.9,
-          "close": 20.12,
-          "volume": 18467181
+          "close": 20.06,
+          "volume": 37354249
         }
       ],
       "name": "Petkim Petrokimya",
@@ -98049,33 +97431,33 @@
     "ASTOR": {
       "symbol": "ASTOR",
       "shortName": "ASTOR ENERJI",
-      "price": 349,
+      "price": 325.75,
       "prevClose": 349,
-      "change": 0,
-      "changePercent": 0,
-      "dayHigh": 353.25,
-      "dayLow": 344.5,
+      "change": -23.25,
+      "changePercent": -6.66,
+      "dayHigh": 355.25,
+      "dayLow": 317,
       "fiftyTwoWeekHigh": 385.75,
       "fiftyTwoWeekLow": 88.2,
-      "volume": 14255693,
-      "rsi14": 62.24,
-      "sma20": 326.52,
-      "sma50": 310.66,
+      "volume": 90392503,
+      "rsi14": 51.21,
+      "sma20": 325.36,
+      "sma50": 310.19,
       "pivots": {
-        "pivot": 348.92,
-        "r1": 353.34,
-        "r2": 357.67,
-        "s1": 344.59,
-        "s2": 340.17
+        "pivot": 332.67,
+        "r1": 348.34,
+        "r2": 370.92,
+        "s1": 310.09,
+        "s2": 294.42
       },
       "returns": {
-        "d1": 0,
-        "w1": 3.95,
-        "m1": 21.39,
-        "m3": 5.6,
-        "m6": 82.72,
-        "y1": 206.95,
-        "ytd": 197.78
+        "d1": -6.66,
+        "w1": -2.98,
+        "m1": 13.3,
+        "m3": -1.44,
+        "m6": 70.55,
+        "y1": 174.43,
+        "ytd": 177.94
       },
       "sparkline": [
         345.5,
@@ -98089,27 +97471,9 @@
         339,
         338.75,
         349,
-        349
+        325.75
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 112.4,
-          "high": 115.1,
-          "low": 112.4,
-          "close": 113.7,
-          "volume": 6981245
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 115.9,
-          "high": 118.3,
-          "low": 115.8,
-          "close": 118.1,
-          "volume": 16230586
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -100383,9 +99747,9 @@
           "date": "28.08.2026",
           "open": 352,
           "high": 353.25,
-          "low": 344.5,
-          "close": 349,
-          "volume": 14255693
+          "low": 341.75,
+          "close": 325.75,
+          "volume": 33102498
         }
       ],
       "name": "Astor Enerji",
@@ -100396,33 +99760,33 @@
     "GESAN": {
       "symbol": "GESAN",
       "shortName": "GIRISIM ELEKTRIK SANAYI",
-      "price": 93.25,
+      "price": 92.1,
       "prevClose": 93.6,
-      "change": -0.35,
-      "changePercent": -0.37,
-      "dayHigh": 94.7,
-      "dayLow": 93.05,
-      "fiftyTwoWeekHigh": 94.7,
+      "change": -1.5,
+      "changePercent": -1.6,
+      "dayHigh": 94.1,
+      "dayLow": 92.1,
+      "fiftyTwoWeekHigh": 97.2,
       "fiftyTwoWeekLow": 41.48,
-      "volume": 5179251,
-      "rsi14": 69.33,
-      "sma20": 84.61,
-      "sma50": 80.54,
+      "volume": 13870184,
+      "rsi14": 66.2,
+      "sma20": 84.55,
+      "sma50": 80.51,
       "pivots": {
-        "pivot": 93.67,
-        "r1": 94.29,
-        "r2": 95.32,
-        "s1": 92.64,
-        "s2": 92.02
+        "pivot": 92.77,
+        "r1": 93.44,
+        "r2": 94.77,
+        "s1": 91.44,
+        "s2": 90.77
       },
       "returns": {
-        "d1": -0.37,
-        "w1": 8.37,
-        "m1": 23.67,
-        "m3": 31.34,
-        "m6": 103.07,
-        "y1": 95.41,
-        "ytd": 94.76
+        "d1": -1.6,
+        "w1": 7.03,
+        "m1": 22.15,
+        "m3": 29.72,
+        "m6": 100.57,
+        "y1": 93.32,
+        "ytd": 92.36
       },
       "sparkline": [
         81.4,
@@ -100436,27 +99800,9 @@
         89.2,
         92.2,
         93.6,
-        93.25
+        92.1
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 48.5,
-          "high": 49,
-          "low": 47.5,
-          "close": 47.72,
-          "volume": 3651047
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 47.96,
-          "high": 48.52,
-          "low": 47.5,
-          "close": 47.66,
-          "volume": 2707136
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -102730,9 +102076,9 @@
           "date": "28.08.2026",
           "open": 94.5,
           "high": 94.7,
-          "low": 93.05,
-          "close": 93.25,
-          "volume": 5179251
+          "low": 92.95,
+          "close": 92.1,
+          "volume": 10177688
         }
       ],
       "name": "Girişim Elektrik",
@@ -102743,33 +102089,33 @@
     "KONTR": {
       "symbol": "KONTR",
       "shortName": "KONTROLMATIK TEKNOLOJI",
-      "price": 3.73,
+      "price": 3.57,
       "prevClose": 3.73,
-      "change": 0,
-      "changePercent": 0,
-      "dayHigh": 3.73,
-      "dayLow": 3.73,
+      "change": -0.16,
+      "changePercent": -4.29,
+      "dayHigh": 3.68,
+      "dayLow": 3.57,
       "fiftyTwoWeekHigh": 39.9,
       "fiftyTwoWeekLow": 3.05,
-      "volume": 269210,
-      "rsi14": 38.89,
-      "sma20": 3.96,
+      "volume": 2515250,
+      "rsi14": 36.13,
+      "sma20": 3.95,
       "sma50": 4.32,
       "pivots": {
-        "pivot": 3.73,
-        "r1": 3.73,
-        "r2": 3.73,
-        "s1": 3.73,
-        "s2": 3.73
+        "pivot": 3.61,
+        "r1": 3.65,
+        "r2": 3.72,
+        "s1": 3.54,
+        "s2": 3.5
       },
       "returns": {
-        "d1": 0,
-        "w1": -4.36,
-        "m1": -23.09,
-        "m3": -53.02,
-        "m6": -61.23,
-        "y1": -86.77,
-        "ytd": -68.15
+        "d1": -4.29,
+        "w1": -8.46,
+        "m1": -26.39,
+        "m3": -55.04,
+        "m6": -62.89,
+        "y1": -86.82,
+        "ytd": -69.51
       },
       "sparkline": [
         3.84,
@@ -102783,27 +102129,9 @@
         3.78,
         3.74,
         3.73,
-        3.73
+        3.57
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 29.66,
-          "high": 29.96,
-          "low": 27.78,
-          "close": 28.2,
-          "volume": 27627465
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 28.2,
-          "high": 28.5,
-          "low": 27.52,
-          "close": 27.58,
-          "volume": 16117957
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -105077,9 +104405,9 @@
           "date": "28.08.2026",
           "open": 3.73,
           "high": 3.73,
-          "low": 3.73,
-          "close": 3.73,
-          "volume": 269210
+          "low": 3.68,
+          "close": 3.57,
+          "volume": 3201417
         }
       ],
       "name": "Kontrolmatik Teknoloji Enerji",
@@ -105090,33 +104418,33 @@
     "EUPWR": {
       "symbol": "EUPWR",
       "shortName": "EUROPOWER ENERJI",
-      "price": 103.6,
+      "price": 102.6,
       "prevClose": 103.1,
-      "change": 0.5,
-      "changePercent": 0.48,
-      "dayHigh": 104.5,
-      "dayLow": 102.9,
-      "fiftyTwoWeekHigh": 108.6,
+      "change": -0.5,
+      "changePercent": -0.48,
+      "dayHigh": 109.3,
+      "dayLow": 102.6,
+      "fiftyTwoWeekHigh": 109.3,
       "fiftyTwoWeekLow": 25.5,
-      "volume": 4752344,
-      "rsi14": 66.07,
-      "sma20": 94.05,
-      "sma50": 91.15,
+      "volume": 23730101,
+      "rsi14": 64.5,
+      "sma20": 94,
+      "sma50": 91.13,
       "pivots": {
-        "pivot": 103.67,
-        "r1": 104.44,
-        "r2": 105.27,
-        "s1": 102.84,
-        "s2": 102.07
+        "pivot": 104.83,
+        "r1": 107.06,
+        "r2": 111.53,
+        "s1": 100.36,
+        "s2": 98.13
       },
       "returns": {
-        "d1": 0.48,
-        "w1": 11.4,
-        "m1": 20.68,
-        "m3": 38.87,
-        "m6": 187.94,
-        "y1": 255.77,
-        "ytd": 206.33
+        "d1": -0.48,
+        "w1": 10.32,
+        "m1": 19.51,
+        "m3": 37.53,
+        "m6": 185.16,
+        "y1": 250.17,
+        "ytd": 203.37
       },
       "sparkline": [
         91.95,
@@ -105130,27 +104458,9 @@
         95.3,
         99.5,
         103.1,
-        103.6
+        102.6
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 29.34,
-          "high": 29.76,
-          "low": 29,
-          "close": 29.12,
-          "volume": 5345805
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 29.28,
-          "high": 29.68,
-          "low": 29.02,
-          "close": 29.2,
-          "volume": 5158018
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -107423,10 +106733,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 104.2,
-          "high": 104.5,
-          "low": 102.9,
-          "close": 103.6,
-          "volume": 4752344
+          "high": 106.8,
+          "low": 102.6,
+          "close": 102.6,
+          "volume": 18599811
         }
       ],
       "name": "Europower Enerji",
@@ -107437,33 +106747,33 @@
     "ODAS": {
       "symbol": "ODAS",
       "shortName": "ODAS ELEKTRIK",
-      "price": 7.4,
+      "price": 7.32,
       "prevClose": 7.05,
-      "change": 0.35,
-      "changePercent": 4.96,
-      "dayHigh": 7.47,
-      "dayLow": 7.04,
+      "change": 0.27,
+      "changePercent": 3.83,
+      "dayHigh": 7.8,
+      "dayLow": 7.25,
       "fiftyTwoWeekHigh": 9.71,
       "fiftyTwoWeekLow": 4.97,
-      "volume": 73322750,
-      "rsi14": 46.3,
+      "volume": 140375144,
+      "rsi14": 44.2,
       "sma20": 7.35,
-      "sma50": 8.07,
+      "sma50": 8.06,
       "pivots": {
-        "pivot": 7.3,
-        "r1": 7.56,
-        "r2": 7.73,
-        "s1": 7.13,
-        "s2": 6.87
+        "pivot": 7.46,
+        "r1": 7.67,
+        "r2": 8.01,
+        "s1": 7.12,
+        "s2": 6.91
       },
       "returns": {
-        "d1": 4.96,
-        "w1": 3.93,
-        "m1": -14.84,
-        "m3": 1.23,
-        "m6": 23.33,
-        "y1": 17.46,
-        "ytd": 41.76
+        "d1": 3.83,
+        "w1": 2.81,
+        "m1": -15.77,
+        "m3": 0.14,
+        "m6": 22,
+        "y1": 15.64,
+        "ytd": 40.23
       },
       "sparkline": [
         7.5,
@@ -107477,27 +106787,9 @@
         7,
         7.11,
         7.05,
-        7.4
+        7.32
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 6.3,
-          "high": 6.57,
-          "low": 6.25,
-          "close": 6.3,
-          "volume": 59935174
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 6.35,
-          "high": 6.38,
-          "low": 6.12,
-          "close": 6.17,
-          "volume": 45291638
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -109770,10 +109062,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 7.05,
-          "high": 7.47,
+          "high": 7.67,
           "low": 7.04,
-          "close": 7.4,
-          "volume": 73322750
+          "close": 7.32,
+          "volume": 159520608
         }
       ],
       "name": "Odaş Elektrik Üretim",
@@ -109784,33 +109076,33 @@
     "BIMAS": {
       "symbol": "BIMAS",
       "shortName": "BIM MAGAZALAR",
-      "price": 414.75,
+      "price": 405.5,
       "prevClose": 413.75,
-      "change": 1,
-      "changePercent": 0.24,
-      "dayHigh": 417.5,
-      "dayLow": 411.25,
+      "change": -8.25,
+      "changePercent": -1.99,
+      "dayHigh": 417,
+      "dayLow": 401.5,
       "fiftyTwoWeekHigh": 425,
       "fiftyTwoWeekLow": 241.625,
-      "volume": 3812025,
-      "rsi14": 61.34,
-      "sma20": 395.96,
-      "sma50": 385.98,
+      "volume": 16366862,
+      "rsi14": 55.18,
+      "sma20": 395.5,
+      "sma50": 385.8,
       "pivots": {
-        "pivot": 414.5,
-        "r1": 417.75,
-        "r2": 420.75,
-        "s1": 411.5,
-        "s2": 408.25
+        "pivot": 408,
+        "r1": 414.5,
+        "r2": 423.5,
+        "s1": 399,
+        "s2": 392.5
       },
       "returns": {
-        "d1": 0.24,
-        "w1": -0.42,
-        "m1": 8.29,
-        "m3": 11.72,
-        "m6": 24.27,
-        "y1": 54.76,
-        "ytd": 52.76
+        "d1": -1.99,
+        "w1": -2.64,
+        "m1": 5.87,
+        "m3": 9.23,
+        "m6": 21.5,
+        "y1": 53.16,
+        "ytd": 49.36
       },
       "sparkline": [
         376.5,
@@ -109824,27 +109116,9 @@
         417.5,
         418.25,
         413.75,
-        414.75
+        405.5
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 266.5,
-          "high": 272.5,
-          "low": 266.25,
-          "close": 268,
-          "volume": 9629256
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 268,
-          "high": 268.5,
-          "low": 261.25,
-          "close": 265,
-          "volume": 11188428
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -112137,8 +111411,8 @@
           "open": 414.75,
           "high": 417.5,
           "low": 411.25,
-          "close": 414.75,
-          "volume": 3812025
+          "close": 405.5,
+          "volume": 7640798
         }
       ],
       "name": "BİM Birleşik Mağazalar",
@@ -112149,33 +111423,33 @@
     "MGROS": {
       "symbol": "MGROS",
       "shortName": "MIGROS TICARET",
-      "price": 561.5,
+      "price": 533.5,
       "prevClose": 563,
-      "change": -1.5,
-      "changePercent": -0.27,
-      "dayHigh": 568,
-      "dayLow": 559,
+      "change": -29.5,
+      "changePercent": -5.24,
+      "dayHigh": 558.5,
+      "dayLow": 533.5,
       "fiftyTwoWeekHigh": 727,
       "fiftyTwoWeekLow": 415.5,
-      "volume": 993834,
-      "rsi14": 38.19,
-      "sma20": 588,
-      "sma50": 623.19,
+      "volume": 3249481,
+      "rsi14": 31.74,
+      "sma20": 586.6,
+      "sma50": 622.63,
       "pivots": {
-        "pivot": 562.83,
-        "r1": 566.66,
-        "r2": 571.83,
-        "s1": 557.66,
-        "s2": 553.83
+        "pivot": 541.83,
+        "r1": 550.16,
+        "r2": 566.83,
+        "s1": 525.16,
+        "s2": 516.83
       },
       "returns": {
-        "d1": -0.27,
-        "w1": -2.01,
-        "m1": -9.87,
-        "m3": -15.44,
-        "m6": -15.94,
-        "y1": 14.71,
-        "ytd": 5.84
+        "d1": -5.24,
+        "w1": -6.89,
+        "m1": -14.37,
+        "m3": -19.65,
+        "m6": -20.13,
+        "y1": 11.79,
+        "ytd": 0.57
       },
       "sparkline": [
         552,
@@ -112189,27 +111463,9 @@
         555.5,
         558.5,
         563,
-        561.5
+        533.5
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 491.25,
-          "high": 496.5,
-          "low": 489,
-          "close": 489.5,
-          "volume": 1817999
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 489.5,
-          "high": 492.5,
-          "low": 482.75,
-          "close": 485.75,
-          "volume": 2489677
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -114483,9 +113739,9 @@
           "date": "28.08.2026",
           "open": 567.5,
           "high": 568,
-          "low": 559,
-          "close": 561.5,
-          "volume": 993834
+          "low": 557,
+          "close": 533.5,
+          "volume": 2407675
         }
       ],
       "name": "Migros Ticaret",
@@ -114496,33 +113752,33 @@
     "SOKM": {
       "symbol": "SOKM",
       "shortName": "SOK MARKETLER TICARET",
-      "price": 57,
+      "price": 55.4,
       "prevClose": 56.3,
-      "change": 0.7,
-      "changePercent": 1.24,
-      "dayHigh": 57.3,
-      "dayLow": 56.35,
+      "change": -0.9,
+      "changePercent": -1.6,
+      "dayHigh": 58.25,
+      "dayLow": 55.25,
       "fiftyTwoWeekHigh": 70.25,
       "fiftyTwoWeekLow": 34.36,
-      "volume": 1365014,
-      "rsi14": 61.29,
-      "sma20": 54.26,
-      "sma50": 51.19,
+      "volume": 4828196,
+      "rsi14": 55.13,
+      "sma20": 54.18,
+      "sma50": 51.16,
       "pivots": {
-        "pivot": 56.88,
-        "r1": 57.41,
-        "r2": 57.83,
-        "s1": 56.46,
-        "s2": 55.93
+        "pivot": 56.3,
+        "r1": 57.35,
+        "r2": 59.3,
+        "s1": 54.35,
+        "s2": 53.3
       },
       "returns": {
-        "d1": 1.24,
-        "w1": -3.39,
-        "m1": 8.37,
-        "m3": 18.75,
-        "m6": -17.39,
-        "y1": 39.98,
-        "ytd": 14.37
+        "d1": -1.6,
+        "w1": -6.1,
+        "m1": 5.32,
+        "m3": 15.42,
+        "m6": -19.71,
+        "y1": 35.85,
+        "ytd": 11.16
       },
       "sparkline": [
         52.75,
@@ -114536,27 +113792,9 @@
         58.1,
         57.15,
         56.3,
-        57
+        55.4
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 40.62,
-          "high": 41.7,
-          "low": 40.62,
-          "close": 40.72,
-          "volume": 4246558
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 40.64,
-          "high": 40.96,
-          "low": 40.08,
-          "close": 40.34,
-          "volume": 5500616
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -116829,10 +116067,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 56.45,
-          "high": 57.3,
+          "high": 58.2,
           "low": 56.35,
-          "close": 57,
-          "volume": 1365014
+          "close": 55.4,
+          "volume": 4046084
         }
       ],
       "name": "Şok Marketler",
@@ -116843,33 +116081,33 @@
     "ULKER": {
       "symbol": "ULKER",
       "shortName": "ULKER BISKUVI",
-      "price": 91.5,
+      "price": 89.95,
       "prevClose": 92.65,
-      "change": -1.15,
-      "changePercent": -1.24,
-      "dayHigh": 93.3,
-      "dayLow": 91.4,
+      "change": -2.7,
+      "changePercent": -2.91,
+      "dayHigh": 92,
+      "dayLow": 89.75,
       "fiftyTwoWeekHigh": 141.7,
       "fiftyTwoWeekLow": 84.9,
-      "volume": 1634321,
-      "rsi14": 47.48,
-      "sma20": 90.41,
-      "sma50": 94.8,
+      "volume": 6222939,
+      "rsi14": 44.15,
+      "sma20": 90.33,
+      "sma50": 94.77,
       "pivots": {
-        "pivot": 92.07,
-        "r1": 92.74,
-        "r2": 93.97,
-        "s1": 90.84,
-        "s2": 90.17
+        "pivot": 90.57,
+        "r1": 91.39,
+        "r2": 92.82,
+        "s1": 89.14,
+        "s2": 88.32
       },
       "returns": {
-        "d1": -1.24,
-        "w1": -2.09,
-        "m1": 4.1,
-        "m3": -21.05,
-        "m6": -27.78,
-        "y1": -21.79,
-        "ytd": -18.3
+        "d1": -2.91,
+        "w1": -3.75,
+        "m1": 2.33,
+        "m3": -22.39,
+        "m6": -29.01,
+        "y1": -21.51,
+        "ytd": -19.69
       },
       "sparkline": [
         88,
@@ -116883,27 +116121,9 @@
         90.75,
         92.2,
         92.65,
-        91.5
+        89.95
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 116.9,
-          "high": 118.4,
-          "low": 116.1,
-          "close": 117,
-          "volume": 3794410
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 117,
-          "high": 117.1,
-          "low": 113.4,
-          "close": 113.4,
-          "volume": 6834370
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -119177,9 +118397,9 @@
           "date": "28.08.2026",
           "open": 92.95,
           "high": 93.3,
-          "low": 91.4,
-          "close": 91.5,
-          "volume": 1634321
+          "low": 91.25,
+          "close": 89.95,
+          "volume": 5791732
         }
       ],
       "name": "Ülker Bisküvi",
@@ -119190,33 +118410,33 @@
     "CCOLA": {
       "symbol": "CCOLA",
       "shortName": "COCA COLA ICECEK",
-      "price": 77.7,
+      "price": 75.2,
       "prevClose": 77.5,
-      "change": 0.2,
-      "changePercent": 0.26,
+      "change": -2.3,
+      "changePercent": -2.97,
       "dayHigh": 78.05,
-      "dayLow": 77.55,
+      "dayLow": 75.2,
       "fiftyTwoWeekHigh": 93.5,
       "fiftyTwoWeekLow": 45.14,
-      "volume": 960879,
-      "rsi14": 37.79,
-      "sma20": 83.31,
-      "sma50": 84.58,
+      "volume": 7477963,
+      "rsi14": 33.91,
+      "sma20": 83.19,
+      "sma50": 84.53,
       "pivots": {
-        "pivot": 77.77,
-        "r1": 77.99,
-        "r2": 78.27,
-        "s1": 77.49,
-        "s2": 77.27
+        "pivot": 76.15,
+        "r1": 77.1,
+        "r2": 79,
+        "s1": 74.25,
+        "s2": 73.3
       },
       "returns": {
-        "d1": 0.26,
-        "w1": -6.61,
-        "m1": -14.14,
-        "m3": -4.66,
-        "m6": 7.25,
-        "y1": 56.34,
-        "ytd": 31.03
+        "d1": -2.97,
+        "w1": -9.62,
+        "m1": -16.91,
+        "m3": -7.73,
+        "m6": 3.8,
+        "y1": 51.67,
+        "ytd": 26.81
       },
       "sparkline": [
         84.95,
@@ -119230,27 +118450,9 @@
         77.2,
         78.95,
         77.5,
-        77.7
+        75.2
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 51,
-          "high": 51.15,
-          "low": 49.7,
-          "close": 49.7,
-          "volume": 14478706
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 49.78,
-          "high": 50.1,
-          "low": 49.3,
-          "close": 49.3,
-          "volume": 13493056
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -121524,9 +120726,9 @@
           "date": "28.08.2026",
           "open": 77.7,
           "high": 78.05,
-          "low": 77.55,
-          "close": 77.7,
-          "volume": 960879
+          "low": 77.45,
+          "close": 75.2,
+          "volume": 2621071
         }
       ],
       "name": "Coca-Cola İçecek",
@@ -121537,33 +120739,33 @@
     "AEFES": {
       "symbol": "AEFES",
       "shortName": "ANADOLU EFES",
-      "price": 18.47,
+      "price": 17.84,
       "prevClose": 18.53,
-      "change": -0.06,
-      "changePercent": -0.32,
-      "dayHigh": 18.67,
-      "dayLow": 18.32,
+      "change": -0.69,
+      "changePercent": -3.72,
+      "dayHigh": 18.44,
+      "dayLow": 17.77,
       "fiftyTwoWeekHigh": 23.28,
       "fiftyTwoWeekLow": 13.37,
-      "volume": 22796024,
-      "rsi14": 32.02,
-      "sma20": 19.92,
-      "sma50": 20.54,
+      "volume": 66218756,
+      "rsi14": 27.77,
+      "sma20": 19.89,
+      "sma50": 20.52,
       "pivots": {
-        "pivot": 18.49,
-        "r1": 18.66,
-        "r2": 18.84,
-        "s1": 18.31,
-        "s2": 18.14
+        "pivot": 18.02,
+        "r1": 18.27,
+        "r2": 18.69,
+        "s1": 17.6,
+        "s2": 17.35
       },
       "returns": {
-        "d1": -0.32,
-        "w1": -4,
-        "m1": -16.35,
-        "m3": -4.84,
-        "m6": -5.77,
-        "y1": 6.64,
-        "ytd": 15.73
+        "d1": -3.72,
+        "w1": -7.28,
+        "m1": -19.2,
+        "m3": -8.09,
+        "m6": -8.98,
+        "y1": 4.51,
+        "ytd": 11.78
       },
       "sparkline": [
         19.25,
@@ -121577,27 +120779,9 @@
         18.85,
         18.9,
         18.53,
-        18.47
+        17.84
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 17.29,
-          "high": 17.45,
-          "low": 17.03,
-          "close": 17.32,
-          "volume": 53927180
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 17.34,
-          "high": 17.36,
-          "low": 16.89,
-          "close": 16.92,
-          "volume": 53281564
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -123872,8 +123056,8 @@
           "open": 18.58,
           "high": 18.67,
           "low": 18.32,
-          "close": 18.47,
-          "volume": 22796024
+          "close": 17.84,
+          "volume": 49169695
         }
       ],
       "name": "Anadolu Efes Biracılık",
@@ -123884,33 +123068,33 @@
     "SASA": {
       "symbol": "SASA",
       "shortName": "SASA POLYESTER",
-      "price": 2.4,
+      "price": 2.35,
       "prevClose": 2.38,
-      "change": 0.02,
-      "changePercent": 0.84,
-      "dayHigh": 2.41,
-      "dayLow": 2.37,
-      "fiftyTwoWeekHigh": 4.91,
+      "change": -0.03,
+      "changePercent": -1.26,
+      "dayHigh": 2.4,
+      "dayLow": 2.33,
+      "fiftyTwoWeekHigh": 4.8,
       "fiftyTwoWeekLow": 2.13,
-      "volume": 800076271,
-      "rsi14": 49.29,
+      "volume": 1654979474,
+      "rsi14": 45.5,
       "sma20": 2.4,
       "sma50": 2.46,
       "pivots": {
-        "pivot": 2.39,
-        "r1": 2.41,
+        "pivot": 2.36,
+        "r1": 2.39,
         "r2": 2.43,
-        "s1": 2.37,
-        "s2": 2.35
+        "s1": 2.32,
+        "s2": 2.29
       },
       "returns": {
-        "d1": 0.84,
-        "w1": 3.45,
-        "m1": -3.23,
-        "m3": -10.78,
-        "m6": 1.27,
-        "y1": -50.31,
-        "ytd": -16.96
+        "d1": -1.26,
+        "w1": 1.29,
+        "m1": -5.24,
+        "m3": -12.64,
+        "m6": -0.84,
+        "y1": -48.69,
+        "ytd": -18.69
       },
       "sparkline": [
         2.45,
@@ -123924,27 +123108,9 @@
         2.31,
         2.34,
         2.38,
-        2.4
+        2.35
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 4.98,
-          "high": 5.02,
-          "low": 4.77,
-          "close": 4.83,
-          "volume": 827495436
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 4.9,
-          "high": 4.91,
-          "low": 4.59,
-          "close": 4.69,
-          "volume": 0
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -126217,10 +125383,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 2.39,
-          "high": 2.41,
+          "high": 2.42,
           "low": 2.37,
-          "close": 2.4,
-          "volume": 800076271
+          "close": 2.35,
+          "volume": 987657549
         }
       ],
       "name": "Sasa Polyester Sanayi",
@@ -126231,33 +125397,33 @@
     "HEKTS": {
       "symbol": "HEKTS",
       "shortName": "HEKTAS",
-      "price": 2.88,
+      "price": 2.73,
       "prevClose": 2.84,
-      "change": 0.04,
-      "changePercent": 1.41,
+      "change": -0.11,
+      "changePercent": -3.87,
       "dayHigh": 2.89,
-      "dayLow": 2.83,
+      "dayLow": 2.73,
       "fiftyTwoWeekHigh": 5.13,
-      "fiftyTwoWeekLow": 2.76,
-      "volume": 120603868,
-      "rsi14": 45.7,
-      "sma20": 2.86,
+      "fiftyTwoWeekLow": 2.73,
+      "volume": 360685941,
+      "rsi14": 33.65,
+      "sma20": 2.85,
       "sma50": 3.07,
       "pivots": {
-        "pivot": 2.87,
-        "r1": 2.91,
-        "r2": 2.93,
-        "s1": 2.85,
-        "s2": 2.81
+        "pivot": 2.78,
+        "r1": 2.83,
+        "r2": 2.94,
+        "s1": 2.67,
+        "s2": 2.62
       },
       "returns": {
-        "d1": 1.41,
-        "w1": 1.05,
-        "m1": -0.35,
-        "m3": -27.27,
-        "m6": -6.19,
-        "y1": -37.93,
-        "ytd": -8.28
+        "d1": -3.87,
+        "w1": -4.21,
+        "m1": -5.54,
+        "m3": -31.06,
+        "m6": -11.07,
+        "y1": -37.1,
+        "ytd": -13.06
       },
       "sparkline": [
         2.83,
@@ -126271,27 +125437,9 @@
         2.85,
         2.84,
         2.84,
-        2.88
+        2.73
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 4.6,
-          "high": 4.73,
-          "low": 4.54,
-          "close": 4.64,
-          "volume": 206866138
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 4.66,
-          "high": 4.67,
-          "low": 4.38,
-          "close": 4.38,
-          "volume": 167295502
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -128564,10 +127712,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 2.86,
-          "high": 2.89,
+          "high": 2.91,
           "low": 2.83,
-          "close": 2.88,
-          "volume": 120603868
+          "close": 2.73,
+          "volume": 327263867
         }
       ],
       "name": "Hektaş Ticaret",
@@ -128578,33 +127726,33 @@
     "GUBRF": {
       "symbol": "GUBRF",
       "shortName": "GUBRE FABRIK.",
-      "price": 503,
+      "price": 481.75,
       "prevClose": 488,
-      "change": 15,
-      "changePercent": 3.07,
-      "dayHigh": 508,
-      "dayLow": 489,
+      "change": -6.25,
+      "changePercent": -1.28,
+      "dayHigh": 496.75,
+      "dayLow": 471.25,
       "fiftyTwoWeekHigh": 625.5,
       "fiftyTwoWeekLow": 254,
-      "volume": 2138043,
-      "rsi14": 66,
-      "sma20": 449.5,
-      "sma50": 443.56,
+      "volume": 3587724,
+      "rsi14": 59.98,
+      "sma20": 448.44,
+      "sma50": 443.14,
       "pivots": {
-        "pivot": 500,
-        "r1": 511,
-        "r2": 519,
-        "s1": 492,
-        "s2": 481
+        "pivot": 483.25,
+        "r1": 495.25,
+        "r2": 508.75,
+        "s1": 469.75,
+        "s2": 457.75
       },
       "returns": {
-        "d1": 3.07,
-        "w1": 5.73,
-        "m1": 25.44,
-        "m3": -6.68,
-        "m6": -1.66,
-        "y1": 71.23,
-        "ytd": 43
+        "d1": -1.28,
+        "w1": 1.26,
+        "m1": 20.14,
+        "m3": -10.62,
+        "m6": -5.82,
+        "y1": 64.84,
+        "ytd": 36.96
       },
       "sparkline": [
         418.5,
@@ -128618,27 +127766,9 @@
         480.5,
         484.5,
         488,
-        503
+        481.75
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 290.25,
-          "high": 299.75,
-          "low": 290.25,
-          "close": 293.75,
-          "volume": 1895058
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 293.25,
-          "high": 294.75,
-          "low": 288.5,
-          "close": 291.5,
-          "volume": 2269097
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -130913,8 +130043,8 @@
           "open": 489,
           "high": 508,
           "low": 489,
-          "close": 503,
-          "volume": 2138043
+          "close": 481.75,
+          "volume": 4441644
         }
       ],
       "name": "Gübre Fabrikaları",
@@ -130925,33 +130055,33 @@
     "EKGYO": {
       "symbol": "EKGYO",
       "shortName": "EMLAK KONUT GMYO",
-      "price": 20.36,
+      "price": 20,
       "prevClose": 20.52,
-      "change": -0.16,
-      "changePercent": -0.78,
-      "dayHigh": 20.62,
-      "dayLow": 20.14,
+      "change": -0.52,
+      "changePercent": -2.53,
+      "dayHigh": 20.88,
+      "dayLow": 19.92,
       "fiftyTwoWeekHigh": 27.12,
       "fiftyTwoWeekLow": 17.47,
-      "volume": 40410332,
-      "rsi14": 60.34,
-      "sma20": 18.99,
-      "sma50": 19.75,
+      "volume": 134050053,
+      "rsi14": 56.2,
+      "sma20": 18.97,
+      "sma50": 19.74,
       "pivots": {
-        "pivot": 20.37,
-        "r1": 20.6,
-        "r2": 20.85,
-        "s1": 20.12,
-        "s2": 19.89
+        "pivot": 20.27,
+        "r1": 20.62,
+        "r2": 21.23,
+        "s1": 19.66,
+        "s2": 19.31
       },
       "returns": {
-        "d1": -0.78,
-        "w1": 4.68,
-        "m1": 14.83,
-        "m3": 5.99,
-        "m6": -16.42,
-        "y1": -2.3,
-        "ytd": -3.96
+        "d1": -2.53,
+        "w1": 2.83,
+        "m1": 12.8,
+        "m3": 4.11,
+        "m6": -17.9,
+        "y1": -5.57,
+        "ytd": -5.66
       },
       "sparkline": [
         18.4,
@@ -130965,27 +130095,9 @@
         20.04,
         20.6,
         20.52,
-        20.36
+        20
       ],
       "history": [
-        {
-          "timestamp": 1756362600,
-          "date": "28.08.2025",
-          "open": 21.22,
-          "high": 21.56,
-          "low": 20.5,
-          "close": 20.84,
-          "volume": 176434281
-        },
-        {
-          "timestamp": 1756449000,
-          "date": "29.08.2025",
-          "open": 20.86,
-          "high": 20.96,
-          "low": 20.52,
-          "close": 20.7,
-          "volume": 92789139
-        },
         {
           "timestamp": 1756708200,
           "date": "01.09.2025",
@@ -133258,10 +132370,10 @@
           "timestamp": 1787898600,
           "date": "28.08.2026",
           "open": 20.54,
-          "high": 20.62,
+          "high": 20.68,
           "low": 20.14,
-          "close": 20.36,
-          "volume": 40410332
+          "close": 20,
+          "volume": 99398302
         }
       ],
       "name": "Emlak Konut GYO",
@@ -133273,9 +132385,9 @@
   "sectorStats": {
     "Ulaştırma & Havacılık": {
       "count": 3,
-      "avgChange": -0.09,
-      "positiveCount": 1,
-      "negativeCount": 2,
+      "avgChange": -3.65,
+      "positiveCount": 0,
+      "negativeCount": 3,
       "symbols": [
         "THYAO",
         "PGSUS",
@@ -133284,9 +132396,9 @@
     },
     "Bankacılık & Finans": {
       "count": 7,
-      "avgChange": 1.5,
-      "positiveCount": 3,
-      "negativeCount": 4,
+      "avgChange": -1.04,
+      "positiveCount": 1,
+      "negativeCount": 6,
       "symbols": [
         "GARAN",
         "AKBNK",
@@ -133299,9 +132411,9 @@
     },
     "Teknoloji & Savunma": {
       "count": 3,
-      "avgChange": 0.01,
-      "positiveCount": 2,
-      "negativeCount": 1,
+      "avgChange": -3.83,
+      "positiveCount": 1,
+      "negativeCount": 2,
       "symbols": [
         "ASELS",
         "VBTYZ",
@@ -133310,9 +132422,9 @@
     },
     "Teknoloji & Telekomünikasyon": {
       "count": 2,
-      "avgChange": -0.23,
-      "positiveCount": 1,
-      "negativeCount": 1,
+      "avgChange": -5.97,
+      "positiveCount": 0,
+      "negativeCount": 2,
       "symbols": [
         "TCELL",
         "TTKOM"
@@ -133320,9 +132432,9 @@
     },
     "Holdingler": {
       "count": 6,
-      "avgChange": 0.26,
-      "positiveCount": 3,
-      "negativeCount": 3,
+      "avgChange": -1.14,
+      "positiveCount": 1,
+      "negativeCount": 5,
       "symbols": [
         "KCHOL",
         "SAHOL",
@@ -133334,7 +132446,7 @@
     },
     "Sanayi & Metal": {
       "count": 2,
-      "avgChange": 1.43,
+      "avgChange": 1.11,
       "positiveCount": 2,
       "negativeCount": 0,
       "symbols": [
@@ -133344,16 +132456,16 @@
     },
     "Sanayi & Cam": {
       "count": 1,
-      "avgChange": 0.45,
-      "positiveCount": 1,
-      "negativeCount": 0,
+      "avgChange": -1.05,
+      "positiveCount": 0,
+      "negativeCount": 1,
       "symbols": [
         "SISE"
       ]
     },
     "Sanayi & Yapı": {
       "count": 2,
-      "avgChange": -0.26,
+      "avgChange": -2.78,
       "positiveCount": 0,
       "negativeCount": 2,
       "symbols": [
@@ -133363,7 +132475,7 @@
     },
     "Otomotiv & Sanayi": {
       "count": 2,
-      "avgChange": -0.33,
+      "avgChange": -1.36,
       "positiveCount": 0,
       "negativeCount": 2,
       "symbols": [
@@ -133373,7 +132485,7 @@
     },
     "Dayanıklı Tüketim": {
       "count": 2,
-      "avgChange": -0.18,
+      "avgChange": -0.23,
       "positiveCount": 1,
       "negativeCount": 1,
       "symbols": [
@@ -133383,7 +132495,7 @@
     },
     "Enerji & Petrokimya": {
       "count": 2,
-      "avgChange": 1.13,
+      "avgChange": 3.02,
       "positiveCount": 2,
       "negativeCount": 0,
       "symbols": [
@@ -133393,9 +132505,9 @@
     },
     "Enerji & Altyapı": {
       "count": 4,
-      "avgChange": 1.27,
-      "positiveCount": 3,
-      "negativeCount": 1,
+      "avgChange": -1.23,
+      "positiveCount": 1,
+      "negativeCount": 3,
       "symbols": [
         "ASTOR",
         "GESAN",
@@ -133405,18 +132517,18 @@
     },
     "Enerji & Teknoloji": {
       "count": 1,
-      "avgChange": 0,
-      "positiveCount": 1,
-      "negativeCount": 0,
+      "avgChange": -4.29,
+      "positiveCount": 0,
+      "negativeCount": 1,
       "symbols": [
         "KONTR"
       ]
     },
     "Perakende & Tüketim": {
       "count": 3,
-      "avgChange": 0.4,
-      "positiveCount": 2,
-      "negativeCount": 1,
+      "avgChange": -2.94,
+      "positiveCount": 0,
+      "negativeCount": 3,
       "symbols": [
         "BIMAS",
         "MGROS",
@@ -133425,9 +132537,9 @@
     },
     "Gıda & İçecek": {
       "count": 3,
-      "avgChange": -0.43,
-      "positiveCount": 1,
-      "negativeCount": 2,
+      "avgChange": -3.2,
+      "positiveCount": 0,
+      "negativeCount": 3,
       "symbols": [
         "ULKER",
         "CCOLA",
@@ -133436,18 +132548,18 @@
     },
     "Kimya & Sanayi": {
       "count": 1,
-      "avgChange": 0.84,
-      "positiveCount": 1,
-      "negativeCount": 0,
+      "avgChange": -1.26,
+      "positiveCount": 0,
+      "negativeCount": 1,
       "symbols": [
         "SASA"
       ]
     },
     "Kimya & Tarım": {
       "count": 2,
-      "avgChange": 2.24,
-      "positiveCount": 2,
-      "negativeCount": 0,
+      "avgChange": -2.58,
+      "positiveCount": 0,
+      "negativeCount": 2,
       "symbols": [
         "HEKTS",
         "GUBRF"
@@ -133455,7 +132567,7 @@
     },
     "Gayrimenkul (GYO)": {
       "count": 1,
-      "avgChange": -0.78,
+      "avgChange": -2.53,
       "positiveCount": 0,
       "negativeCount": 1,
       "symbols": [
@@ -133465,118 +132577,118 @@
   },
   "topGainers": [
     {
-      "symbol": "HALKB",
-      "name": "Türkiye Halk Bankası",
-      "price": 46.1,
-      "changePercent": 9.97,
-      "sector": "Bankacılık & Finans"
+      "symbol": "TUPRS",
+      "name": "Tüpraş Türkiye Petrol Rafinerileri",
+      "price": 400.25,
+      "changePercent": 5.12,
+      "sector": "Enerji & Petrokimya"
     },
     {
       "symbol": "ODAS",
       "name": "Odaş Elektrik Üretim",
-      "price": 7.4,
-      "changePercent": 4.96,
+      "price": 7.32,
+      "changePercent": 3.83,
       "sector": "Enerji & Altyapı"
     },
     {
-      "symbol": "GUBRF",
-      "name": "Gübre Fabrikaları",
-      "price": 503,
-      "changePercent": 3.07,
-      "sector": "Kimya & Tarım"
+      "symbol": "VESTL",
+      "name": "Vestel Elektronik",
+      "price": 22.96,
+      "changePercent": 3.05,
+      "sector": "Dayanıklı Tüketim"
     },
     {
-      "symbol": "EREGL",
-      "name": "Ereğli Demir ve Çelik",
-      "price": 39.42,
-      "changePercent": 2.12,
+      "symbol": "KRDMD",
+      "name": "Kardemir (D)",
+      "price": 47.38,
+      "changePercent": 1.76,
       "sector": "Sanayi & Metal"
     },
     {
-      "symbol": "ENKAI",
-      "name": "Enka İnşaat ve Sanayi",
-      "price": 89,
-      "changePercent": 1.77,
-      "sector": "Holdingler"
+      "symbol": "VBTYZ",
+      "name": "VBT Yazılım",
+      "price": 37.74,
+      "changePercent": 1.45,
+      "sector": "Teknoloji & Savunma"
     }
   ],
   "topLosers": [
     {
-      "symbol": "ULKER",
-      "name": "Ülker Bisküvi",
-      "price": 91.5,
-      "changePercent": -1.24,
-      "sector": "Gıda & İçecek"
-    },
-    {
       "symbol": "SDTTR",
       "name": "SDT Uzay ve Savunma",
-      "price": 24.18,
-      "changePercent": -0.9,
+      "price": 22.3,
+      "changePercent": -8.61,
       "sector": "Teknoloji & Savunma"
     },
     {
-      "symbol": "EKGYO",
-      "name": "Emlak Konut GYO",
-      "price": 20.36,
-      "changePercent": -0.78,
-      "sector": "Gayrimenkul (GYO)"
-    },
-    {
-      "symbol": "PGSUS",
-      "name": "Pegasus Hava Taşımacılığı",
-      "price": 150.6,
-      "changePercent": -0.59,
-      "sector": "Ulaştırma & Havacılık"
-    },
-    {
-      "symbol": "DOHOL",
-      "name": "Doğan Holding",
-      "price": 22.22,
-      "changePercent": -0.54,
-      "sector": "Holdingler"
-    }
-  ],
-  "mostActive": [
-    {
-      "symbol": "ASELS",
-      "name": "Aselsan Elektronik Sanayi",
-      "price": 404.5,
-      "volume": 13068542,
-      "turnover": 5286225239,
-      "changePercent": 0.19
+      "symbol": "TCELL",
+      "name": "Turkcell İletişim",
+      "price": 95.05,
+      "changePercent": -7.54,
+      "sector": "Teknoloji & Telekomünikasyon"
     },
     {
       "symbol": "ASTOR",
       "name": "Astor Enerji",
-      "price": 349,
-      "volume": 14255693,
-      "turnover": 4975236857,
-      "changePercent": 0
+      "price": 325.75,
+      "changePercent": -6.66,
+      "sector": "Enerji & Altyapı"
+    },
+    {
+      "symbol": "TAVHL",
+      "name": "TAV Havalimanları",
+      "price": 265,
+      "changePercent": -6.36,
+      "sector": "Ulaştırma & Havacılık"
+    },
+    {
+      "symbol": "MGROS",
+      "name": "Migros Ticaret",
+      "price": 533.5,
+      "changePercent": -5.24,
+      "sector": "Perakende & Tüketim"
+    }
+  ],
+  "mostActive": [
+    {
+      "symbol": "ASTOR",
+      "name": "Astor Enerji",
+      "price": 325.75,
+      "volume": 90392503,
+      "turnover": 29445357852,
+      "changePercent": -6.66
     },
     {
       "symbol": "TUPRS",
       "name": "Tüpraş Türkiye Petrol Rafinerileri",
-      "price": 384.75,
-      "volume": 11872252,
-      "turnover": 4567848957,
-      "changePercent": 1.05
+      "price": 400.25,
+      "volume": 35328555,
+      "turnover": 14140254139,
+      "changePercent": 5.12
+    },
+    {
+      "symbol": "ASELS",
+      "name": "Aselsan Elektronik Sanayi",
+      "price": 386.25,
+      "volume": 33990305,
+      "turnover": 13128755306,
+      "changePercent": -4.33
     },
     {
       "symbol": "AKBNK",
       "name": "Akbank",
-      "price": 72.65,
-      "volume": 62488101,
-      "turnover": 4539760538,
-      "changePercent": -0.27
+      "price": 71.85,
+      "volume": 166818966,
+      "turnover": 11985942707,
+      "changePercent": -1.37
     },
     {
       "symbol": "THYAO",
       "name": "Türk Hava Yolları",
-      "price": 305.75,
-      "volume": 10911645,
-      "turnover": 3336235459,
-      "changePercent": -0.49
+      "price": 302.25,
+      "volume": 36911929,
+      "turnover": 11156630540,
+      "changePercent": -1.63
     }
   ]
 }

@@ -2,9 +2,11 @@ name: Sabah Bulteni Otomatik Gonder
 
 on:
   schedule:
-    # Hafta ici her sabah 06:00 UTC = 09:00 TSI (Seans oncesi)
-    - cron: '0 6 * * 1-5'
+    # Hafta ici her sabah 05:45 UTC = 08:45 TSI (GitHub Actions kuyruk gecikmesini onlemek icin tepe saat olmayan :45 dakikasi secildi)
+    - cron: '45 5 * * 1-5'
   workflow_dispatch:
+  repository_dispatch:
+    types: [send_newsletter]
 
 jobs:
   send-morning-newsletter:
